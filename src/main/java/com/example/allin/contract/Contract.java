@@ -6,28 +6,25 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "contracts")
 public class Contract {
-  enum Rarity {
-    Common,
-    Rare,
-    Epic,
-    Legendary
-  }
-
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
+  // Change to player and add foregin key
   @Column(nullable = false)
   private Integer playerId;
 
+  // Add foreign key
   @Column(nullable = false)
   private Integer owner;
 
   @Column(nullable = false)
-  private Rarity rarity = Rarity.Common;
+  private Rarity rarity;
 
   @Column(nullable = false)
   private String event;
@@ -42,19 +39,19 @@ public class Contract {
   private LocalDate expirationTime;
 
   @Column(nullable = false)
-  private double value;
+  private Double value;
 
   @Column(nullable = false)
-  private boolean forSale = false;
+  private Boolean forSale = false;
 
-  private double sellPrice;
+  private Double sellPrice;
 
   public Contract() {
   }
 
   public Contract(Integer playerId, Integer owner, String event, Integer eventThreshold, LocalDate creationTime,
       LocalDate expirationTime,
-      double value, boolean forSale, double sellPrice) {
+      Double value, Boolean forSale, Double sellPrice) {
     this.playerId = playerId;
     this.owner = owner;
     this.event = event;
@@ -68,7 +65,7 @@ public class Contract {
 
   public Contract(Integer id, Integer playerId, Integer owner, String event, Integer eventThreshold,
       LocalDate creationTime,
-      LocalDate expirationTime, double value, boolean forSale, double sellPrice) {
+      LocalDate expirationTime, Double value, Boolean forSale, Double sellPrice) {
     this.id = id;
     this.playerId = playerId;
     this.owner = owner;
@@ -93,6 +90,10 @@ public class Contract {
     return owner;
   }
 
+  public Rarity getRarity() {
+    return rarity;
+  }
+
   public String getEvent() {
     return event;
   }
@@ -109,24 +110,48 @@ public class Contract {
     return expirationTime;
   }
 
-  public double getValue() {
+  public Double getValue() {
     return value;
   }
 
-  public boolean isForSale() {
+  public Boolean getForSale() {
     return forSale;
   }
 
-  public double getSellPrice() {
+  public Double getSellPrice() {
     return sellPrice;
+  }
+
+  public void setPlayerId(int playerId) {
+    this.playerId = playerId;
   }
 
   public void setOwner(int owner) {
     this.owner = owner;
   }
 
+  public void setRarity(Rarity rarity) {
+    this.rarity = rarity;
+  }
+
+  public void setEvent(String event) {
+    this.event = event;
+  }
+
+  public void setEventThreshold(int eventThreshold) {
+    this.eventThreshold = eventThreshold;
+  }
+
+  public void setCreationTime(LocalDate creationTime) {
+    this.creationTime = creationTime;
+  }
+
   public void setExpirationTime(LocalDate expirationTime) {
     this.expirationTime = expirationTime;
+  }
+
+  public void setValue(double value) {
+    this.value = value;
   }
 
   public void setForSale(boolean forSale) {
@@ -139,10 +164,10 @@ public class Contract {
 
   @Override
   public String toString() {
-    return "Contract(id=" + this.id + ", playerId=" + this.playerId + ", owner=" + this.owner + ", event=" + this.event
-        + ", eventThreshold=" + this.eventThreshold + ", creationTime=" + this.creationTime + ", expirationTime="
-        + this.expirationTime + ", value=" + this.value + ", forSale=" + this.forSale + ", sellPrice=" + this.sellPrice
-        + ")";
+    return "Contract(id=" + this.id + ", playerId=" + this.playerId + ", owner=" + this.owner + ", rarity="
+        + this.rarity + ", event=" + this.event + ", eventThreshold=" + this.eventThreshold + ", creationTime="
+        + this.creationTime + ", expirationTime=" + this.expirationTime + ", value=" + this.value + ", forSale="
+        + this.forSale + ", sellPrice=" + this.sellPrice + ")";
   }
 
 }

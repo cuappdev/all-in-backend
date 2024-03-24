@@ -33,6 +33,7 @@ public class ContractController {
     return contractService.getContractById(id);
   }
 
+  // Change to created the contract on the backend
   @PostMapping("/")
   public ResponseEntity<Contract> createContract(@RequestBody final Contract contract) {
     return contractService.createContract(contract);
@@ -44,7 +45,7 @@ public class ContractController {
   }
 
   @DeleteMapping("/{id}/")
-  public ResponseEntity<String> deleteContract(@PathVariable final String id) {
+  public ResponseEntity<Contract> deleteContract(@PathVariable final String id) {
     return contractService.deleteContract(id);
   }
 
