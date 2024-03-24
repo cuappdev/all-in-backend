@@ -2,42 +2,57 @@ package com.example.allin.contract;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 public class Contract {
+  enum Rarity {
+    Common,
+    Rare,
+    Epic,
+    Legendary
+  }
+
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  private int playerId;
-  // player_id integer [not null]
-  private int owner;
-  // owner integer [not null]
+  @Column(nullable = false)
+  private Integer playerId;
 
-  // rarity rarity
+  @Column(nullable = false)
+  private Integer owner;
 
+  @Column(nullable = false)
+  private Rarity rarity = Rarity.Common;
+
+  @Column(nullable = false)
   private String event;
-  // event varchar
-  private int eventThreshold;
-  // event_threshold varchar
-  private LocalDate creationTime;
-  // creation_date datetime [not null, default: `now()`]
+
+  @Column(nullable = false)
+  private Integer eventThreshold;
+
+  @Column(nullable = false)
+  private LocalDate creationTime = LocalDate.now();
+
+  @Column(nullable = false)
   private LocalDate expirationTime;
-  // expiration_date datetime [not null]
+
+  @Column(nullable = false)
   private double value;
-  // value double [not null]
-  private boolean forSale;
-  // for_sale boolean [not null, default: False]
+
+  @Column(nullable = false)
+  private boolean forSale = false;
+
   private double sellPrice;
-  // sell_price double
 
   public Contract() {
   }
 
-  public Contract(int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
+  public Contract(Integer playerId, Integer owner, String event, Integer eventThreshold, LocalDate creationTime,
       LocalDate expirationTime,
       double value, boolean forSale, double sellPrice) {
     this.playerId = playerId;
@@ -51,7 +66,8 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-  public Contract(Integer id, int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
+  public Contract(Integer id, Integer playerId, Integer owner, String event, Integer eventThreshold,
+      LocalDate creationTime,
       LocalDate expirationTime, double value, boolean forSale, double sellPrice) {
     this.id = id;
     this.playerId = playerId;
@@ -69,11 +85,11 @@ public class Contract {
     return id;
   }
 
-  public int getPlayerId() {
+  public Integer getPlayerId() {
     return playerId;
   }
 
-  public int getOwner() {
+  public Integer getOwner() {
     return owner;
   }
 
@@ -81,7 +97,7 @@ public class Contract {
     return event;
   }
 
-  public int getEventThreshold() {
+  public Integer getEventThreshold() {
     return eventThreshold;
   }
 

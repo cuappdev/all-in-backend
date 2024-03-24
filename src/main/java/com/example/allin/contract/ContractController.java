@@ -28,7 +28,7 @@ public class ContractController {
     return contractService.getAllContracts();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id}/")
   public ResponseEntity<Contract> getContractById(@PathVariable final String id) {
     return contractService.getContractById(id);
   }
@@ -38,12 +38,12 @@ public class ContractController {
     return contractService.createContract(contract);
   }
 
-  @PatchMapping("/{id}")
+  @PatchMapping("/{id}/")
   public ResponseEntity<Contract> updateContract(@PathVariable final String id, @RequestBody final Contract contract) {
     return contractService.updateContract(id, contract);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{id}/")
   public ResponseEntity<String> deleteContract(@PathVariable final String id) {
     return contractService.deleteContract(id);
   }
