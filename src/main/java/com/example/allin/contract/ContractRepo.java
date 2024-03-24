@@ -1,9 +1,9 @@
-// package com.example.allin.contract;
+package com.example.allin.contract;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-// @Repository
-// public interface ContractRepo extends JpaRepository<Contract, Long> {
+@Repository
+public interface ContractRepo extends JpaRepository<Contract, Long> {
 
-// }
+}

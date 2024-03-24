@@ -2,10 +2,16 @@ package com.example.allin.contract;
 
 import java.time.LocalDate;
 
-public class Contract {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
-  private Long id;
-  // id integer [primary key, increment]
+@Entity
+public class Contract {
+  @Id
+  @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
+  private Integer id;
+
   private int playerId;
   // player_id integer [not null]
   private int owner;
@@ -45,7 +51,7 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-  public Contract(Long id, int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
+  public Contract(Integer id, int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
       LocalDate expirationTime, double value, boolean forSale, double sellPrice) {
     this.id = id;
     this.playerId = playerId;
@@ -59,7 +65,7 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
