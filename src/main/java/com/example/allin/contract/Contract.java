@@ -1,11 +1,14 @@
 package com.example.allin.contract;
 
+import com.example.allin.user.User;
+
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -45,6 +48,9 @@ public class Contract {
   private Boolean forSale = false;
 
   private Double sellPrice;
+
+  @ManyToOne
+  private User user;
 
   public Contract() {
   }
