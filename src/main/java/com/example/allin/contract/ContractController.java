@@ -7,6 +7,7 @@ import com.example.allin.exceptions.OverdrawnException;
 import com.example.allin.exceptions.NotForSaleException;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -76,9 +77,9 @@ public class ContractController {
 
   @PostMapping("/contract/{contract_id}/buy/")
   public ResponseEntity<Contract> buyContract(@PathVariable final Integer contract_id,
-      @RequestBody final Integer buyer_id) {
+      @RequestBody final Map<String, Integer> body) {
     try {
-      Contract boughtContract = contractService.buyContract(contract_id, buyer_id);
+      Contract boughtContract = contractService.buyContract(contract_id, body.get("buyer_id"));
       return ResponseEntity.ok(boughtContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
@@ -91,9 +92,9 @@ public class ContractController {
 
   @PostMapping("/contract/{contract_id}/sell/")
   public ResponseEntity<Contract> sellContract(@PathVariable final Integer contract_id,
-      @RequestBody final Double sellPrice) {
+      @RequestBody final Map<String, Double> body) {
     try {
-      Contract soldContract = contractService.sellContract(contract_id, sellPrice);
+      Contract soldContract = contractService.sellContract(contract_id, body.get("sell_price"));
       return ResponseEntity.ok(soldContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
