@@ -54,5 +54,4 @@ public class UserService {
     userRepo.deleteById(user_id);
     return userOptional.get();
   }
-
 }
