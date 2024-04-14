@@ -2,6 +2,8 @@ package com.example.allin.contract;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.allin.exceptions.NotFoundException;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-@RequestMapping("/contracts")
 public class ContractController {
 
   private final ContractService contractService;
@@ -23,30 +23,47 @@ public class ContractController {
     this.contractService = contractService;
   }
 
-  @GetMapping("/")
+  @GetMapping("/contracts/")
   public ResponseEntity<List<Contract>> getAllContracts() {
-    return contractService.getAllContracts();
+    List<Contract> contracts = contractService.getAllContracts();
+    return ResponseEntity.ok(contracts);
   }
 
-  @GetMapping("/{id}/")
-  public ResponseEntity<Contract> getContractById(@PathVariable final String id) {
-    return contractService.getContractById(id);
+  @GetMapping("/contract/{contract_id}/")
+  public ResponseEntity<Contract> getContractById(@PathVariable final Integer contract_id) {
+    try {
+      Contract contract = contractService.getContractById(contract_id);
+      return ResponseEntity.ok(contract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
-  // Change to created the contract on the backend
-  @PostMapping("/")
+  // Change to create the contract on the backend
+  @PostMapping("/contracts/")
   public ResponseEntity<Contract> createContract(@RequestBody final Contract contract) {
-    return contractService.createContract(contract);
+    return ResponseEntity.status(201).body(contractService.createContract(contract));
   }
 
-  @PatchMapping("/{id}/")
-  public ResponseEntity<Contract> updateContract(@PathVariable final String id, @RequestBody final Contract contract) {
-    return contractService.updateContract(id, contract);
+  @PatchMapping("/contract/{contract_id}/")
+  public ResponseEntity<Contract> updateContract(@PathVariable final Integer contract_id,
+      @RequestBody final Contract contract) {
+    try {
+      Contract updatedContract = contractService.updateContract(contract_id, contract);
+      return ResponseEntity.ok(updatedContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
-  @DeleteMapping("/{id}/")
-  public ResponseEntity<Contract> deleteContract(@PathVariable final String id) {
-    return contractService.deleteContract(id);
+  @DeleteMapping("/contract/{contract_id}/")
+  public ResponseEntity<Contract> deleteContract(@PathVariable final Integer contract_id) {
+    try {
+      Contract deletedContract = contractService.deleteContract(contract_id);
+      return ResponseEntity.ok(deletedContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
 }

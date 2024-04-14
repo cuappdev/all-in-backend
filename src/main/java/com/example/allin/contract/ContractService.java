@@ -1,13 +1,11 @@
 package com.example.allin.contract;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.example.allin.exceptions.NotFoundException;
 
 @Service
 public class ContractService {
@@ -18,38 +16,48 @@ public class ContractService {
     this.contractRepo = contractRepo;
   }
 
-  public ResponseEntity<List<Contract>> getAllContracts() {
-    return ResponseEntity.status(HttpStatus.OK).body(contractRepo.findAll());
+  public List<Contract> getAllContracts() {
+    return contractRepo.findAll();
   }
 
-  public ResponseEntity<Contract> getContractById(final String id) {
-    Optional<Contract> contractOptional = contractRepo.findById(Integer.parseInt(id));
-    if (contractOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-    return ResponseEntity.status(HttpStatus.OK).body(contractOptional.get());
-  }
-
-  public ResponseEntity<Contract> createContract(final Contract contract) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(contractRepo.save(contract));
-  }
-
-  public ResponseEntity<Contract> updateContract(final String id, final Contract contract) {
-    Optional<Contract> contractOptional = contractRepo.findById(Integer.parseInt(id));
-    if (contractOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-    return ResponseEntity.status(HttpStatus.OK).body(contractRepo.save(contract));
-  }
-
-  public ResponseEntity<Contract> deleteContract(final String id) {
-    Integer contract_id = Integer.parseInt(id);
+  public Contract getContractById(final Integer contract_id) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      throw new NotFoundException();
     }
-    contractRepo.deleteById(Integer.parseInt(id));
-    return ResponseEntity.status(HttpStatus.OK).body(contractOptional.get());
+    return contractOptional.get();
+  }
+
+  public Contract createContract(final Contract contract) {
+    return contractRepo.save(contract);
+  }
+
+  public Contract updateContract(final Integer contract_id, final Contract contract) throws NotFoundException {
+    Optional<Contract> contractOptional = contractRepo.findById(contract_id);
+    if (contractOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    Contract contractToUpdate = contractOptional.get();
+    contractToUpdate.setPlayerId(contract.getPlayerId());
+    contractToUpdate.setOwner(contract.getOwner());
+    contractToUpdate.setRarity(contract.getRarity());
+    contractToUpdate.setEvent(contract.getEvent());
+    contractToUpdate.setEventThreshold(contract.getEventThreshold());
+    contractToUpdate.setCreationTime(contract.getCreationTime());
+    contractToUpdate.setExpirationTime(contract.getExpirationTime());
+    contractToUpdate.setValue(contract.getValue());
+    contractToUpdate.setForSale(contract.getForSale());
+    contractToUpdate.setSellPrice(contract.getSellPrice());
+    return contractRepo.save(contractToUpdate);
+  }
+
+  public Contract deleteContract(final Integer contract_id) throws NotFoundException {
+    Optional<Contract> contractOptional = contractRepo.findById(contract_id);
+    if (contractOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    contractRepo.deleteById(contract_id);
+    return contractOptional.get();
   }
 
 }
