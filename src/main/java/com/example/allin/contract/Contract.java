@@ -2,38 +2,56 @@ package com.example.allin.contract;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "contracts")
 public class Contract {
+  @Id
+  @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
+  private Integer id;
 
-  private Long id;
-  // id integer [primary key, increment]
-  private int playerId;
-  // player_id integer [not null]
-  private int owner;
-  // owner integer [not null]
+  // Change to player and add foregin key
+  @Column(nullable = false)
+  private Integer playerId;
 
-  // rarity rarity
+  // Add foreign key
+  @Column(nullable = false)
+  private Integer owner;
 
+  @Column(nullable = false)
+  private Rarity rarity;
+
+  @Column(nullable = false)
   private String event;
-  // event varchar
-  private int eventThreshold;
-  // event_threshold varchar
-  private LocalDate creationTime;
-  // creation_date datetime [not null, default: `now()`]
+
+  @Column(nullable = false)
+  private Integer eventThreshold;
+
+  @Column(nullable = false)
+  private LocalDate creationTime = LocalDate.now();
+
+  @Column(nullable = false)
   private LocalDate expirationTime;
-  // expiration_date datetime [not null]
-  private double value;
-  // value double [not null]
-  private boolean forSale;
-  // for_sale boolean [not null, default: False]
-  private double sellPrice;
-  // sell_price double
+
+  @Column(nullable = false)
+  private Double value;
+
+  @Column(nullable = false)
+  private Boolean forSale = false;
+
+  private Double sellPrice;
 
   public Contract() {
   }
 
-  public Contract(int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
+  public Contract(Integer playerId, Integer owner, String event, Integer eventThreshold, LocalDate creationTime,
       LocalDate expirationTime,
-      double value, boolean forSale, double sellPrice) {
+      Double value, Boolean forSale, Double sellPrice) {
     this.playerId = playerId;
     this.owner = owner;
     this.event = event;
@@ -45,8 +63,9 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-  public Contract(Long id, int playerId, int owner, String event, int eventThreshold, LocalDate creationTime,
-      LocalDate expirationTime, double value, boolean forSale, double sellPrice) {
+  public Contract(Integer id, Integer playerId, Integer owner, String event, Integer eventThreshold,
+      LocalDate creationTime,
+      LocalDate expirationTime, Double value, Boolean forSale, Double sellPrice) {
     this.id = id;
     this.playerId = playerId;
     this.owner = owner;
@@ -59,23 +78,27 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public int getPlayerId() {
+  public Integer getPlayerId() {
     return playerId;
   }
 
-  public int getOwner() {
+  public Integer getOwner() {
     return owner;
+  }
+
+  public Rarity getRarity() {
+    return rarity;
   }
 
   public String getEvent() {
     return event;
   }
 
-  public int getEventThreshold() {
+  public Integer getEventThreshold() {
     return eventThreshold;
   }
 
@@ -87,24 +110,48 @@ public class Contract {
     return expirationTime;
   }
 
-  public double getValue() {
+  public Double getValue() {
     return value;
   }
 
-  public boolean isForSale() {
+  public Boolean getForSale() {
     return forSale;
   }
 
-  public double getSellPrice() {
+  public Double getSellPrice() {
     return sellPrice;
+  }
+
+  public void setPlayerId(int playerId) {
+    this.playerId = playerId;
   }
 
   public void setOwner(int owner) {
     this.owner = owner;
   }
 
+  public void setRarity(Rarity rarity) {
+    this.rarity = rarity;
+  }
+
+  public void setEvent(String event) {
+    this.event = event;
+  }
+
+  public void setEventThreshold(int eventThreshold) {
+    this.eventThreshold = eventThreshold;
+  }
+
+  public void setCreationTime(LocalDate creationTime) {
+    this.creationTime = creationTime;
+  }
+
   public void setExpirationTime(LocalDate expirationTime) {
     this.expirationTime = expirationTime;
+  }
+
+  public void setValue(double value) {
+    this.value = value;
   }
 
   public void setForSale(boolean forSale) {
@@ -117,10 +164,10 @@ public class Contract {
 
   @Override
   public String toString() {
-    return "Contract(id=" + this.id + ", playerId=" + this.playerId + ", owner=" + this.owner + ", event=" + this.event
-        + ", eventThreshold=" + this.eventThreshold + ", creationTime=" + this.creationTime + ", expirationTime="
-        + this.expirationTime + ", value=" + this.value + ", forSale=" + this.forSale + ", sellPrice=" + this.sellPrice
-        + ")";
+    return "Contract(id=" + this.id + ", playerId=" + this.playerId + ", owner=" + this.owner + ", rarity="
+        + this.rarity + ", event=" + this.event + ", eventThreshold=" + this.eventThreshold + ", creationTime="
+        + this.creationTime + ", expirationTime=" + this.expirationTime + ", value=" + this.value + ", forSale="
+        + this.forSale + ", sellPrice=" + this.sellPrice + ")";
   }
 
 }
