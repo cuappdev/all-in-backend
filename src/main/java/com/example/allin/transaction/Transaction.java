@@ -5,9 +5,11 @@ import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
