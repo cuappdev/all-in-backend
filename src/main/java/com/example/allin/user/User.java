@@ -27,7 +27,7 @@ public class User {
   // private String image;
 
   @Column(nullable = false)
-  private Integer balance;
+  private Double balance;
 
   @Column
   private String sessionToken;
@@ -47,7 +47,7 @@ public class User {
   public User() {
   }
 
-  public User(String email, String hashedPassword, Integer balance, String sessionToken, String sessionExpiration,
+  public User(String email, String hashedPassword, Double balance, String sessionToken, String sessionExpiration,
       Boolean isAdmin) {
     this.email = email;
     this.hashedPassword = hashedPassword;
@@ -82,11 +82,11 @@ public class User {
     this.hashedPassword = hashedPassword;
   }
 
-  public Integer getBalance() {
+  public Double getBalance() {
     return balance;
   }
 
-  public void setBalance(Integer balance) {
+  public void setBalance(Double balance) {
     this.balance = balance;
   }
 

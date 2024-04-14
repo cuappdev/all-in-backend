@@ -3,6 +3,8 @@ package com.example.allin.contract;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.allin.exceptions.NotFoundException;
+import com.example.allin.exceptions.OverdrawnException;
+import com.example.allin.exceptions.NotForSaleException;
 
 import java.util.List;
 
@@ -61,6 +63,38 @@ public class ContractController {
     try {
       Contract deletedContract = contractService.deleteContract(contract_id);
       return ResponseEntity.ok(deletedContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @GetMapping("/market/")
+  public ResponseEntity<List<Contract>> getMarketContracts() {
+    List<Contract> marketContracts = contractService.getMarketContracts();
+    return ResponseEntity.ok(marketContracts);
+  }
+
+  @PostMapping("/contract/{contract_id}/buy/")
+  public ResponseEntity<Contract> buyContract(@PathVariable final Integer contract_id,
+      @RequestBody final Integer buyer_id) {
+    try {
+      Contract boughtContract = contractService.buyContract(contract_id, buyer_id);
+      return ResponseEntity.ok(boughtContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    } catch (OverdrawnException e) {
+      return ResponseEntity.status(402).build();
+    } catch (NotForSaleException e) {
+      return ResponseEntity.status(403).build();
+    }
+  }
+
+  @PostMapping("/contract/{contract_id}/sell/")
+  public ResponseEntity<Contract> sellContract(@PathVariable final Integer contract_id,
+      @RequestBody final Double sellPrice) {
+    try {
+      Contract soldContract = contractService.sellContract(contract_id, sellPrice);
+      return ResponseEntity.ok(soldContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
