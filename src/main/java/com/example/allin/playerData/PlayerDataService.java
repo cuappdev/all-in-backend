@@ -37,9 +37,10 @@ public class PlayerDataService {
     }
     PlayerData playerDataToUpdate = playerDataOptional.get();
     playerDataToUpdate.setPlayerId(playerData.getPlayerId());
-    playerDataToUpdate.lastUpdate(playerData.getLastUpdate());
+    playerDataToUpdate.setGameDate(playerData.getGameDate());
+    playerDataToUpdate.setOpponent(playerData.getOpponent());
     playerDataToUpdate.setPlayed(playerData.getPlayed());
-    playerDataToUpdate.setStarted(playerData.getStarted());
+    playerDataToUpdate.setPoints(playerData.getPoints());
     playerDataToUpdate.setMinutes(playerData.getMinutes());
     playerDataToUpdate.setFieldGoalsMade(playerData.getFieldGoalsMade());
     playerDataToUpdate.setFieldGoalsAttempted(playerData.getFieldGoalsAttempted());
@@ -47,10 +48,9 @@ public class PlayerDataService {
     playerDataToUpdate.setThreePointersAttempted(playerData.getThreePointersAttempted());
     playerDataToUpdate.setFreeThrowsMade(playerData.getFreeThrowsMade());
     playerDataToUpdate.setFreeThrowsAttempted(playerData.getFreeThrowsAttempted());
-    playerDataToUpdate.setOffensiveRebounds(playerData.getOffensiveRebounds());
-    playerDataToUpdate.setDefensiveRebounds(playerData.getDefensiveRebounds());
-    playerDataToUpdate.setPersonalFouls(playerData.getPersonalFouls());
-    playerDataToUpdate.setPoints(playerData.getPoints());
+    playerDataToUpdate.setRebounds(playerData.getRebounds());
+    playerDataToUpdate.setAssists(playerData.getAssists());
+    playerDataToUpdate.setSteals(playerData.getSteals());
     return playerDataRepo.save(playerDataToUpdate);
   }
 
