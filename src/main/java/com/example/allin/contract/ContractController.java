@@ -42,12 +42,6 @@ public class ContractController {
     }
   }
 
-  // Change to create the contract on the backend
-  @PostMapping("/contracts/")
-  public ResponseEntity<Contract> createContract(@RequestBody final Contract contract) {
-    return ResponseEntity.status(201).body(contractService.createContract(contract));
-  }
-
   @PatchMapping("/contract/{contract_id}/")
   public ResponseEntity<Contract> updateContract(@PathVariable final Integer contract_id,
       @RequestBody final Contract contract) {

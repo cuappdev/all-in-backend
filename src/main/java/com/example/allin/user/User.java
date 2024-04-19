@@ -2,6 +2,7 @@ package com.example.allin.user;
 
 import com.example.allin.contract.Contract;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 
 @Entity
 @Table(name = "users")
@@ -18,44 +20,42 @@ public class User {
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  @Column(nullable = false)
+  @Column(name = "firstname", nullable = false)
+  private String firstname;
+
+  @Column(name = "lastname", nullable = false)
+  private String lastname;
+
+  @Column(name = "email", nullable = false)
   private String email;
 
-  @Column(nullable = false)
+  @Column(name = "hashedPassword", nullable = false)
   private String hashedPassword;
 
-  // private String image;
+  @Column(name = "image", nullable = true)
+  private String image;
 
-  @Column(nullable = false)
-  private Double balance;
+  @Column(name = "balance", nullable = false)
+  private Double balance = 1000.0;
 
-  @Column
-  private String sessionToken;
-
-  @Column
-  private String sessionExpiration;
-
-  // @Column
-  // private String refreshToken;
-
-  @Column(nullable = false)
+  @Column(name = "isAdmin", nullable = false)
   private Boolean isAdmin;
 
-  @OneToMany(mappedBy = "owner", cascade = jakarta.persistence.CascadeType.ALL)
-  private List<Contract> contracts;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = jakarta.persistence.FetchType.EAGER)
+  private List<Contract> contracts = new LinkedList<>();
 
   public User() {
   }
 
-  public User(String email, String hashedPassword, Double balance, String sessionToken, String sessionExpiration,
+  public User(String firstname, String lastname, String email, String hashedPassword, String image, Double balance,
       Boolean isAdmin) {
+    this.firstname = firstname;
+    this.lastname = lastname;
     this.email = email;
     this.hashedPassword = hashedPassword;
+    this.image = image;
     this.balance = balance;
-    this.sessionToken = sessionToken;
-    this.sessionExpiration = sessionExpiration;
     this.isAdmin = isAdmin;
-    this.contracts = new java.util.LinkedList<>();
   }
 
   public Integer getId() {
@@ -64,6 +64,22 @@ public class User {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public String getFirstname() {
+    return firstname;
+  }
+
+  public void setFirstname(String firstname) {
+    this.firstname = firstname;
+  }
+
+  public String getLastname() {
+    return lastname;
+  }
+
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
   }
 
   public String getEmail() {
@@ -82,28 +98,20 @@ public class User {
     this.hashedPassword = hashedPassword;
   }
 
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
   public Double getBalance() {
     return balance;
   }
 
   public void setBalance(Double balance) {
     this.balance = balance;
-  }
-
-  public String getSessionToken() {
-    return sessionToken;
-  }
-
-  public void setSessionToken(String sessionToken) {
-    this.sessionToken = sessionToken;
-  }
-
-  public String getSessionExpiration() {
-    return sessionExpiration;
-  }
-
-  public void setSessionExpiration(String sessionExpiration) {
-    this.sessionExpiration = sessionExpiration;
   }
 
   public Boolean getIsAdmin() {
@@ -114,9 +122,26 @@ public class User {
     this.isAdmin = isAdmin;
   }
 
+  public List<Contract> getContracts() {
+    return contracts;
+  }
+
+  public void setContracts(List<Contract> contracts) {
+    this.contracts = contracts;
+    contracts.forEach(contract -> contract.setOwner(this));
+  }
+
   @Override
   public String toString() {
-    return "User [balance=" + balance + ", email=" + email + ", hashedPassword=" + hashedPassword + ", id=" + id
-        + ", isAdmin=" + isAdmin + ", sessionExpiration=" + sessionExpiration + ", sessionToken=" + sessionToken + "]";
+    return "User{" +
+        "id=" + id +
+        ", firstname='" + firstname + '\'' +
+        ", lastname='" + lastname + '\'' +
+        ", email='" + email + '\'' +
+        ", hashedPassword='" + hashedPassword + '\'' +
+        ", image='" + image + '\'' +
+        ", balance=" + balance +
+        ", isAdmin=" + isAdmin +
+        '}';
   }
 }

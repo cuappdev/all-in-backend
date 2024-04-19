@@ -40,8 +40,6 @@ public class UserService {
     userToUpdate.setEmail(user.getEmail());
     userToUpdate.setHashedPassword(user.getHashedPassword());
     userToUpdate.setBalance(user.getBalance());
-    userToUpdate.setSessionToken(user.getSessionToken());
-    userToUpdate.setSessionExpiration(user.getSessionExpiration());
     userToUpdate.setIsAdmin(user.getIsAdmin());
     return userRepo.save(userToUpdate);
   }

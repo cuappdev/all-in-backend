@@ -55,7 +55,6 @@ public class ContractService {
     contractToUpdate.setEvent(contract.getEvent());
     contractToUpdate.setEventThreshold(contract.getEventThreshold());
     contractToUpdate.setCreationTime(contract.getCreationTime());
-    contractToUpdate.setExpirationTime(contract.getExpirationTime());
     contractToUpdate.setValue(contract.getValue());
     contractToUpdate.setForSale(contract.getForSale());
     contractToUpdate.setSellPrice(contract.getSellPrice());
@@ -88,14 +87,12 @@ public class ContractService {
       throw new NotForSaleException();
     }
 
-    Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner());
     Optional<User> buyerOptional = userRepo.findById(buyer_id);
-
-    if (sellerOptional.isEmpty() || buyerOptional.isEmpty()) {
+    if (buyerOptional.isEmpty()) {
       throw new NotFoundException();
     }
 
-    User seller = sellerOptional.get();
+    User seller = contractToBuy.getOwner();
     User buyer = buyerOptional.get();
     Double sellPrice = contractToBuy.getSellPrice();
 
@@ -106,7 +103,7 @@ public class ContractService {
     seller.setBalance(seller.getBalance() + sellPrice);
     buyer.setBalance(buyer.getBalance() - sellPrice);
 
-    contractToBuy.setOwner(buyer_id);
+    contractToBuy.setOwner(buyer);
     contractToBuy.setForSale(false);
 
     return contractRepo.save(contractToBuy);
