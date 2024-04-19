@@ -26,13 +26,15 @@ public class ContractController {
     this.contractService = contractService;
   }
 
+  // CRUD operations
+
   @GetMapping("/contracts/")
   public ResponseEntity<List<Contract>> getAllContracts() {
     List<Contract> contracts = contractService.getAllContracts();
     return ResponseEntity.ok(contracts);
   }
 
-  @GetMapping("/contract/{contract_id}/")
+  @GetMapping("/contracts/{contract_id}/")
   public ResponseEntity<Contract> getContractById(@PathVariable final Integer contract_id) {
     try {
       Contract contract = contractService.getContractById(contract_id);
@@ -42,7 +44,7 @@ public class ContractController {
     }
   }
 
-  @PatchMapping("/contract/{contract_id}/")
+  @PatchMapping("/contracts/{contract_id}/")
   public ResponseEntity<Contract> updateContract(@PathVariable final Integer contract_id,
       @RequestBody final Contract contract) {
     try {
@@ -53,7 +55,7 @@ public class ContractController {
     }
   }
 
-  @DeleteMapping("/contract/{contract_id}/")
+  @DeleteMapping("/contracts/{contract_id}/")
   public ResponseEntity<Contract> deleteContract(@PathVariable final Integer contract_id) {
     try {
       Contract deletedContract = contractService.deleteContract(contract_id);
@@ -63,13 +65,15 @@ public class ContractController {
     }
   }
 
+  // Market operations
+
   @GetMapping("/market/")
   public ResponseEntity<List<Contract>> getMarketContracts() {
     List<Contract> marketContracts = contractService.getMarketContracts();
     return ResponseEntity.ok(marketContracts);
   }
 
-  @PostMapping("/contract/{contract_id}/buy/")
+  @PostMapping("/contracts/{contract_id}/buy/")
   public ResponseEntity<Contract> buyContract(@PathVariable final Integer contract_id,
       @RequestBody final Map<String, Integer> body) {
     try {
@@ -84,7 +88,7 @@ public class ContractController {
     }
   }
 
-  @PostMapping("/contract/{contract_id}/sell/")
+  @PostMapping("/contracts/{contract_id}/sell/")
   public ResponseEntity<Contract> sellContract(@PathVariable final Integer contract_id,
       @RequestBody final Map<String, Double> body) {
     try {

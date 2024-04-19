@@ -11,7 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "contracts")
@@ -24,8 +29,9 @@ public class Contract {
   @Column(nullable = false)
   private Integer playerId;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "owner_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "owner_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private User owner;
 
   @Column(name = "rarity", nullable = false)
@@ -89,10 +95,12 @@ public class Contract {
     this.playerId = playerId;
   }
 
+  @JsonIgnore
   public User getOwner() {
     return owner;
   }
 
+  @JsonIgnore
   public void setOwner(User owner) {
     this.owner = owner;
   }

@@ -2,6 +2,10 @@ package com.example.allin.user;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.allin.contract.Contract;
+import com.example.allin.contract.ContractService;
+import com.example.allin.transaction.Transaction;
+import com.example.allin.transaction.TransactionService;
 import com.example.allin.exceptions.NotFoundException;
 
 import java.util.List;
@@ -18,10 +22,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
   private final UserService userService;
+  private final ContractService contractService;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, ContractService ContractService) {
     this.userService = userService;
+    this.contractService = ContractService;
   }
+
+  // CRUD operations
 
   @GetMapping("/users/")
   public ResponseEntity<List<User>> getAllUsers() {
@@ -29,7 +37,7 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
-  @GetMapping("/user/{user_id}/")
+  @GetMapping("/users/{user_id}/")
   public ResponseEntity<User> getUserById(@PathVariable final Integer user_id) {
     try {
       User user = userService.getUserById(user_id);
@@ -44,7 +52,7 @@ public class UserController {
     return ResponseEntity.status(201).body(userService.createUser(user));
   }
 
-  @PatchMapping("/user/{user_id}/")
+  @PatchMapping("/users/{user_id}/")
   public ResponseEntity<User> updateUser(@PathVariable final Integer user_id, @RequestBody final User user) {
     try {
       User updatedUser = userService.updateUser(user_id, user);
@@ -54,7 +62,7 @@ public class UserController {
     }
   }
 
-  @DeleteMapping("/user/{user_id}/")
+  @DeleteMapping("/users/{user_id}/")
   public ResponseEntity<User> deleteUser(@PathVariable final Integer user_id) {
     try {
       User deletedUser = userService.deleteUser(user_id);
@@ -63,5 +71,42 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // Contract operations
+
+  @GetMapping("/users/{user_id}/contracts/")
+  public ResponseEntity<List<Contract>> getUserContracts(@PathVariable final Integer user_id) {
+    try {
+      List<Contract> contracts = contractService.getContractsByUserId(user_id);
+      return ResponseEntity.ok(contracts);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @PostMapping("/users/{user_id}/contracts/")
+  public ResponseEntity<Contract> createContract(@PathVariable final Integer user_id,
+      @RequestBody final Contract contract) {
+    try {
+      Contract createdContract = contractService.createContractByUserId(user_id, contract);
+      return ResponseEntity.status(201).body(createdContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  // Transaction operations
+
+  // @GetMapping("/users/{user_id}/transactions/")
+  // public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable
+  // final Integer user_id) {
+  // try {
+  // List<Transaction> transactions =
+  // userService.getTransactionsByUserId(user_id);
+  // return ResponseEntity.ok(transactions);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
 
 }

@@ -2,16 +2,16 @@ package com.example.allin.user;
 
 import com.example.allin.contract.Contract;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.LinkedList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "users")
@@ -41,7 +41,7 @@ public class User {
   @Column(name = "isAdmin", nullable = false)
   private Boolean isAdmin;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = jakarta.persistence.FetchType.EAGER)
+  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private List<Contract> contracts = new LinkedList<>();
 
   public User() {
@@ -128,7 +128,10 @@ public class User {
 
   public void setContracts(List<Contract> contracts) {
     this.contracts = contracts;
-    contracts.forEach(contract -> contract.setOwner(this));
+  }
+
+  public void addContract(Contract contract) {
+    contracts.add(contract);
   }
 
   @Override

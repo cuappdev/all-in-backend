@@ -39,7 +39,22 @@ public class ContractService {
     return null;
   }
 
-  public Contract createContract(final Contract contract) {
+  public List<Contract> getContractsByUserId(final Integer user_id) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(user_id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    User user = userOptional.get();
+    return contractRepo.findByOwner(user);
+  }
+
+  public Contract createContractByUserId(final Integer user_id, final Contract contract) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(user_id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    User user = userOptional.get();
+    contract.setOwner(user);
     return contractRepo.save(contract);
   }
 

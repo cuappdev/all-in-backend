@@ -37,8 +37,11 @@ public class UserService {
       throw new NotFoundException();
     }
     User userToUpdate = userOptional.get();
+    userToUpdate.setFirstname(user.getFirstname());
+    userToUpdate.setLastname(user.getLastname());
     userToUpdate.setEmail(user.getEmail());
     userToUpdate.setHashedPassword(user.getHashedPassword());
+    userToUpdate.setImage(user.getImage());
     userToUpdate.setBalance(user.getBalance());
     userToUpdate.setIsAdmin(user.getIsAdmin());
     return userRepo.save(userToUpdate);
