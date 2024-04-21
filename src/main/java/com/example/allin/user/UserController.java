@@ -81,16 +81,46 @@ public class UserController {
     }
   }
 
-  // @PatchMapping("/users/{user_id}/image/")
-  // public ResponseEntity<User> updateUserImage(@PathVariable final Integer
-  // user_id, @RequestBody final User user) {
-  // try {
-  // User updatedUser = userService.updateUserImageById(user_id, user);
-  // return ResponseEntity.ok(updatedUser);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/image/")
+  public ResponseEntity<byte[]> getImageFromStorage(@PathVariable final Integer user_id) throws NotFoundException {
+    try {
+      User user = userService.getUserById(user_id);
+      String currentDirectory = user.getImage();
+      String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
+      currentDirectory = currentDirectory.replace(imageName, "");
+      byte[] image = userService.getImageFromStorage(currentDirectory, imageName);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_JPEG);
+      return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    } catch (Exception e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @PatchMapping("/users/{user_id}/image/")
+  public ResponseEntity<String> updateUserImageById(@PathVariable final Integer user_id,
+      @RequestBody final MultipartFile image) {
+    String uploadDirectory = "src/main/resources/static/images/users/";
+    try {
+      userService.updateUserImageById(user_id, image, uploadDirectory);
+      return ResponseEntity.ok("Image uploaded successfully!");
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @DeleteMapping("/users/{user_id}/image/")
+  public ResponseEntity<String> deleteUserImageById(@PathVariable final Integer user_id) {
+    String uploadDirectory = "src/main/resources/static/images/users/";
+    try {
+      if (userService.deleteUserImageById(user_id, uploadDirectory)) {
+        return ResponseEntity.ok("Image deleted successfully");
+      }
+      return ResponseEntity.notFound().build();
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
   // Contract operations
 
