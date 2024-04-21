@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class PlayerController {
@@ -62,4 +67,49 @@ public class PlayerController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  @GetMapping("/players/{playerId}/image/")
+  public ResponseEntity<byte[]> getImageFromStorage(@PathVariable final Integer playerId) throws NotFoundException{
+    try {
+      Player player = playerService.getPlayerById(playerId);
+      String currentDirectory = player.getImage();
+      System.out.println("playerimage: " + currentDirectory);
+      String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
+      currentDirectory = currentDirectory.replace(imageName, "");
+      System.out.println("currentDirectory: " + currentDirectory);
+      System.out.println("imageName: " + imageName);
+      byte[] image = playerService.getImageFromStorage(currentDirectory, imageName);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_JPEG);
+      return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    } catch (Exception e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @PatchMapping("/players/{playerId}/image/")
+  public ResponseEntity<String> updatePlayerImageById(@PathVariable final Integer playerId,
+      @RequestBody final MultipartFile image){
+    String uploadDirectory = "src/main/resources/static/images/players/";
+    try {
+      playerService.updatePlayerImageById(playerId, image, uploadDirectory);
+      return ResponseEntity.ok("Image uploaded successfully!");
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @DeleteMapping("/players/{playerId}/image/")
+  public ResponseEntity<String> deletePlayerImageById(@PathVariable final Integer playerId){
+    String uploadDirectory = "src/main/resources/static/images/players/";
+    try {
+      if (playerService.deletePlayerImageById(playerId, uploadDirectory)) {
+        return ResponseEntity.ok("Image deleted successfully");
+      }
+      return ResponseEntity.notFound().build();
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
 }

@@ -48,7 +48,7 @@ public class Player {
   private String highSchool;
 
   @Column()
-  private String image;
+  private String image = "src/main/resources/static/images/players/default.jpg";
 
   @Column()
   private String bio = "";
