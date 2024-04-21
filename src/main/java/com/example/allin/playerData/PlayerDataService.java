@@ -1,5 +1,7 @@
 package com.example.allin.playerData;
 
+import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -60,5 +62,9 @@ public class PlayerDataService {
     }
     playerDataRepo.deleteById(playerDataId);
     return playerDataOptional.get();
+  }
+
+  public List<PlayerData> getPlayerDataByDate(final LocalDate gameDate) throws NotFoundException {
+    return playerDataRepo.findByGameDate(gameDate);
   }
 }

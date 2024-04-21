@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.allin.exceptions.NotFoundException;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,6 +61,16 @@ public class PlayerDataController {
     try {
       PlayerData deletedPlayerData = playerDataService.deletePlayerData(playerDataId);
       return ResponseEntity.ok(deletedPlayerData);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @GetMapping("/playerData/game/{gameDate}/")
+  public ResponseEntity<List<PlayerData>> getPlayerDataByGame(@PathVariable final String gameDate) {
+    try {
+      List<PlayerData> playerData = playerDataService.getPlayerDataByDate(LocalDate.parse(gameDate));
+      return ResponseEntity.ok(playerData);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
