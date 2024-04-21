@@ -48,7 +48,7 @@ public class Player {
   private String highSchool;
 
   @Column()
-  private byte[] image;
+  private String image;
 
   @Column()
   private String bio = "";
@@ -63,7 +63,7 @@ public class Player {
   }
 
   public Player(String firstName, String lastName, String position, Integer number, Integer height, Integer weight,
-      Integer year, String hometown, String highSchool, byte[] image, String bio) {
+      Integer year, String hometown, String highSchool, String image, String bio) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.position = position;
@@ -157,11 +157,11 @@ public class Player {
     this.highSchool = highSchool;
   }
 
-  public byte[] getImage() {
+  public String getImage() {
     return image;
   }
 
-  public void setImage(byte[] image) {
+  public void setImage(String image) {
     this.image = image;
   }
 
