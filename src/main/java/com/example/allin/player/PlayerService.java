@@ -44,11 +44,9 @@ public class PlayerService {
     playerToUpdate.setNumber(player.getNumber());
     playerToUpdate.setHeight(player.getHeight());
     playerToUpdate.setWeight(player.getWeight());
-    playerToUpdate.setYear(player.getYear());
     playerToUpdate.setHometown(player.getHometown());
     playerToUpdate.setHighSchool(player.getHighSchool());
     playerToUpdate.setImage(player.getImage());
-    playerToUpdate.setBio(player.getBio());
     return playerRepo.save(playerToUpdate);
   }
 
