@@ -11,23 +11,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
-import lombok.Data;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import lombok.Data;
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
-@Data
 @Entity
 @Table(name = "player_data")
 public class PlayerData {
