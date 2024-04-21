@@ -42,8 +42,8 @@ public class UserService {
       throw new NotFoundException();
     }
     User userToUpdate = userOptional.get();
+    userToUpdate.setUsername(user.getUsername());
     userToUpdate.setEmail(user.getEmail());
-    userToUpdate.setImage(user.getImage());
     userToUpdate.setBalance(user.getBalance());
     return userRepo.save(userToUpdate);
   }

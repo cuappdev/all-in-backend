@@ -50,11 +50,9 @@ public class PlayerService {
     playerToUpdate.setNumber(player.getNumber());
     playerToUpdate.setHeight(player.getHeight());
     playerToUpdate.setWeight(player.getWeight());
-    playerToUpdate.setYear(player.getYear());
     playerToUpdate.setHometown(player.getHometown());
     playerToUpdate.setHighSchool(player.getHighSchool());
     playerToUpdate.setImage(player.getImage());
-    playerToUpdate.setBio(player.getBio());
     return playerRepo.save(playerToUpdate);
   }
 
@@ -107,12 +105,12 @@ public class PlayerService {
     playerRepo.save(playerToUpdate);
   }
 
-  public boolean deletePlayerImageById(final Integer user_id, final String uploadDirectory) throws NotFoundException{
-    Optional<Player> userOptional = playerRepo.findById(user_id);
-    if (userOptional.isEmpty()) {
+  public boolean deletePlayerImageById(final Integer player_id, final String uploadDirectory) throws NotFoundException{
+    Optional<Player> playerOptional = playerRepo.findById(player_id);
+    if (playerOptional.isEmpty()) {
       throw new NotFoundException();
     }
-    Player playerToUpdate = userOptional.get();
+    Player playerToUpdate = playerOptional.get();
     String image = playerToUpdate.getImage();
     if (image.equals(defaultImage)) {
       return false;

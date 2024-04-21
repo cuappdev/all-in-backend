@@ -39,16 +39,12 @@ public class PlayerDataService {
     }
     PlayerData playerDataToUpdate = playerDataOptional.get();
     playerDataToUpdate.setGameDate(playerData.getGameDate());
-    playerDataToUpdate.setOpponent(playerData.getOpponent());
-    playerDataToUpdate.setPlayed(playerData.getPlayed());
+    playerDataToUpdate.setOpposingTeam(playerData.getOpposingTeam());
     playerDataToUpdate.setPoints(playerData.getPoints());
     playerDataToUpdate.setMinutes(playerData.getMinutes());
-    playerDataToUpdate.setFieldGoalsMade(playerData.getFieldGoalsMade());
-    playerDataToUpdate.setFieldGoalsAttempted(playerData.getFieldGoalsAttempted());
-    playerDataToUpdate.setThreePointersMade(playerData.getThreePointersMade());
-    playerDataToUpdate.setThreePointersAttempted(playerData.getThreePointersAttempted());
-    playerDataToUpdate.setFreeThrowsMade(playerData.getFreeThrowsMade());
-    playerDataToUpdate.setFreeThrowsAttempted(playerData.getFreeThrowsAttempted());
+    playerDataToUpdate.setFieldGoals(playerData.getFieldGoals());
+    playerDataToUpdate.setThreePointers(playerData.getThreePointers());
+    playerDataToUpdate.setFreeThrows(playerData.getFreeThrows());
     playerDataToUpdate.setRebounds(playerData.getRebounds());
     playerDataToUpdate.setAssists(playerData.getAssists());
     playerDataToUpdate.setSteals(playerData.getSteals());

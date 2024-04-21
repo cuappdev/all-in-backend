@@ -2,6 +2,7 @@ package com.example.allin.playerData;
 
 import java.time.LocalDate;
 
+import com.example.allin.contract.OpposingTeam;
 import com.example.allin.player.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,12 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 
@@ -35,83 +30,66 @@ public class PlayerData {
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Player player;
 
-  @Column(nullable = false)
+  @Column(name = "gameDate", nullable = false)
   private LocalDate gameDate;
 
-  @Column(nullable = false)
-  private String opponent;
+  @Column(name = "opposingTeam", nullable = false)
+  private OpposingTeam opposingTeam;
 
-  @Column()
-  private Boolean played;
-
-  @Column()
+  @Column(name = "points", nullable = false)
   private Integer points;
 
-  @Column()
+  @Column(name = "minutes", nullable = false)
   private Integer minutes;
 
-  @Column()
-  private Integer fieldGoalsMade;
+  @Column(name = "fieldGoals", nullable = false)
+  private Integer fieldGoals;
 
-  @Column()
-  private Integer fieldGoalsAttempted;
+  @Column(name = "threePointers", nullable = false)
+  private Integer threePointers;
 
-  @Column()
-  private Integer threePointersMade;
+  @Column(name = "freeThrows", nullable = false)
+  private Integer freeThrows;
 
-  @Column()
-  private Integer threePointersAttempted;
-
-  @Column()
-  private Integer freeThrowsMade;
-
-  @Column()
-  private Integer freeThrowsAttempted;
-
-  @Column()
+  @Column(name = "rebounds", nullable = false)
   private Integer rebounds;
 
-  @Column()
+  @Column(name = "assists", nullable = false)
   private Integer assists;
 
-  @Column()
+  @Column(name = "steals", nullable = false)
   private Integer steals;
 
-  @Column()
+  @Column(name = "blocks", nullable = false)
   private Integer blocks;
 
-  @Column()
+  @Column(name = "turnovers", nullable = false)
   private Integer turnovers;
 
-  @Column()
-  private Integer personalFouls;
+  @Column(name = "fouls", nullable = false)
+  private Integer fouls;
 
   public PlayerData() {
   }
 
-  public PlayerData(Player player, LocalDate gameDate, String opponent, Boolean played, Integer points,
-      Integer minutes,
-      Integer fieldGoalsMade, Integer fieldGoalsAttempted, Integer threePointersMade, Integer threePointersAttempted,
-      Integer freeThrowsMade, Integer freeThrowsAttempted, Integer rebounds, Integer assists, Integer steals,
-      Integer blocks, Integer turnovers, Integer personalFouls) {
+  public PlayerData(Player player, LocalDate gameDate, OpposingTeam opposingTeam, Integer points, Integer minutes,
+      Integer fieldGoals, Integer threePointers, Integer freeThrows, Integer rebounds, Integer assists,
+      Integer steals,
+      Integer blocks, Integer turnovers, Integer fouls) {
     this.player = player;
     this.gameDate = gameDate;
-    this.opponent = opponent;
-    this.played = played;
+    this.opposingTeam = opposingTeam;
     this.points = points;
     this.minutes = minutes;
-    this.fieldGoalsMade = fieldGoalsMade;
-    this.fieldGoalsAttempted = fieldGoalsAttempted;
-    this.threePointersMade = threePointersMade;
-    this.threePointersAttempted = threePointersAttempted;
-    this.freeThrowsMade = freeThrowsMade;
-    this.freeThrowsAttempted = freeThrowsAttempted;
+    this.fieldGoals = fieldGoals;
+    this.threePointers = threePointers;
+    this.freeThrows = freeThrows;
     this.rebounds = rebounds;
     this.assists = assists;
     this.steals = steals;
     this.blocks = blocks;
     this.turnovers = turnovers;
-    this.personalFouls = personalFouls;
+    this.fouls = fouls;
   }
 
   public Integer getId() {
@@ -144,20 +122,12 @@ public class PlayerData {
     this.gameDate = gameDate;
   }
 
-  public String getOpponent() {
-    return opponent;
+  public OpposingTeam getOpposingTeam() {
+    return opposingTeam;
   }
 
-  public void setOpponent(String opponent) {
-    this.opponent = opponent;
-  }
-
-  public Boolean getPlayed() {
-    return played;
-  }
-
-  public void setPlayed(Boolean played) {
-    this.played = played;
+  public void setOpposingTeam(OpposingTeam opposingTeam) {
+    this.opposingTeam = opposingTeam;
   }
 
   public Integer getPoints() {
@@ -176,52 +146,28 @@ public class PlayerData {
     this.minutes = minutes;
   }
 
-  public Integer getFieldGoalsMade() {
-    return fieldGoalsMade;
+  public Integer getFieldGoals() {
+    return fieldGoals;
   }
 
-  public void setFieldGoalsMade(Integer fieldGoalsMade) {
-    this.fieldGoalsMade = fieldGoalsMade;
+  public void setFieldGoals(Integer fieldGoals) {
+    this.fieldGoals = fieldGoals;
   }
 
-  public Integer getFieldGoalsAttempted() {
-    return fieldGoalsAttempted;
+  public Integer getThreePointers() {
+    return threePointers;
   }
 
-  public void setFieldGoalsAttempted(Integer fieldGoalsAttempted) {
-    this.fieldGoalsAttempted = fieldGoalsAttempted;
+  public void setThreePointers(Integer threePointers) {
+    this.threePointers = threePointers;
   }
 
-  public Integer getThreePointersMade() {
-    return threePointersMade;
+  public Integer getFreeThrows() {
+    return freeThrows;
   }
 
-  public void setThreePointersMade(Integer threePointersMade) {
-    this.threePointersMade = threePointersMade;
-  }
-
-  public Integer getThreePointersAttempted() {
-    return threePointersAttempted;
-  }
-
-  public void setThreePointersAttempted(Integer threePointersAttempted) {
-    this.threePointersAttempted = threePointersAttempted;
-  }
-
-  public Integer getFreeThrowsMade() {
-    return freeThrowsMade;
-  }
-
-  public void setFreeThrowsMade(Integer freeThrowsMade) {
-    this.freeThrowsMade = freeThrowsMade;
-  }
-
-  public Integer getFreeThrowsAttempted() {
-    return freeThrowsAttempted;
-  }
-
-  public void setFreeThrowsAttempted(Integer freeThrowsAttempted) {
-    this.freeThrowsAttempted = freeThrowsAttempted;
+  public void setFreeThrows(Integer freeThrows) {
+    this.freeThrows = freeThrows;
   }
 
   public Integer getRebounds() {
@@ -264,22 +210,19 @@ public class PlayerData {
     this.turnovers = turnovers;
   }
 
-  public Integer getPersonalFouls() {
-    return personalFouls;
+  public Integer getFouls() {
+    return fouls;
   }
 
-  public void setPersonalFouls(Integer personalFouls) {
-    this.personalFouls = personalFouls;
+  public void setFouls(Integer fouls) {
+    this.fouls = fouls;
   }
 
   @Override
   public String toString() {
-    return "PlayerData [id=" + id + ", player=" + player + ", gameDate=" + gameDate + ", opponent=" + opponent
-        + ", played=" + played + ", points=" + points + ", minutes=" + minutes + ", fieldGoalsMade=" + fieldGoalsMade
-        + ", fieldGoalsAttempted=" + fieldGoalsAttempted + ", threePointersMade=" + threePointersMade
-        + ", threePointersAttempted=" + threePointersAttempted + ", freeThrowsMade=" + freeThrowsMade
-        + ", freeThrowsAttempted=" + freeThrowsAttempted + ", rebounds=" + rebounds + ", assists=" + assists
-        + ", steals=" + steals + ", blocks=" + blocks + ", turnovers=" + turnovers + ", personalFouls=" + personalFouls
-        + "]";
+    return "PlayerData [id=" + id + ", player=" + player + ", gameDate=" + gameDate + ", opposingTeam=" + opposingTeam
+        + ", points=" + points + ", minutes=" + minutes + ", fieldGoals=" + fieldGoals + ", threePointers="
+        + threePointers + ", freeThrows=" + freeThrows + ", rebounds=" + rebounds + ", assists=" + assists + ", steals="
+        + steals + ", blocks=" + blocks + ", turnovers=" + turnovers + ", fouls=" + fouls + "]";
   }
 }

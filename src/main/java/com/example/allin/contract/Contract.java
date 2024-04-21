@@ -40,15 +40,17 @@ public class Contract {
   @OnDelete(action = OnDeleteAction.CASCADE)
   private User owner;
 
+  @Column(name = "buyPrice", nullable = false)
+  private Double buyPrice;
+
   @Column(name = "rarity", nullable = false)
   private Rarity rarity;
 
   @Column(name = "opposingTeam", nullable = false)
   private OpposingTeam opposingTeam;
 
-  // Add image locations
   @Column(name = "opposingTeamImage", nullable = false)
-  private String opposingTeamImage;
+  private String opposingTeamImage = "/src/main/resources/static/images/teams/default.jpg";
 
   @Column(name = "event", nullable = false)
   private Event event;
@@ -68,7 +70,7 @@ public class Contract {
   @Column(name = "forSale", nullable = false)
   private Boolean forSale = false;
 
-  @Column(name = "sellPrice", nullable = true)
+  @Column(name = "sellPrice")
   private Double sellPrice;
 
   @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
@@ -77,16 +79,20 @@ public class Contract {
   public Contract() {
   }
 
-  public Contract(Player player, User owner, Rarity rarity, OpposingTeam opposingTeam, String opposingTeamImage,
+  public Contract(Player player, User owner, Double buyPrice, Rarity rarity, OpposingTeam opposingTeam,
+      String opposingTeamImage,
       Event event,
-      Integer eventThreshold, Double value, Boolean expired, Boolean forSale, Double sellPrice) {
+      Integer eventThreshold, LocalDate creationTime, Double value, Boolean expired, Boolean forSale,
+      Double sellPrice) {
     this.player = player;
     this.owner = owner;
+    this.buyPrice = buyPrice;
     this.rarity = rarity;
     this.opposingTeam = opposingTeam;
     this.opposingTeamImage = opposingTeamImage;
     this.event = event;
     this.eventThreshold = eventThreshold;
+    this.creationTime = creationTime;
     this.value = value;
     this.expired = expired;
     this.forSale = forSale;
@@ -129,6 +135,14 @@ public class Contract {
     this.owner = owner;
   }
 
+  public Double getBuyPrice() {
+    return buyPrice;
+  }
+
+  public void setBuyPrice(Double buyPrice) {
+    this.buyPrice = buyPrice;
+  }
+
   public Rarity getRarity() {
     return rarity;
   }
@@ -145,10 +159,12 @@ public class Contract {
     this.opposingTeam = opposingTeam;
   }
 
+  @JsonIgnore
   public String getOpposingTeamImage() {
     return opposingTeamImage;
   }
 
+  @JsonIgnore
   public void setOpposingTeamImage(String opposingTeamImage) {
     this.opposingTeamImage = opposingTeamImage;
   }
@@ -211,11 +227,10 @@ public class Contract {
 
   @Override
   public String toString() {
-    return "Contract [id=" + id + ", player=" + player.getId() + ", owner=" + owner.getId() + ", rarity=" + rarity
-        + ", opposingTeam="
-        + opposingTeam + ", opposingTeamImage=" + opposingTeamImage + ", event=" + event + ", eventThreshold="
-        + eventThreshold + ", creationTime=" + creationTime + ", value=" + value + ", expired=" + expired + ", forSale="
-        + forSale + ", sellPrice=" + sellPrice + "]";
+    return "Contract [buyPrice=" + buyPrice + ", creationTime=" + creationTime + ", event=" + event
+        + ", eventThreshold=" + eventThreshold + ", expired=" + expired + ", forSale=" + forSale + ", id=" + id
+        + ", opposingTeam=" + opposingTeam + ", opposingTeamImage=" + opposingTeamImage + ", owner=" + owner
+        + ", player=" + player + ", rarity=" + rarity + ", sellPrice=" + sellPrice + ", value=" + value + "]";
   }
 
 }

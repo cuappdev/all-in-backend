@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import com.example.allin.user.User;
 import com.example.allin.user.UserRepo;
 
+import com.example.allin.transaction.Transaction;
+import com.example.allin.transaction.TransactionRepo;
+
+import com.example.allin.player.Player;
+import com.example.allin.player.PlayerRepo;
+
 import com.example.allin.exceptions.NotFoundException;
 import com.example.allin.exceptions.OverdrawnException;
 import com.example.allin.exceptions.NotForSaleException;
@@ -17,10 +23,15 @@ public class ContractService {
 
   private final ContractRepo contractRepo;
   private final UserRepo userRepo;
+  private final TransactionRepo transactionRepo;
+  private final PlayerRepo playerRepo;
 
-  public ContractService(ContractRepo contractRepo, UserRepo userRepo) {
+  public ContractService(ContractRepo contractRepo, UserRepo userRepo, TransactionRepo transactionRepo,
+      PlayerRepo playerRepo) {
     this.contractRepo = contractRepo;
     this.userRepo = userRepo;
+    this.transactionRepo = transactionRepo;
+    this.playerRepo = playerRepo;
   }
 
   public List<Contract> getAllContracts() {
@@ -48,14 +59,22 @@ public class ContractService {
     return contractRepo.findByOwner(user);
   }
 
-  public Contract createContractByUserId(final Integer user_id, final Contract contract) throws NotFoundException {
+  public Contract createContractByUserIdAndPlayerId(final Integer user_id, final Integer player_id,
+      final Contract contract) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
-    if (userOptional.isEmpty()) {
+    Optional<Player> playerOptional = playerRepo.findById(player_id);
+    if (userOptional.isEmpty() || playerOptional.isEmpty()) {
       throw new NotFoundException();
     }
     User user = userOptional.get();
+    Player player = playerOptional.get();
     contract.setOwner(user);
-    return contractRepo.save(contract);
+    contract.setPlayer(player);
+    contractRepo.save(contract);
+    Transaction transaction = new Transaction(null, user, contract,
+        contract.getCreationTime(), contract.getBuyPrice());
+    transactionRepo.save(transaction);
+    return contract;
   }
 
   public Contract updateContract(final Integer contract_id, final Contract contract) throws NotFoundException {

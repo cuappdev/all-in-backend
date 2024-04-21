@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import com.example.allin.user.User;
 import com.example.allin.contract.Contract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +16,8 @@ import jakarta.persistence.FetchType;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "transactions")
@@ -71,6 +72,9 @@ public class Transaction {
   }
 
   public Integer getSellerId() {
+    if (seller == null) {
+      return null;
+    }
     return seller.getId();
   }
 
@@ -85,6 +89,9 @@ public class Transaction {
   }
 
   public Integer getBuyerId() {
+    if (buyer == null) {
+      return null;
+    }
     return buyer.getId();
   }
 

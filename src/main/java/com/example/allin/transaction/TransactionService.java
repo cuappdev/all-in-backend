@@ -1,5 +1,7 @@
 package com.example.allin.transaction;
 
+import com.example.allin.user.User;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,33 @@ public class TransactionService {
 
   public List<Transaction> getTransactionsByContract(final Contract contract) throws NotFoundException {
     return transactionRepo.findByContract(contract);
+  }
+
+  public List<Transaction> getTransactionsByUserId(final Integer user_id) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(user_id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    User user = userOptional.get();
+    return transactionRepo.findBySellerOrBuyer(user, user);
+  }
+
+  public List<Transaction> getSellerTransactionsByUserId(final Integer user_id) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(user_id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    User user = userOptional.get();
+    return transactionRepo.findBySeller(user);
+  }
+
+  public List<Transaction> getBuyerTransactionsByUserId(final Integer user_id) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(user_id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    User user = userOptional.get();
+    return transactionRepo.findByBuyer(user);
   }
 
   public Transaction createTransaction(final Transaction transaction) {
