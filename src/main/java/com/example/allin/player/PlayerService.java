@@ -78,7 +78,6 @@ public class PlayerService {
 
   public void updatePlayerImageById(final Integer player_id, final MultipartFile image, final String uploadDirectory) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
-    System.out.println("playerOptional: " + playerOptional);
     if (playerOptional.isEmpty()) {
       throw new NotFoundException();
     }
@@ -86,9 +85,6 @@ public class PlayerService {
     String uniqueFileName = player_id + "_" + image.getOriginalFilename();
     Path uploadPath = Path.of(uploadDirectory);
     Path filePath = uploadPath.resolve(uniqueFileName);
-    System.out.println("uploadPath: " + uploadPath);
-    System.out.println("filePath: " + filePath);
-    System.out.println("uniqueFileName: " + uniqueFileName);
     if (!Files.exists(uploadPath)) {
       try {
         Files.createDirectories(uploadPath);

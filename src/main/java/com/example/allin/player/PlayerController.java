@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -73,11 +72,8 @@ public class PlayerController {
     try {
       Player player = playerService.getPlayerById(playerId);
       String currentDirectory = player.getImage();
-      System.out.println("playerimage: " + currentDirectory);
       String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
       currentDirectory = currentDirectory.replace(imageName, "");
-      System.out.println("currentDirectory: " + currentDirectory);
-      System.out.println("imageName: " + imageName);
       byte[] image = playerService.getImageFromStorage(currentDirectory, imageName);
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.IMAGE_JPEG);
