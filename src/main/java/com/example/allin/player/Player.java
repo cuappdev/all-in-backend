@@ -48,7 +48,7 @@ public class Player {
   private String highSchool;
 
   @Column(name = "image", nullable = false)
-  private String image = "/src/main/resources/static/images/players/default.jpg";
+  private String image = "src/main/resources/static/images/players/default.jpg";
 
   @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
   private List<Contract> contracts = new LinkedList<>();

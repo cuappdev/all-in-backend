@@ -30,7 +30,7 @@ public class User {
   private String email;
 
   @Column(name = "image", nullable = false)
-  private String image = "/src/main/resources/static/images/users/default.jpg";
+  private String image = "src/main/resources/static/images/users/default.jpg";
 
   @Column(name = "balance", nullable = false)
   private Double balance = 1000.0;

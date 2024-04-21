@@ -7,7 +7,6 @@ import com.example.allin.contract.ContractService;
 import com.example.allin.transaction.Transaction;
 import com.example.allin.transaction.TransactionService;
 import com.example.allin.exceptions.NotFoundException;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class UserController {
@@ -50,17 +56,6 @@ public class UserController {
     }
   }
 
-  // CHANGE LOGIC
-  @GetMapping("/users/{user_id}/image/")
-  public ResponseEntity<String> getUserImageById(@PathVariable final Integer user_id) {
-    try {
-      User user = userService.getUserById(user_id);
-      return ResponseEntity.ok(user.getImage());
-    } catch (NotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
-  }
-
   @PostMapping("/users/")
   public ResponseEntity<User> createUser(@RequestBody final User user) {
     return ResponseEntity.status(201).body(userService.createUser(user));
@@ -85,6 +80,17 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // @PatchMapping("/users/{user_id}/image/")
+  // public ResponseEntity<User> updateUserImage(@PathVariable final Integer
+  // user_id, @RequestBody final User user) {
+  // try {
+  // User updatedUser = userService.updateUserImageById(user_id, user);
+  // return ResponseEntity.ok(updatedUser);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
 
   // Contract operations
 
