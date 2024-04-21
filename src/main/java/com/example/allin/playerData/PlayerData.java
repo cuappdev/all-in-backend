@@ -2,14 +2,30 @@ package com.example.allin.playerData;
 
 import java.time.LocalDate;
 
+import com.example.allin.player.Player;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import lombok.Data;
+
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 
 @Data
 @Entity
@@ -19,9 +35,11 @@ public class PlayerData {
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  @Column(nullable = false)
-  private Integer playerId;
-  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "player_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Player player;
+
   @Column(nullable = false)
   private LocalDate gameDate;
 
@@ -76,11 +94,12 @@ public class PlayerData {
   public PlayerData() {
   }
 
-  public PlayerData(Integer playerId, LocalDate gameDate, String opponent, Boolean played, Integer points, Integer minutes,
+  public PlayerData(Player player, LocalDate gameDate, String opponent, Boolean played, Integer points,
+      Integer minutes,
       Integer fieldGoalsMade, Integer fieldGoalsAttempted, Integer threePointersMade, Integer threePointersAttempted,
       Integer freeThrowsMade, Integer freeThrowsAttempted, Integer rebounds, Integer assists, Integer steals,
       Integer blocks, Integer turnovers, Integer personalFouls) {
-    this.playerId = playerId;
+    this.player = player;
     this.gameDate = gameDate;
     this.opponent = opponent;
     this.played = played;
@@ -108,12 +127,18 @@ public class PlayerData {
     this.id = id;
   }
 
-  public Integer getPlayerId() {
-    return playerId;
+  @JsonIgnore
+  public Player getPlayer() {
+    return player;
   }
 
-  public void setPlayerId(Integer playerId) {
-    this.playerId = playerId;
+  public Integer getPlayerId() {
+    return player.getId();
+  }
+
+  @JsonIgnore
+  public void setPlayer(Player player) {
+    this.player = player;
   }
 
   public LocalDate getGameDate() {
@@ -254,7 +279,7 @@ public class PlayerData {
 
   @Override
   public String toString() {
-    return "PlayerData [id=" + id + ", playerId=" + playerId + ", gameDate=" + gameDate + ", opponent=" + opponent
+    return "PlayerData [id=" + id + ", player=" + player + ", gameDate=" + gameDate + ", opponent=" + opponent
         + ", played=" + played + ", points=" + points + ", minutes=" + minutes + ", fieldGoalsMade=" + fieldGoalsMade
         + ", fieldGoalsAttempted=" + fieldGoalsAttempted + ", threePointersMade=" + threePointersMade
         + ", threePointersAttempted=" + threePointersAttempted + ", freeThrowsMade=" + freeThrowsMade
