@@ -17,4 +17,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 
   List<Transaction> findByBuyer(User buyer);
 
+  List<Transaction> findBySellerOrBuyer(User seller, User buyer);
+
 }

@@ -2,7 +2,6 @@ package com.example.allin.user;
 
 import com.example.allin.contract.Contract;
 import com.example.allin.transaction.Transaction;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -14,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")

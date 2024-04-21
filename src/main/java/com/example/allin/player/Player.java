@@ -1,6 +1,7 @@
 package com.example.allin.player;
 
 import java.util.List;
+import java.util.LinkedList;
 
 import com.example.allin.playerData.PlayerData;
 import com.example.allin.contract.Contract;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "players")
 public class Player {
@@ -20,61 +23,53 @@ public class Player {
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  @Column()
+  @Column(name = "firstName", nullable = false)
   private String firstName;
 
-  @Column()
+  @Column(name = "lastName", nullable = false)
   private String lastName;
 
-  @Column()
-  private String position;
+  @Column(name = "position", nullable = false)
+  private Position[] position;
 
-  @Column()
+  @Column(name = "number", nullable = false)
   private Integer number;
 
-  @Column()
-  private Integer height;
+  @Column(name = "height", nullable = false)
+  private String height;
 
-  @Column()
+  @Column(name = "weight", nullable = false)
   private Integer weight;
 
-  @Column()
-  private Integer year;
-
-  @Column()
+  @Column(name = "hometown", nullable = false)
   private String hometown;
 
-  @Column()
+  @Column(name = "highSchool", nullable = false)
   private String highSchool;
 
-  @Column()
-  private String image;
-
-  @Column()
-  private String bio = "";
+  @Column(name = "image", nullable = false)
+  private String image = "/src/main/resources/static/images/players/default.jpg";
 
   @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-  private List<Contract> contracts;
+  private List<Contract> contracts = new LinkedList<>();
 
   @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-  private List<PlayerData> playerData;
+  private List<PlayerData> playerData = new LinkedList<>();
 
   public Player() {
   }
 
-  public Player(String firstName, String lastName, String position, Integer number, Integer height, Integer weight,
-      Integer year, String hometown, String highSchool, String image, String bio) {
+  public Player(String firstName, String lastName, Position[] position, Integer number, String height, Integer weight,
+      String hometown, String highSchool, String image) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.position = position;
     this.number = number;
     this.height = height;
     this.weight = weight;
-    this.year = year;
     this.hometown = hometown;
     this.highSchool = highSchool;
     this.image = image;
-    this.bio = bio;
   }
 
   public Integer getId() {
@@ -101,11 +96,11 @@ public class Player {
     this.lastName = lastName;
   }
 
-  public String getPosition() {
+  public Position[] getPosition() {
     return position;
   }
 
-  public void setPosition(String position) {
+  public void setPosition(Position[] position) {
     this.position = position;
   }
 
@@ -117,11 +112,11 @@ public class Player {
     this.number = number;
   }
 
-  public Integer getHeight() {
+  public String getHeight() {
     return height;
   }
 
-  public void setHeight(Integer height) {
+  public void setHeight(String height) {
     this.height = height;
   }
 
@@ -131,14 +126,6 @@ public class Player {
 
   public void setWeight(Integer weight) {
     this.weight = weight;
-  }
-
-  public Integer getYear() {
-    return year;
-  }
-
-  public void setYear(Integer year) {
-    this.year = year;
   }
 
   public String getHometown() {
@@ -157,24 +144,26 @@ public class Player {
     this.highSchool = highSchool;
   }
 
+  @JsonIgnore
   public String getImage() {
     return image;
   }
 
+  @JsonIgnore
   public void setImage(String image) {
     this.image = image;
   }
 
-  public String getBio() {
-    return bio;
-  }
-
-  public void setBio(String bio) {
-    this.bio = bio;
-  }
-
   public List<Contract> getContracts() {
     return contracts;
+  }
+
+  public void addContract(Contract contract) {
+    contracts.add(contract);
+  }
+
+  public void removeContract(Contract contract) {
+    contracts.remove(contract);
   }
 
   public void setContracts(List<Contract> contracts) {
@@ -197,18 +186,11 @@ public class Player {
     this.playerData = playerData;
   }
 
-  public void addContract(Contract contract) {
-    contracts.add(contract);
-  }
-
-  public void removeContract(Contract contract) {
-    contracts.remove(contract);
-  }
-
   @Override
   public String toString() {
-    return "Player [bio=" + bio + ", firstName=" + firstName + ", height=" + height + ", highSchool=" + highSchool
-        + ", hometown=" + hometown + ", id=" + id + ", image=" + image + ", lastName=" + lastName + ", number=" + number
-        + ", position=" + position + ", weight=" + weight + ", year=" + year + "]";
+    return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", position=" + position
+        + ", number=" + number + ", height=" + height + ", weight=" + weight + ", hometown=" + hometown
+        + ", highSchool="
+        + highSchool + ", image=" + image + "]";
   }
 }

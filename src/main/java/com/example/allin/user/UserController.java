@@ -86,18 +86,16 @@ public class UserController {
     }
   }
 
-  // Change PFP
-  @PatchMapping("/users/{user_id}/image/")
-  public ResponseEntity<User> updateUserImage(@PathVariable final Integer user_id, @RequestBody final User user) {
-    try {
-      User updatedUser = userService.updateUserImageById(user_id, user);
-      return ResponseEntity.ok(updatedUser);
-    } catch (NotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
-  }
-
-  // Add login and logout operations
+  // @PatchMapping("/users/{user_id}/image/")
+  // public ResponseEntity<User> updateUserImage(@PathVariable final Integer
+  // user_id, @RequestBody final User user) {
+  // try {
+  // User updatedUser = userService.updateUserImageById(user_id, user);
+  // return ResponseEntity.ok(updatedUser);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
 
   // Contract operations
 
@@ -111,11 +109,12 @@ public class UserController {
     }
   }
 
-  @PostMapping("/users/{user_id}/contracts/")
+  @PostMapping("/users/{user_id}/players/{player_id}/contracts/")
   public ResponseEntity<Contract> createContract(@PathVariable final Integer user_id,
+      @PathVariable final Integer player_id,
       @RequestBody final Contract contract) {
     try {
-      Contract createdContract = contractService.createContractByUserId(user_id, contract);
+      Contract createdContract = contractService.createContractByUserIdAndPlayerId(user_id, player_id, contract);
       return ResponseEntity.status(201).body(createdContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
@@ -124,40 +123,34 @@ public class UserController {
 
   // Transaction operations
 
-  // @GetMapping("/users/{user_id}/transactions/")
-  // public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable
-  // final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/")
+  public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
-  // @GetMapping("/users/{user_id}/transactions/seller/")
-  // public ResponseEntity<List<Transaction>>
-  // getUserSellerTransactions(@PathVariable final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getSellerTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/seller/")
+  public ResponseEntity<List<Transaction>> getUserSellerTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getSellerTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
-  // @GetMapping("/users/{user_id}/transactions/buyer/")
-  // public ResponseEntity<List<Transaction>>
-  // getUserBuyerTransactions(@PathVariable final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getBuyerTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/buyer/")
+  public ResponseEntity<List<Transaction>> getUserBuyerTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getBuyerTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
 }
