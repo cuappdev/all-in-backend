@@ -50,6 +50,17 @@ public class UserController {
     }
   }
 
+  // CHANGE LOGIC
+  @GetMapping("/users/{user_id}/image/")
+  public ResponseEntity<String> getUserImageById(@PathVariable final Integer user_id) {
+    try {
+      User user = userService.getUserById(user_id);
+      return ResponseEntity.ok(user.getImage());
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
   @PostMapping("/users/")
   public ResponseEntity<User> createUser(@RequestBody final User user) {
     return ResponseEntity.status(201).body(userService.createUser(user));
@@ -74,6 +85,19 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // Change PFP
+  @PatchMapping("/users/{user_id}/image/")
+  public ResponseEntity<User> updateUserImage(@PathVariable final Integer user_id, @RequestBody final User user) {
+    try {
+      User updatedUser = userService.updateUserImageById(user_id, user);
+      return ResponseEntity.ok(updatedUser);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  // Add login and logout operations
 
   // Contract operations
 

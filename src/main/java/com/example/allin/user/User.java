@@ -2,6 +2,7 @@ package com.example.allin.user;
 
 import com.example.allin.contract.Contract;
 import com.example.allin.transaction.Transaction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -21,27 +22,17 @@ public class User {
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  @Column(name = "firstname", nullable = false)
-  private String firstname;
+  @Column(name = "username", nullable = false, unique = true)
+  private String username;
 
-  @Column(name = "lastname", nullable = false)
-  private String lastname;
-
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
-  @Column(name = "hashedPassword", nullable = false)
-  private String hashedPassword;
-
-  // Add image locations
-  @Column(name = "image")
-  private String image;
+  @Column(name = "image", nullable = false)
+  private String image = "/src/main/resources/static/images/users/default.jpg";
 
   @Column(name = "balance", nullable = false)
   private Double balance = 1000.0;
-
-  @Column(name = "isAdmin", nullable = false)
-  private Boolean isAdmin = false;
 
   @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private List<Contract> contracts = new LinkedList<>();
@@ -55,15 +46,11 @@ public class User {
   public User() {
   }
 
-  public User(String firstname, String lastname, String email, String hashedPassword, String image, Double balance,
-      Boolean isAdmin) {
-    this.firstname = firstname;
-    this.lastname = lastname;
+  public User(String username, String email, String image, Double balance) {
+    this.username = username;
     this.email = email;
-    this.hashedPassword = hashedPassword;
     this.image = image;
     this.balance = balance;
-    this.isAdmin = isAdmin;
   }
 
   public Integer getId() {
@@ -74,20 +61,12 @@ public class User {
     this.id = id;
   }
 
-  public String getFirstname() {
-    return firstname;
+  public String getUsername() {
+    return username;
   }
 
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
-  }
-
-  public String getLastname() {
-    return lastname;
-  }
-
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getEmail() {
@@ -98,18 +77,12 @@ public class User {
     this.email = email;
   }
 
-  public String getHashedPassword() {
-    return hashedPassword;
-  }
-
-  public void setHashedPassword(String hashedPassword) {
-    this.hashedPassword = hashedPassword;
-  }
-
+  @JsonIgnore
   public String getImage() {
     return image;
   }
 
+  @JsonIgnore
   public void setImage(String image) {
     this.image = image;
   }
@@ -120,14 +93,6 @@ public class User {
 
   public void setBalance(Double balance) {
     this.balance = balance;
-  }
-
-  public Boolean getIsAdmin() {
-    return isAdmin;
-  }
-
-  public void setIsAdmin(Boolean isAdmin) {
-    this.isAdmin = isAdmin;
   }
 
   public List<Contract> getContracts() {
@@ -180,15 +145,7 @@ public class User {
 
   @Override
   public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", firstname='" + firstname + '\'' +
-        ", lastname='" + lastname + '\'' +
-        ", email='" + email + '\'' +
-        ", hashedPassword='" + hashedPassword + '\'' +
-        ", image='" + image + '\'' +
-        ", balance=" + balance +
-        ", isAdmin=" + isAdmin +
-        '}';
+    return "User [id=" + id + ", username=" + username + ", email=" + email + ", image=" + image + ", balance="
+        + balance + "]";
   }
 }
