@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class TransactionController {
+
   public final TransactionService transactionService;
 
   public TransactionController(TransactionService transactionService) {
     this.transactionService = transactionService;
   }
+
+  // CRUD operations
 
   @GetMapping("/transactions/")
   public ResponseEntity<List<Transaction>> getAllTransactions() {
@@ -28,10 +31,10 @@ public class TransactionController {
     return ResponseEntity.ok(transactions);
   }
 
-  @GetMapping("/transactions/{transactionId}/")
-  public ResponseEntity<Transaction> getTransactioResponseEntityById(@PathVariable final Integer transactionId) {
+  @GetMapping("/transactions/{transaction_id}/")
+  public ResponseEntity<Transaction> getTransactionById(@PathVariable final Integer transaction_id) {
     try {
-      Transaction transaction = transactionService.getTransactionById(transactionId);
+      Transaction transaction = transactionService.getTransactionById(transaction_id);
       return ResponseEntity.ok(transaction);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
@@ -43,24 +46,26 @@ public class TransactionController {
     return ResponseEntity.status(201).body(transactionService.createTransaction(transaction));
   }
 
-  @PatchMapping("/transactions/{transactionId}/")
-  public ResponseEntity<Transaction> updateTransaction(@PathVariable final Integer transactionId,
+  @PatchMapping("/transactions/{transaction_id}/")
+  public ResponseEntity<Transaction> updateTransaction(@PathVariable final Integer transaction_id,
       @RequestBody final Transaction transaction) {
     try {
-      Transaction updatedTransaction = transactionService.updateTransaction(transactionId, transaction);
+      Transaction updatedTransaction = transactionService.updateTransaction(transaction_id, transaction);
       return ResponseEntity.ok(updatedTransaction);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
-  @DeleteMapping("/transactions/{transactionId}/")
-  public ResponseEntity<Transaction> deleteTransaction(@PathVariable final Integer transactionId) {
+  @DeleteMapping("/transactions/{transaction_id}/")
+  public ResponseEntity<Transaction> deleteTransaction(@PathVariable final Integer transaction_id) {
     try {
-      transactionService.deleteTransaction(transactionId);
-      return ResponseEntity.noContent().build();
+      Transaction deletedTransaction = transactionService.deleteTransaction(transaction_id);
+      return ResponseEntity.ok(deletedTransaction);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // Get transactions by contract id
 }

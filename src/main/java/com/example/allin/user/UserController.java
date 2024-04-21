@@ -23,10 +23,13 @@ public class UserController {
 
   private final UserService userService;
   private final ContractService contractService;
+  private final TransactionService transactionService;
 
-  public UserController(UserService userService, ContractService ContractService) {
+  public UserController(UserService userService, ContractService ContractService,
+      TransactionService transactionService) {
     this.userService = userService;
     this.contractService = ContractService;
+    this.transactionService = transactionService;
   }
 
   // CRUD operations
@@ -102,7 +105,31 @@ public class UserController {
   // final Integer user_id) {
   // try {
   // List<Transaction> transactions =
-  // userService.getTransactionsByUserId(user_id);
+  // transactionService.getTransactionsByUserId(user_id);
+  // return ResponseEntity.ok(transactions);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
+
+  // @GetMapping("/users/{user_id}/transactions/seller/")
+  // public ResponseEntity<List<Transaction>>
+  // getUserSellerTransactions(@PathVariable final Integer user_id) {
+  // try {
+  // List<Transaction> transactions =
+  // transactionService.getSellerTransactionsByUserId(user_id);
+  // return ResponseEntity.ok(transactions);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
+
+  // @GetMapping("/users/{user_id}/transactions/buyer/")
+  // public ResponseEntity<List<Transaction>>
+  // getUserBuyerTransactions(@PathVariable final Integer user_id) {
+  // try {
+  // List<Transaction> transactions =
+  // transactionService.getBuyerTransactionsByUserId(user_id);
   // return ResponseEntity.ok(transactions);
   // } catch (NotFoundException e) {
   // return ResponseEntity.notFound().build();

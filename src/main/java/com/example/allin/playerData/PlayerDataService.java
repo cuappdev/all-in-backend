@@ -36,7 +36,6 @@ public class PlayerDataService {
       throw new NotFoundException();
     }
     PlayerData playerDataToUpdate = playerDataOptional.get();
-    playerDataToUpdate.setPlayerId(playerData.getPlayerId());
     playerDataToUpdate.setGameDate(playerData.getGameDate());
     playerDataToUpdate.setOpponent(playerData.getOpponent());
     playerDataToUpdate.setPlayed(playerData.getPlayed());

@@ -2,11 +2,21 @@ package com.example.allin.transaction;
 
 import java.time.LocalDate;
 
+import com.example.allin.user.User;
+import com.example.allin.contract.Contract;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "transactions")
@@ -15,28 +25,34 @@ public class Transaction {
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
-  @Column(nullable = false)
-  private Integer sellerId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "seller_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private User seller;
 
-  @Column(nullable = false)
-  private Integer buyerId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "buyer_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private User buyer;
 
-  @Column(nullable = false)
-  private Integer contractId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "contract_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Contract contract;
 
-  @Column(nullable = false)
-  private LocalDate transactionDate;
+  @Column(name = "transactionDate", nullable = false)
+  private LocalDate transactionDate = LocalDate.now();
 
-  @Column(nullable = false)
-  private Integer price;
+  @Column(name = "price", nullable = false)
+  private Double price;
 
   public Transaction() {
   }
 
-  public Transaction(Integer sellerId, Integer buyerId, Integer contractId, LocalDate transactionDate, Integer price) {
-    this.sellerId = sellerId;
-    this.buyerId = buyerId;
-    this.contractId = contractId;
+  public Transaction(User seller, User buyer, Contract contract, LocalDate transactionDate, Double price) {
+    this.seller = seller;
+    this.buyer = buyer;
+    this.contract = contract;
     this.transactionDate = transactionDate;
     this.price = price;
   }
@@ -49,28 +65,46 @@ public class Transaction {
     this.id = id;
   }
 
-  public Integer getSellerId() {
-    return sellerId;
+  @JsonIgnore
+  public User getSeller() {
+    return seller;
   }
 
-  public void setSellerId(Integer sellerId) {
-    this.sellerId = sellerId;
+  public Integer getSellerId() {
+    return seller.getId();
+  }
+
+  @JsonIgnore
+  public void setSeller(User seller) {
+    this.seller = seller;
+  }
+
+  @JsonIgnore
+  public User getBuyer() {
+    return buyer;
   }
 
   public Integer getBuyerId() {
-    return buyerId;
+    return buyer.getId();
   }
 
-  public void setBuyerId(Integer buyerId) {
-    this.buyerId = buyerId;
+  @JsonIgnore
+  public void setBuyer(User buyer) {
+    this.buyer = buyer;
+  }
+
+  @JsonIgnore
+  public Contract getContract() {
+    return contract;
   }
 
   public Integer getContractId() {
-    return contractId;
+    return contract.getId();
   }
 
-  public void setContractId(Integer contractId) {
-    this.contractId = contractId;
+  @JsonIgnore
+  public void setContract(Contract contract) {
+    this.contract = contract;
   }
 
   public LocalDate getTransactionDate() {
@@ -81,23 +115,17 @@ public class Transaction {
     this.transactionDate = transactionDate;
   }
 
-  public Integer getPrice() {
+  public Double getPrice() {
     return price;
   }
 
-  public void setPrice(Integer price) {
+  public void setPrice(Double price) {
     this.price = price;
   }
 
   @Override
   public String toString() {
-    return "Transaction{" +
-      "id=" + id +
-      ", sellerId=" + sellerId +
-      ", buyerId=" + buyerId +
-      ", contractId=" + contractId +
-      ", transactionDate=" + transactionDate +
-      ", price=" + price +
-      '}';
+    return "Transaction [id=" + id + ", seller=" + seller + ", buyer=" + buyer + ", contract=" + contract
+        + ", transactionDate=" + transactionDate + ", price=" + price + "]";
   }
 }

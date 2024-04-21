@@ -64,8 +64,6 @@ public class ContractService {
       throw new NotFoundException();
     }
     Contract contractToUpdate = contractOptional.get();
-    contractToUpdate.setPlayerId(contract.getPlayerId());
-    contractToUpdate.setOwner(contract.getOwner());
     contractToUpdate.setRarity(contract.getRarity());
     contractToUpdate.setEvent(contract.getEvent());
     contractToUpdate.setEventThreshold(contract.getEventThreshold());

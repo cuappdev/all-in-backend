@@ -1,6 +1,7 @@
 package com.example.allin.user;
 
 import com.example.allin.contract.Contract;
+import com.example.allin.transaction.Transaction;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -32,17 +33,24 @@ public class User {
   @Column(name = "hashedPassword", nullable = false)
   private String hashedPassword;
 
-  @Column(name = "image", nullable = true)
+  // Add image locations
+  @Column(name = "image")
   private String image;
 
   @Column(name = "balance", nullable = false)
   private Double balance = 1000.0;
 
   @Column(name = "isAdmin", nullable = false)
-  private Boolean isAdmin;
+  private Boolean isAdmin = false;
 
   @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private List<Contract> contracts = new LinkedList<>();
+
+  @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+  private List<Transaction> sellerTransactions = new LinkedList<>();
+
+  @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
+  private List<Transaction> buyerTransactions = new LinkedList<>();
 
   public User() {
   }
@@ -132,6 +140,42 @@ public class User {
 
   public void addContract(Contract contract) {
     contracts.add(contract);
+  }
+
+  public void removeContract(Contract contract) {
+    contracts.remove(contract);
+  }
+
+  public List<Transaction> getSellerTransactions() {
+    return sellerTransactions;
+  }
+
+  public void setSellerTransactions(List<Transaction> sellerTransactions) {
+    this.sellerTransactions = sellerTransactions;
+  }
+
+  public void addSellerTransaction(Transaction transaction) {
+    sellerTransactions.add(transaction);
+  }
+
+  public void removeSellerTransaction(Transaction transaction) {
+    sellerTransactions.remove(transaction);
+  }
+
+  public List<Transaction> getBuyerTransactions() {
+    return buyerTransactions;
+  }
+
+  public void setBuyerTransactions(List<Transaction> buyerTransactions) {
+    this.buyerTransactions = buyerTransactions;
+  }
+
+  public void addBuyerTransaction(Transaction transaction) {
+    buyerTransactions.add(transaction);
+  }
+
+  public void removeBuyerTransaction(Transaction transaction) {
+    buyerTransactions.remove(transaction);
   }
 
   @Override
