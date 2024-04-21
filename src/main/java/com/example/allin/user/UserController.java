@@ -100,40 +100,34 @@ public class UserController {
 
   // Transaction operations
 
-  // @GetMapping("/users/{user_id}/transactions/")
-  // public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable
-  // final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/")
+  public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
-  // @GetMapping("/users/{user_id}/transactions/seller/")
-  // public ResponseEntity<List<Transaction>>
-  // getUserSellerTransactions(@PathVariable final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getSellerTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/seller/")
+  public ResponseEntity<List<Transaction>> getUserSellerTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getSellerTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
-  // @GetMapping("/users/{user_id}/transactions/buyer/")
-  // public ResponseEntity<List<Transaction>>
-  // getUserBuyerTransactions(@PathVariable final Integer user_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getBuyerTransactionsByUserId(user_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @GetMapping("/users/{user_id}/transactions/buyer/")
+  public ResponseEntity<List<Transaction>> getUserBuyerTransactions(@PathVariable final Integer user_id) {
+    try {
+      List<Transaction> transactions = transactionService.getBuyerTransactionsByUserId(user_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
 }
