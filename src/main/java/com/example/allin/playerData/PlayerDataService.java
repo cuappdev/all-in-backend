@@ -2,6 +2,9 @@ package com.example.allin.playerData;
 
 import java.time.LocalDate;
 
+import com.example.allin.player.Player;
+import com.example.allin.player.PlayerRepo;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -11,9 +14,11 @@ import com.example.allin.exceptions.NotFoundException;
 @Service
 public class PlayerDataService {
   private final PlayerDataRepo playerDataRepo;
+  private final PlayerRepo playerRepo;
 
-  public PlayerDataService(PlayerDataRepo playerDataRepo) {
+  public PlayerDataService(PlayerDataRepo playerDataRepo, PlayerRepo playerRepo) {
     this.playerDataRepo = playerDataRepo;
+    this.playerRepo = playerRepo;
   }
 
   public List<PlayerData> getAllPlayerData() {
@@ -60,7 +65,17 @@ public class PlayerDataService {
     return playerDataOptional.get();
   }
 
+  public List<PlayerData> getPlayerDataByPlayerId(final Integer playerId) throws NotFoundException {
+    Optional<Player> playerOptional = playerRepo.findById(playerId);
+    if (playerOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    Player player = playerOptional.get();
+    return playerDataRepo.findByPlayer(player);
+  }
+
   public List<PlayerData> getPlayerDataByDate(final LocalDate gameDate) throws NotFoundException {
     return playerDataRepo.findByGameDate(gameDate);
   }
+
 }

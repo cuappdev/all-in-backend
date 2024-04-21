@@ -28,17 +28,17 @@ public class Transaction {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "seller_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
+  @OnDelete(action = OnDeleteAction.NO_ACTION)
   private User seller;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "buyer_id", nullable = false)
-  @OnDelete(action = OnDeleteAction.CASCADE)
+  @OnDelete(action = OnDeleteAction.NO_ACTION)
   private User buyer;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "contract_id", nullable = false)
-  @OnDelete(action = OnDeleteAction.CASCADE)
+  @OnDelete(action = OnDeleteAction.NO_ACTION)
   private Contract contract;
 
   @Column(name = "transactionDate", nullable = false)
@@ -106,6 +106,9 @@ public class Transaction {
   }
 
   public Integer getContractId() {
+    if (contract == null) {
+      return null;
+    }
     return contract.getId();
   }
 

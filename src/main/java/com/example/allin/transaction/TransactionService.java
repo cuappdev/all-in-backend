@@ -1,24 +1,28 @@
 package com.example.allin.transaction;
 
 import com.example.allin.user.User;
+import com.example.allin.user.UserRepo;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.allin.contract.Contract;
+import com.example.allin.contract.ContractRepo;
+
 import com.example.allin.exceptions.NotFoundException;
-import com.example.allin.user.UserRepo;
 
 @Service
 public class TransactionService {
 
   private final TransactionRepo transactionRepo;
   private final UserRepo userRepo;
+  private final ContractRepo contractRepo;
 
-  public TransactionService(TransactionRepo transactionRepo, UserRepo userRepo) {
+  public TransactionService(TransactionRepo transactionRepo, UserRepo userRepo, ContractRepo contractRepo) {
     this.transactionRepo = transactionRepo;
     this.userRepo = userRepo;
+    this.contractRepo = contractRepo;
   }
 
   public List<Transaction> getAllTransactions() {
@@ -90,5 +94,12 @@ public class TransactionService {
     return transactionToDelete;
   }
 
-  // Get transactions by contract id
+  public List<Transaction> getTransactionsByContractId(final Integer contract_id) throws NotFoundException {
+    Optional<Contract> contractOptional = contractRepo.findById(contract_id);
+    if (contractOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    Contract contract = contractOptional.get();
+    return transactionRepo.findByContract(contract);
+  }
 }

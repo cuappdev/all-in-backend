@@ -86,17 +86,6 @@ public class UserController {
     }
   }
 
-  // @PatchMapping("/users/{user_id}/image/")
-  // public ResponseEntity<User> updateUserImage(@PathVariable final Integer
-  // user_id, @RequestBody final User user) {
-  // try {
-  // User updatedUser = userService.updateUserImageById(user_id, user);
-  // return ResponseEntity.ok(updatedUser);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
-
   // Contract operations
 
   @GetMapping("/users/{user_id}/contracts/")

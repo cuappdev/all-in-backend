@@ -1,5 +1,6 @@
 package com.example.allin.contract;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,12 @@ public class ContractService {
   }
 
   public List<Contract> getContractsByPlayerId(final Integer player_id) throws NotFoundException {
-    return null;
+    Optional<Player> playerOptional = playerRepo.findById(player_id);
+    if (playerOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+    Player player = playerOptional.get();
+    return contractRepo.findByPlayer(player);
   }
 
   public List<Contract> getContractsByUserId(final Integer user_id) throws NotFoundException {
@@ -119,8 +125,9 @@ public class ContractService {
       throw new NotForSaleException();
     }
 
+    Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner().getId());
     Optional<User> buyerOptional = userRepo.findById(buyer_id);
-    if (buyerOptional.isEmpty()) {
+    if (sellerOptional.isEmpty() || buyerOptional.isEmpty()) {
       throw new NotFoundException();
     }
 
@@ -137,8 +144,13 @@ public class ContractService {
 
     contractToBuy.setOwner(buyer);
     contractToBuy.setForSale(false);
+    contractRepo.save(contractToBuy);
 
-    return contractRepo.save(contractToBuy);
+    Transaction transaction = new Transaction(seller, buyer, contractToBuy,
+        LocalDate.now(), sellPrice);
+    transactionRepo.save(transaction);
+
+    return contractToBuy;
   }
 
   public Contract sellContract(final Integer contract_id, final Double sellPrice) throws NotFoundException {

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 public class PlayerDataController {
   public final PlayerDataService playerDataService;
@@ -23,6 +22,8 @@ public class PlayerDataController {
   public PlayerDataController(PlayerDataService playerDataService) {
     this.playerDataService = playerDataService;
   }
+
+  // CRUD operations
 
   @GetMapping("/playerData/")
   public ResponseEntity<List<PlayerData>> getAllPlayerData() {
@@ -65,6 +66,20 @@ public class PlayerDataController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // Player operations
+
+  @GetMapping("/playerData/player/{playerId}/")
+  public ResponseEntity<List<PlayerData>> getPlayerDataByPlayer(@PathVariable final Integer playerId) {
+    try {
+      List<PlayerData> playerData = playerDataService.getPlayerDataByPlayerId(playerId);
+      return ResponseEntity.ok(playerData);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  // Game operations
 
   @GetMapping("/playerData/game/{gameDate}/")
   public ResponseEntity<List<PlayerData>> getPlayerDataByGame(@PathVariable final String gameDate) {

@@ -67,5 +67,16 @@ public class TransactionController {
     }
   }
 
-  // Get transactions by contract id
+  // Contract-Transaction operations
+
+  @GetMapping("/transactions/contract/{contract_id}/")
+  public ResponseEntity<List<Transaction>> getTransactionsByContractId(@PathVariable final Integer contract_id) {
+    try {
+      List<Transaction> transactions = transactionService.getTransactionsByContractId(contract_id);
+      return ResponseEntity.ok(transactions);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
 }

@@ -113,6 +113,9 @@ public class Contract {
   }
 
   public Integer getPlayerId() {
+    if (player == null) {
+      return null;
+    }
     return player.getId();
   }
 
@@ -127,6 +130,9 @@ public class Contract {
   }
 
   public Integer getOwnerId() {
+    if (owner == null) {
+      return null;
+    }
     return owner.getId();
   }
 

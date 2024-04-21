@@ -106,6 +106,9 @@ public class PlayerData {
   }
 
   public Integer getPlayerId() {
+    if (player == null) {
+      return null;
+    }
     return player.getId();
   }
 

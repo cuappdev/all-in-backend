@@ -2,6 +2,9 @@ package com.example.allin.player;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.allin.contract.Contract;
+import com.example.allin.contract.ContractService;
+
 import com.example.allin.exceptions.NotFoundException;
 
 import java.util.List;
@@ -16,11 +19,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class PlayerController {
-  public final PlayerService playerService;
 
-  public PlayerController(PlayerService playerService) {
+  public final PlayerService playerService;
+  public final ContractService contractService;
+
+  public PlayerController(PlayerService playerService, ContractService contractService) {
     this.playerService = playerService;
+    this.contractService = contractService;
   }
+
+  // CRUD operations
 
   @GetMapping("/players/")
   public ResponseEntity<List<Player>> getAllPlayers() {
@@ -62,4 +70,17 @@ public class PlayerController {
       return ResponseEntity.notFound().build();
     }
   }
+
+  // Contracts Operations
+
+  @GetMapping("/players/{playerId}/contracts/")
+  public ResponseEntity<List<Contract>> getContractsByPlayerId(@PathVariable final Integer playerId) {
+    try {
+      List<Contract> contracts = contractService.getContractsByPlayerId(playerId);
+      return ResponseEntity.ok(contracts);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
 }
