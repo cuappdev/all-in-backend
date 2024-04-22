@@ -74,6 +74,8 @@ public class ContractService {
     }
     User user = userOptional.get();
     Player player = playerOptional.get();
+    user.setBalance(user.getBalance() - contract.getBuyPrice());
+    userRepo.save(user);
     contract.setOwner(user);
     contract.setPlayer(player);
     contractRepo.save(contract);

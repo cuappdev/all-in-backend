@@ -60,6 +60,18 @@ public class Player {
   }
 
   public Player(String firstName, String lastName, Position[] position, Integer number, String height, Integer weight,
+      String hometown, String highSchool) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.position = position;
+    this.number = number;
+    this.height = height;
+    this.weight = weight;
+    this.hometown = hometown;
+    this.highSchool = highSchool;
+  }
+
+  public Player(String firstName, String lastName, Position[] position, Integer number, String height, Integer weight,
       String hometown, String highSchool, String image) {
     this.firstName = firstName;
     this.lastName = lastName;
