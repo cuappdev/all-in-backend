@@ -17,6 +17,7 @@ import com.example.allin.player.PlayerRepo;
 
 import com.example.allin.exceptions.NotFoundException;
 import com.example.allin.exceptions.OverdrawnException;
+import com.example.allin.contract.util.ContractGenerator;
 import com.example.allin.exceptions.NotForSaleException;
 
 import java.nio.file.Files;
@@ -70,8 +71,8 @@ public class ContractService {
     return contractRepo.findByOwner(user);
   }
 
-  public Contract createContractByUserIdAndPlayerId(final Integer user_id, final Integer player_id,
-      final Contract contract) throws NotFoundException {
+  public Contract createContract(final Integer user_id, final Integer player_id, final Double buyPrice,
+      final Rarity rarity) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (userOptional.isEmpty() || playerOptional.isEmpty()) {
@@ -79,6 +80,9 @@ public class ContractService {
     }
     User user = userOptional.get();
     Player player = playerOptional.get();
+
+    Contract contract = ContractGenerator.generateContract(user, player, buyPrice, rarity);
+
     user.setBalance(user.getBalance() - contract.getBuyPrice());
     userRepo.save(user);
     contract.setOwner(user);

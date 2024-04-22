@@ -3,9 +3,11 @@ package com.example.allin.user;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.allin.contract.Contract;
 import com.example.allin.contract.ContractService;
+import com.example.allin.contract.Rarity;
 import com.example.allin.transaction.Transaction;
 import com.example.allin.transaction.TransactionService;
 import com.example.allin.exceptions.ForbiddenException;
@@ -147,12 +149,16 @@ public class UserController {
   @PostMapping("/users/{user_id}/players/{player_id}/contracts/")
   public ResponseEntity<Contract> createContract(@PathVariable final Integer user_id,
       @PathVariable final Integer player_id,
-      @RequestBody final Contract contract) {
+      @RequestBody final Map<String, Object> body) {
     try {
-      Contract createdContract = contractService.createContractByUserIdAndPlayerId(user_id, player_id, contract);
+      Double buyPrice = (Double) body.get("buy_price");
+      Rarity rarity = Rarity.valueOf((String) body.get("rarity"));
+      Contract createdContract = contractService.createContract(user_id, player_id, buyPrice, rarity);
       return ResponseEntity.status(201).body(createdContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
+    } catch (ClassCastException e) {
+      return ResponseEntity.badRequest().build();
     }
   }
 
