@@ -15,6 +15,9 @@ import com.example.allin.transaction.TransactionRepo;
 import com.example.allin.player.Player;
 import com.example.allin.player.PlayerRepo;
 
+import com.example.allin.playerData.PlayerData;
+import com.example.allin.playerData.PlayerDataRepo;
+
 import com.example.allin.exceptions.NotFoundException;
 import com.example.allin.exceptions.OverdrawnException;
 import com.example.allin.contract.util.ContractGenerator;
@@ -30,15 +33,17 @@ public class ContractService {
   private final UserRepo userRepo;
   private final TransactionRepo transactionRepo;
   private final PlayerRepo playerRepo;
+  private final PlayerDataRepo playerDataRepo;
 
   public final String imagePath = "src/main/resources/static/images/teams/";
 
   public ContractService(ContractRepo contractRepo, UserRepo userRepo, TransactionRepo transactionRepo,
-      PlayerRepo playerRepo) {
+      PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
     this.contractRepo = contractRepo;
     this.userRepo = userRepo;
     this.transactionRepo = transactionRepo;
     this.playerRepo = playerRepo;
+    this.playerDataRepo = playerDataRepo;
   }
 
   public List<Contract> getAllContracts() {
@@ -72,7 +77,7 @@ public class ContractService {
   }
 
   public Contract createContract(final Integer user_id, final Integer player_id, final Double buyPrice,
-      final Rarity rarity) throws NotFoundException {
+      final Rarity rarity) throws NotFoundException, OverdrawnException {
     Optional<User> userOptional = userRepo.findById(user_id);
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (userOptional.isEmpty() || playerOptional.isEmpty()) {
@@ -80,6 +85,10 @@ public class ContractService {
     }
     User user = userOptional.get();
     Player player = playerOptional.get();
+
+    if (buyPrice > user.getBalance()) {
+      throw new OverdrawnException();
+    }
 
     Contract contract = ContractGenerator.generateContract(user, player, buyPrice, rarity);
 

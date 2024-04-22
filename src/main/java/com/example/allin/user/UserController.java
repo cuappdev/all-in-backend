@@ -12,6 +12,7 @@ import com.example.allin.transaction.Transaction;
 import com.example.allin.transaction.TransactionService;
 import com.example.allin.exceptions.ForbiddenException;
 import com.example.allin.exceptions.NotFoundException;
+import com.example.allin.exceptions.OverdrawnException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -157,6 +158,8 @@ public class UserController {
       return ResponseEntity.status(201).body(createdContract);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
+    } catch (OverdrawnException e) {
+      return ResponseEntity.status(403).build();
     } catch (ClassCastException e) {
       return ResponseEntity.badRequest().build();
     }

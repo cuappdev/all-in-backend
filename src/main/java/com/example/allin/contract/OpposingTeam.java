@@ -22,5 +22,9 @@ public enum OpposingTeam {
   Dartmouth,
   Harvard,
   Yale,
-  Ohio
+  Ohio;
+
+  public static OpposingTeam getRandomOpposingTeam() {
+    return values()[(int) (Math.random() * values().length)];
+  }
 }

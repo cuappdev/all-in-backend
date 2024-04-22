@@ -11,5 +11,9 @@ public enum Event {
   Steals,
   Blocks,
   Turnovers,
-  Fouls
+  Fouls;
+
+  public static Event getRandomEvent() {
+    return values()[(int) (Math.random() * values().length)];
+  }
 }
