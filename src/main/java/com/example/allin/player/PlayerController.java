@@ -40,10 +40,10 @@ public class PlayerController {
     return ResponseEntity.ok(players);
   }
 
-  @GetMapping("/players/{playerId}/")
-  public ResponseEntity<Player> getPlayerById(@PathVariable final Integer playerId) {
+  @GetMapping("/players/{player_id}/")
+  public ResponseEntity<Player> getPlayerById(@PathVariable final Integer player_id) {
     try {
-      Player player = playerService.getPlayerById(playerId);
+      Player player = playerService.getPlayerById(player_id);
       return ResponseEntity.ok(player);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
@@ -55,21 +55,21 @@ public class PlayerController {
     return ResponseEntity.status(201).body(playerService.createPlayer(player));
   }
 
-  @PatchMapping("/players/{playerId}/")
-  public ResponseEntity<Player> updatePlayer(@PathVariable final Integer playerId,
+  @PatchMapping("/players/{player_id}/")
+  public ResponseEntity<Player> updatePlayer(@PathVariable final Integer player_id,
       @RequestBody final Player player) {
     try {
-      Player updatedPlayer = playerService.updatePlayer(playerId, player);
+      Player updatedPlayer = playerService.updatePlayer(player_id, player);
       return ResponseEntity.ok(updatedPlayer);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
-  @DeleteMapping("/players/{playerId}/")
-  public ResponseEntity<Player> deletePlayer(@PathVariable final Integer playerId) {
+  @DeleteMapping("/players/{player_id}/")
+  public ResponseEntity<Player> deletePlayer(@PathVariable final Integer player_id) {
     try {
-      return ResponseEntity.ok(playerService.deletePlayer(playerId));
+      return ResponseEntity.ok(playerService.deletePlayer(player_id));
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
@@ -77,20 +77,22 @@ public class PlayerController {
 
   // Contracts Operations
 
-  @GetMapping("/players/{playerId}/contracts/")
-  public ResponseEntity<List<Contract>> getContractsByPlayerId(@PathVariable final Integer playerId) {
+  @GetMapping("/players/{player_id}/contracts/")
+  public ResponseEntity<List<Contract>> getContractsByPlayerId(@PathVariable final Integer player_id) {
     try {
-      List<Contract> contracts = contractService.getContractsByPlayerId(playerId);
+      List<Contract> contracts = contractService.getContractsByPlayerId(player_id);
       return ResponseEntity.ok(contracts);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
-  @GetMapping("/players/{playerId}/image/")
-  public ResponseEntity<byte[]> getImageFromStorage(@PathVariable final Integer playerId) throws NotFoundException {
+  // Images Operations
+
+  @GetMapping("/players/{player_id}/image/")
+  public ResponseEntity<byte[]> getPlayerImageById(@PathVariable final Integer player_id) throws NotFoundException {
     try {
-      Player player = playerService.getPlayerById(playerId);
+      Player player = playerService.getPlayerById(player_id);
       String currentDirectory = player.getImage();
       String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
       currentDirectory = currentDirectory.replace(imageName, "");
@@ -103,23 +105,23 @@ public class PlayerController {
     }
   }
 
-  @PatchMapping("/players/{playerId}/image/")
-  public ResponseEntity<String> updatePlayerImageById(@PathVariable final Integer playerId,
+  @PatchMapping("/players/{player_id}/image/")
+  public ResponseEntity<String> updatePlayerImageById(@PathVariable final Integer player_id,
       @RequestBody final MultipartFile image) {
     String uploadDirectory = "src/main/resources/static/images/players/";
     try {
-      playerService.updatePlayerImageById(playerId, image, uploadDirectory);
+      playerService.updatePlayerImageById(player_id, image, uploadDirectory);
       return ResponseEntity.ok("Image uploaded successfully!");
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
-  @DeleteMapping("/players/{playerId}/image/")
-  public ResponseEntity<String> deletePlayerImageById(@PathVariable final Integer playerId) {
+  @DeleteMapping("/players/{player_id}/image/")
+  public ResponseEntity<String> deletePlayerImageById(@PathVariable final Integer player_id) {
     String uploadDirectory = "src/main/resources/static/images/players/";
     try {
-      if (playerService.deletePlayerImageById(playerId, uploadDirectory)) {
+      if (playerService.deletePlayerImageById(player_id, uploadDirectory)) {
         return ResponseEntity.ok("Image deleted successfully");
       }
       return ResponseEntity.notFound().build();

@@ -50,7 +50,7 @@ public class Contract {
   private OpposingTeam opposingTeam;
 
   @Column(name = "opposingTeamImage", nullable = false)
-  private String opposingTeamImage = "/src/main/resources/static/images/teams/default.jpg";
+  private String opposingTeamImage = "src/main/resources/static/images/teams/default.jpg";
 
   @Column(name = "event", nullable = false)
   private Event event;
@@ -80,8 +80,7 @@ public class Contract {
   }
 
   public Contract(Player player, User owner, Double buyPrice, Rarity rarity, OpposingTeam opposingTeam,
-      String opposingTeamImage,
-      Event event,
+      String opposingTeamImage, Event event,
       Integer eventThreshold, LocalDate creationTime, Double value, Boolean expired, Boolean forSale,
       Double sellPrice) {
     this.player = player;

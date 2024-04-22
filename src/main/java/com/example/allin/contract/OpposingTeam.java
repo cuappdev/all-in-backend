@@ -2,16 +2,16 @@ package com.example.allin.contract;
 
 public enum OpposingTeam {
   Lehigh,
-  SUNY_Morrisville,
+  Morrisville,
   Fordham,
-  George_Mason,
-  Cal_St_Fullerton,
-  Utah_Valley,
+  George,
+  Fullerton,
+  Utah,
   Monmouth,
   Lafayette,
   Syracuse,
   Siena,
-  Robert_Morris,
+  Robert,
   Colgate,
   Baylor,
   Columbia,
@@ -22,5 +22,5 @@ public enum OpposingTeam {
   Dartmouth,
   Harvard,
   Yale,
-  Ohio_St
+  Ohio
 }

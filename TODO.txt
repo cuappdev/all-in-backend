@@ -1,5 +1,3 @@
-Creating transactions on buying or selling contracts
-Implement checks for making sure email and username are unique in user creation
 Web scraper
-creating a contract
+Creating a contract
 Add different error responses for exceptions

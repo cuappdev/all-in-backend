@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class ContractController {
@@ -60,6 +63,22 @@ public class ContractController {
     try {
       Contract deletedContract = contractService.deleteContract(contract_id);
       return ResponseEntity.ok(deletedContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @GetMapping("/contracts/{contract_id}/image/")
+  public ResponseEntity<byte[]> getContractImageById(@PathVariable final Integer contract_id) {
+    try {
+      Contract contract = contractService.getContractById(contract_id);
+      String currentDirectory = contract.getOpposingTeamImage();
+      String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
+      currentDirectory = currentDirectory.replace(imageName, "");
+      byte[] image = contractService.getContractImageById(currentDirectory, imageName);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_JPEG);
+      return new ResponseEntity<>(image, headers, HttpStatus.OK);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }

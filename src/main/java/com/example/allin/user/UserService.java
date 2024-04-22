@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.allin.exceptions.ForbiddenException;
 import com.example.allin.exceptions.NotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +15,7 @@ import java.nio.file.Path;
 public class UserService {
   private final UserRepo userRepo;
 
-  public String defaultImage = "src/main/resources/static/images/users/default.jpg";
+  public final String defaultImage = "src/main/resources/static/images/users/default.jpg";
 
   public UserService(UserRepo userRepo) {
     this.userRepo = userRepo;
@@ -32,7 +33,10 @@ public class UserService {
     return userOptional.get();
   }
 
-  public User createUser(final User user) {
+  public User createUser(final User user) throws ForbiddenException {
+    if (userRepo.findByUsername(user.getUsername()) != null || userRepo.findByEmail(user.getEmail()) != null) {
+      throw new ForbiddenException();
+    }
     return userRepo.save(user);
   }
 
@@ -57,7 +61,7 @@ public class UserService {
     return userOptional.get();
   }
 
-  public byte[] getImageFromStorage(final String uploadDirectory, final String fileName) {
+  public byte[] getUserImageById(final String uploadDirectory, final String fileName) {
     Path uploadPath = Path.of(uploadDirectory);
     Path filePath = uploadPath.resolve(fileName);
     try {
@@ -68,7 +72,8 @@ public class UserService {
     return null;
   }
 
-  public void updateUserImageById(final Integer user_id, final MultipartFile image, final String uploadDirectory) throws NotFoundException {
+  public byte[] updateUserImageById(final Integer user_id, final MultipartFile image, final String uploadDirectory)
+      throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
       throw new NotFoundException();
@@ -91,9 +96,11 @@ public class UserService {
     }
     userToUpdate.setImage(uploadDirectory + uniqueFileName);
     userRepo.save(userToUpdate);
+    return getUserImageById(uploadDirectory, uniqueFileName);
   }
 
-  public boolean deleteUserImageById(final Integer user_id, final String uploadDirectory) throws NotFoundException{
+  public byte[] deleteUserImageById(final Integer user_id, final String uploadDirectory)
+      throws NotFoundException, ForbiddenException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
       throw new NotFoundException();
@@ -101,17 +108,18 @@ public class UserService {
     User userToUpdate = userOptional.get();
     String image = userToUpdate.getImage();
     if (image.equals(defaultImage)) {
-      return false;
+      throw new ForbiddenException();
     }
     Path pathToFile = Path.of(userToUpdate.getImage());
     try {
+      byte[] deletedImage = Files.readAllBytes(pathToFile);
       Files.delete(pathToFile);
       userToUpdate.setImage("src/main/resources/static/images/users/default.jpg");
       userRepo.save(userToUpdate);
-      return true;
+      return deletedImage;
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return false;
+    return null;
   }
 }

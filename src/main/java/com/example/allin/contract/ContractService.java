@@ -19,6 +19,9 @@ import com.example.allin.exceptions.NotFoundException;
 import com.example.allin.exceptions.OverdrawnException;
 import com.example.allin.exceptions.NotForSaleException;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Service
 public class ContractService {
 
@@ -26,6 +29,8 @@ public class ContractService {
   private final UserRepo userRepo;
   private final TransactionRepo transactionRepo;
   private final PlayerRepo playerRepo;
+
+  public final String imagePath = "src/main/resources/static/images/teams/";
 
   public ContractService(ContractRepo contractRepo, UserRepo userRepo, TransactionRepo transactionRepo,
       PlayerRepo playerRepo) {
@@ -78,6 +83,7 @@ public class ContractService {
     userRepo.save(user);
     contract.setOwner(user);
     contract.setPlayer(player);
+    contract.setOpposingTeamImage(imagePath + contract.getOpposingTeam() + ".png");
     contractRepo.save(contract);
     Transaction transaction = new Transaction(null, user, contract,
         contract.getCreationTime(), contract.getBuyPrice());
@@ -166,6 +172,18 @@ public class ContractService {
     contractToSell.setSellPrice(sellPrice);
 
     return contractRepo.save(contractToSell);
+  }
+
+  public byte[] getContractImageById(final String uploadDirectory, final String fileName) {
+    System.out.println(uploadDirectory);
+    Path uploadPath = Path.of(uploadDirectory);
+    Path filePath = uploadPath.resolve(fileName);
+    try {
+      return Files.readAllBytes(filePath);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
 }

@@ -2,12 +2,14 @@ package com.example.allin.user;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import com.example.allin.contract.Contract;
 import com.example.allin.contract.ContractService;
 import com.example.allin.transaction.Transaction;
 import com.example.allin.transaction.TransactionService;
+import com.example.allin.exceptions.ForbiddenException;
 import com.example.allin.exceptions.NotFoundException;
-import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.http.HttpHeaders;
@@ -58,7 +59,12 @@ public class UserController {
 
   @PostMapping("/users/")
   public ResponseEntity<User> createUser(@RequestBody final User user) {
-    return ResponseEntity.status(201).body(userService.createUser(user));
+    try {
+      return ResponseEntity.status(201).body(userService.createUser(user));
+    } catch (ForbiddenException e) {
+      return ResponseEntity.status(403).build();
+    }
+
   }
 
   @PatchMapping("/users/{user_id}/")
@@ -82,43 +88,47 @@ public class UserController {
   }
 
   @GetMapping("/users/{user_id}/image/")
-  public ResponseEntity<byte[]> getImageFromStorage(@PathVariable final Integer user_id) throws NotFoundException {
+  public ResponseEntity<byte[]> getUserImageById(@PathVariable final Integer user_id) {
     try {
       User user = userService.getUserById(user_id);
       String currentDirectory = user.getImage();
       String imageName = currentDirectory.substring(currentDirectory.lastIndexOf("/") + 1);
       currentDirectory = currentDirectory.replace(imageName, "");
-      byte[] image = userService.getImageFromStorage(currentDirectory, imageName);
+      byte[] image = userService.getUserImageById(currentDirectory, imageName);
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.IMAGE_JPEG);
       return new ResponseEntity<>(image, headers, HttpStatus.OK);
-    } catch (Exception e) {
+    } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
   @PatchMapping("/users/{user_id}/image/")
-  public ResponseEntity<String> updateUserImageById(@PathVariable final Integer user_id,
+  public ResponseEntity<byte[]> updateUserImageById(@PathVariable final Integer user_id,
       @RequestBody final MultipartFile image) {
     String uploadDirectory = "src/main/resources/static/images/users/";
     try {
-      userService.updateUserImageById(user_id, image, uploadDirectory);
-      return ResponseEntity.ok("Image uploaded successfully!");
+      byte[] uploadedImage = userService.updateUserImageById(user_id, image, uploadDirectory);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_JPEG);
+      return new ResponseEntity<>(uploadedImage, headers, HttpStatus.OK);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
     }
   }
 
   @DeleteMapping("/users/{user_id}/image/")
-  public ResponseEntity<String> deleteUserImageById(@PathVariable final Integer user_id) {
+  public ResponseEntity<byte[]> deleteUserImageById(@PathVariable final Integer user_id) {
     String uploadDirectory = "src/main/resources/static/images/users/";
     try {
-      if (userService.deleteUserImageById(user_id, uploadDirectory)) {
-        return ResponseEntity.ok("Image deleted successfully");
-      }
-      return ResponseEntity.notFound().build();
+      byte[] deletedImage = userService.deleteUserImageById(user_id, uploadDirectory);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_JPEG);
+      return new ResponseEntity<>(deletedImage, headers, HttpStatus.OK);
     } catch (NotFoundException e) {
       return ResponseEntity.notFound().build();
+    } catch (ForbiddenException e) {
+      return ResponseEntity.status(403).build();
     }
   }
 
