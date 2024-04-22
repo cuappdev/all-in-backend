@@ -22,10 +22,10 @@ public class ContractGenerator {
     this.playerDataRepo = playerDataRepo;
   }
 
-  public final static Double COMMON_PROBABILITY_THRESHOLD = 0.6;
-  public final static Double RARE_PROBABILITY_THRESHOLD = 0.45;
-  public final static Double EPIC_PROBABILITY_THRESHOLD = 0.3;
-  public final static Double LEGENDARY_PROBABILITY_THRESHOLD = 0.15;
+  public final static Double COMMON_PROBABILITY_THRESHOLD = 0.7;
+  public final static Double RARE_PROBABILITY_THRESHOLD = 0.55;
+  public final static Double EPIC_PROBABILITY_THRESHOLD = 0.4;
+  public final static Double LEGENDARY_PROBABILITY_THRESHOLD = 0.25;
   public final static Double PROB_RANGE_OVERLAP = 0.05;
 
   public final static Double ALPHA = 1.0;
