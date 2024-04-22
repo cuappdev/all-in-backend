@@ -2,6 +2,7 @@ package com.example.allin.playerData;
 
 import java.time.LocalDate;
 
+import com.example.allin.contract.Event;
 import com.example.allin.contract.OpposingTeam;
 import com.example.allin.player.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -227,5 +228,34 @@ public class PlayerData {
         + ", points=" + points + ", minutes=" + minutes + ", fieldGoals=" + fieldGoals + ", threePointers="
         + threePointers + ", freeThrows=" + freeThrows + ", rebounds=" + rebounds + ", assists=" + assists + ", steals="
         + steals + ", blocks=" + blocks + ", turnovers=" + turnovers + ", fouls=" + fouls + "]";
+  }
+
+  public Integer getEvent(Event e) {
+    switch (e) {
+      case Points:
+        return getPoints();
+      case Minutes:
+        return getMinutes();
+      case Field_Goals:
+        return getFieldGoals();
+      case Three_Pointers:
+        return getThreePointers();
+      case Free_Throws:
+        return getFreeThrows();
+      case Rebounds:
+        return getRebounds();
+      case Assists:
+        return getAssists();
+      case Steals:
+        return getSteals();
+      case Blocks:
+        return getBlocks();
+      case Turnovers:
+        return getTurnovers();
+      case Fouls:
+        return getFouls();
+      default:
+        return 0;
+    }
   }
 }

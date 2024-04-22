@@ -1,11 +1,14 @@
 package com.example.allin.contract.util;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.example.allin.contract.Contract;
 import com.example.allin.contract.Event;
 import com.example.allin.contract.OpposingTeam;
 import com.example.allin.player.Player;
+import com.example.allin.playerData.PlayerData;
+import com.example.allin.playerData.PlayerDataRepo;
 import com.example.allin.user.User;
 import com.example.allin.contract.Rarity;
 
@@ -13,7 +16,13 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ContractGenerator {
 
-  public static Contract generateContract(User user, Player player, Double buyPrice, Rarity rarity) {
+  PlayerDataRepo playerDataRepo;
+
+  public ContractGenerator(PlayerDataRepo playerDataRepo) {
+    this.playerDataRepo = playerDataRepo;
+  }
+
+  public Contract generateContract(User user, Player player, Double buyPrice, Rarity rarity) {
     // event and opposing_team is randomly picked
     // Value should be greater than the buy_price (each rarity has a different
     // multiplier with legendary being the highest)
@@ -63,13 +72,29 @@ public class ContractGenerator {
         false, null);
   }
 
-  public static Integer normalizeEventThreshold(Player player, Event event, Double eventProb) {
+  public Double[] getPlayerDataByEvent(Player player, Event event) {
+    List<PlayerData> playerData = playerDataRepo.findByPlayer(player);
+    Integer N = playerData.size();
+    Double eventTotal = 0.0;
+    for (PlayerData data : playerData) {
+      eventTotal += data.getEvent(event);
+    }
+    Double eventAvg = eventTotal / N;
+    Double eventSD = 0.0;
+    for (PlayerData data : playerData) {
+      eventSD += Math.pow(data.getEvent(event) - eventAvg, 2);
+    }
+    eventSD = Math.sqrt(eventSD / N);
+    return new Double[] { eventAvg, eventSD };
+  }
+
+  public Integer normalizeEventThreshold(Player player, Event event, Double eventProb) {
     // Normalize the event threshold based on player averages
-    Double eventAvg = 0.0;
-    Double eventSD = 1.0;
-    NormalDistribution X = new NormalDistribution(eventAvg, eventSD);
+    Double[] eventMetrics = getPlayerDataByEvent(player, event);
+    Double eventAvg = eventMetrics[0];
+    Double eventSD = eventMetrics[1];
+    NormalDistribution X = new NormalDistribution(eventAvg, Math.pow(eventSD, 2));
     Integer threshold = (int) Math.round(X.inverseCumulativeProbability(1 - eventProb));
     return threshold;
-
   }
 }

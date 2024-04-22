@@ -15,7 +15,6 @@ import com.example.allin.transaction.TransactionRepo;
 import com.example.allin.player.Player;
 import com.example.allin.player.PlayerRepo;
 
-import com.example.allin.playerData.PlayerData;
 import com.example.allin.playerData.PlayerDataRepo;
 
 import com.example.allin.exceptions.NotFoundException;
@@ -90,17 +89,17 @@ public class ContractService {
       throw new OverdrawnException();
     }
 
-    Contract contract = ContractGenerator.generateContract(user, player, buyPrice, rarity);
+    ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+    Contract contract = contractGenerator.generateContract(user, player, buyPrice, rarity);
+    contractRepo.save(contract);
 
     user.setBalance(user.getBalance() - contract.getBuyPrice());
     userRepo.save(user);
-    contract.setOwner(user);
-    contract.setPlayer(player);
-    contract.setOpposingTeamImage(imagePath + contract.getOpposingTeam() + ".png");
-    contractRepo.save(contract);
+
     Transaction transaction = new Transaction(null, user, contract,
         contract.getCreationTime(), contract.getBuyPrice());
     transactionRepo.save(transaction);
+
     return contract;
   }
 
