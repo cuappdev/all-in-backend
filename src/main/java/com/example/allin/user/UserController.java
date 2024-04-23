@@ -13,6 +13,7 @@ import com.example.allin.transaction.TransactionService;
 import com.example.allin.exceptions.ForbiddenException;
 import com.example.allin.exceptions.NotFoundException;
 import com.example.allin.exceptions.OverdrawnException;
+import com.example.allin.player.PlayerService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +35,14 @@ public class UserController {
   private final UserService userService;
   private final ContractService contractService;
   private final TransactionService transactionService;
+  private final PlayerService playerService;
 
   public UserController(UserService userService, ContractService ContractService,
-      TransactionService transactionService) {
+      TransactionService transactionService, PlayerService playerService) {
     this.userService = userService;
     this.contractService = ContractService;
     this.transactionService = transactionService;
+    this.playerService = playerService;
   }
 
   // CRUD operations
@@ -148,12 +151,31 @@ public class UserController {
   }
 
   @PostMapping("/users/{user_id}/players/{player_id}/contracts/")
-  public ResponseEntity<Contract> createContract(@PathVariable final Integer user_id,
+  public ResponseEntity<Contract> createContractByPlayerId(@PathVariable final Integer user_id,
       @PathVariable final Integer player_id,
+      @RequestBody final Map<String, Double> body) {
+    try {
+      Double buyPrice = body.get("buy_price");
+      Rarity rarity = Rarity.getRandomRarity();
+      Contract createdContract = contractService.createContract(user_id, player_id, buyPrice, rarity);
+      return ResponseEntity.status(201).body(createdContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    } catch (OverdrawnException e) {
+      return ResponseEntity.status(403).build();
+    } catch (ClassCastException e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @PostMapping("/users/{user_id}/contracts/")
+  public ResponseEntity<Contract> createContractByRarity(@PathVariable final Integer user_id,
       @RequestBody final Map<String, Object> body) {
     try {
       Double buyPrice = (Double) body.get("buy_price");
       Rarity rarity = Rarity.valueOf((String) body.get("rarity"));
+      Integer max_player_id = playerService.getAllPlayers().size();
+      Integer player_id = (int) (Math.random() * max_player_id) + 1;
       Contract createdContract = contractService.createContract(user_id, player_id, buyPrice, rarity);
       return ResponseEntity.status(201).body(createdContract);
     } catch (NotFoundException e) {

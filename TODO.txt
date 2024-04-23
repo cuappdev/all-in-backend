@@ -1,3 +1,3 @@
-Creating a contract
 Web scraper
+Creating a contract (Done?)
 Add different error responses for exceptions
