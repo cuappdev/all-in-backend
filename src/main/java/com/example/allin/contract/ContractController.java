@@ -92,6 +92,16 @@ public class ContractController {
     return ResponseEntity.ok(marketContracts);
   }
 
+  @GetMapping("/contracts/{contract_id}/recall/")
+  public ResponseEntity<Contract> recallContract(@PathVariable final Integer contract_id) {
+    try {
+      Contract recalledContract = contractService.recallContract(contract_id);
+      return ResponseEntity.ok(recalledContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
   @PostMapping("/contracts/{contract_id}/buy/")
   public ResponseEntity<Contract> buyContract(@PathVariable final Integer contract_id,
       @RequestBody final Map<String, Integer> body) {

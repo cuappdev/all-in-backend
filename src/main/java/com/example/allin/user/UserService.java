@@ -34,8 +34,13 @@ public class UserService {
   }
 
   public User createUser(final User user) throws ForbiddenException {
-    if (userRepo.findByUsername(user.getUsername()) != null || userRepo.findByEmail(user.getEmail()) != null) {
-      throw new ForbiddenException();
+    User existingUser = userRepo.findByUsername(user.getUsername());
+    if (existingUser != null) {
+      if (existingUser.getEmail().equals(user.getEmail())) {
+        return existingUser;
+      } else {
+        throw new ForbiddenException();
+      }
     }
     return userRepo.save(user);
   }

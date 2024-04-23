@@ -198,4 +198,17 @@ public class ContractService {
     return null;
   }
 
+  public Contract recallContract(final Integer contract_id) throws NotFoundException {
+    Optional<Contract> contractOptional = contractRepo.findById(contract_id);
+    if (contractOptional.isEmpty()) {
+      throw new NotFoundException();
+    }
+
+    Contract contractToRecall = contractOptional.get();
+    contractToRecall.setForSale(false);
+    contractToRecall.setSellPrice(0.0);
+
+    return contractRepo.save(contractToRecall);
+  }
+
 }
