@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+  all-in-backend:
+    build: .
+    # restart: always
+    ports:
+      - 80:8080
+    # networks:
+    #   - springapimysql-net
+    environment:
+      - spring.jpa.hibernate.ddl-auto=create-drop
+      - spring.datasource.url=jdbc:mysql://localhost:3306/all_in
+      - spring.datasource.username=springuser
+      - spring.datasource.password=password
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+      - spring.jpa.show-sql=true
+      
+      
+    # depends_on:
+    #   - mysqldb
+    
+    # volumes:
+    #   - .m2:/root/.m2
+      
+  # mysqldb:
+  #   image: "mysql:8.0"
+  #   restart: always
+  #   ports:
+  #     - 3306:3306
+  #   networks:
+  #     - springapimysql-net  
+    # environment:
+    #   MYSQL_DATABASE: all_in
+    #   MYSQL_USER: springuser
+    #   MYSQL_PASSWORD: password
+    #   MYSQL_ROOT_PASSWORD: aayush54
+networks:
+  springapimysql-net:
