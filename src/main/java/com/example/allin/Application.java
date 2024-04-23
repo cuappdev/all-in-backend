@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.example.allin.player.Player;
 import com.example.allin.player.PlayerRepo;
+import com.example.allin.playerData.PlayerDataRepo;
+import com.example.allin.playerData.util.PopulatePlayerData;
 import com.example.allin.player.Position;
 
 @SpringBootApplication
@@ -16,12 +18,15 @@ public class Application {
         @Autowired
         PlayerRepo playerRepo;
 
+        @Autowired
+        PlayerDataRepo playerDataRepo;
+
         public static void main(String[] args) {
                 SpringApplication.run(Application.class, args);
         }
 
         @Bean
-        public CommandLineRunner populatePlayers(PlayerRepo playerRepo) {
+        public CommandLineRunner populatePlayers(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
                 return (args) -> {
                         Player chris_manon = new Player("Chris", "Manon", new Position[] { Position.Guard }, 30, "6'5",
                                         209,
@@ -126,6 +131,9 @@ public class Application {
                         playerRepo.save(ryan_kiachian);
                         playerRepo.save(darius_ervin);
                         playerRepo.save(hayden_franson);
+
+                        PopulatePlayerData populatePlayerData = new PopulatePlayerData(playerDataRepo);
+                        populatePlayerData.run();
                 };
         }
 
