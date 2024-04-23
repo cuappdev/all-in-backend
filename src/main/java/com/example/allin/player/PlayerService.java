@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Service
 public class PlayerService {
 
@@ -29,7 +28,7 @@ public class PlayerService {
   public Player getPlayerById(final Integer player_id) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     return playerOptional.get();
   }
@@ -41,7 +40,7 @@ public class PlayerService {
   public Player updatePlayer(final Integer player_id, final Player player) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     Player playerToUpdate = playerOptional.get();
     playerToUpdate.setFirstName(player.getFirstName());
@@ -59,7 +58,7 @@ public class PlayerService {
   public Player deletePlayer(final Integer player_id) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     playerRepo.deleteById(player_id);
     return playerOptional.get();
@@ -76,10 +75,11 @@ public class PlayerService {
     return null;
   }
 
-  public void updatePlayerImageById(final Integer player_id, final MultipartFile image, final String uploadDirectory) throws NotFoundException {
+  public void updatePlayerImageById(final Integer player_id, final MultipartFile image, final String uploadDirectory)
+      throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     Player playerToUpdate = playerOptional.get();
     String uniqueFileName = player_id + "_" + image.getOriginalFilename();
@@ -101,10 +101,10 @@ public class PlayerService {
     playerRepo.save(playerToUpdate);
   }
 
-  public boolean deletePlayerImageById(final Integer player_id, final String uploadDirectory) throws NotFoundException{
+  public boolean deletePlayerImageById(final Integer player_id, final String uploadDirectory) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     Player playerToUpdate = playerOptional.get();
     String image = playerToUpdate.getImage();

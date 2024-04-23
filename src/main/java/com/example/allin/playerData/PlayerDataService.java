@@ -28,7 +28,7 @@ public class PlayerDataService {
   public PlayerData getPlayerDataById(final Integer playerDataId) throws NotFoundException {
     Optional<PlayerData> playerDataOptional = playerDataRepo.findById(playerDataId);
     if (playerDataOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player data with id " + playerDataId + " not found.");
     }
     return playerDataOptional.get();
   }
@@ -40,7 +40,7 @@ public class PlayerDataService {
   public PlayerData updatePlayerData(final Integer playerDataId, final PlayerData playerData) throws NotFoundException {
     Optional<PlayerData> playerDataOptional = playerDataRepo.findById(playerDataId);
     if (playerDataOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player data with id " + playerDataId + " not found.");
     }
     PlayerData playerDataToUpdate = playerDataOptional.get();
     playerDataToUpdate.setGameDate(playerData.getGameDate());
@@ -59,7 +59,7 @@ public class PlayerDataService {
   public PlayerData deletePlayerData(final Integer playerDataId) throws NotFoundException {
     Optional<PlayerData> playerDataOptional = playerDataRepo.findById(playerDataId);
     if (playerDataOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player data with id " + playerDataId + " not found.");
     }
     playerDataRepo.deleteById(playerDataId);
     return playerDataOptional.get();
@@ -68,7 +68,7 @@ public class PlayerDataService {
   public List<PlayerData> getPlayerDataByPlayerId(final Integer playerId) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(playerId);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + playerId + " not found.");
     }
     Player player = playerOptional.get();
     return playerDataRepo.findByPlayer(player);

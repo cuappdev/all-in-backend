@@ -55,12 +55,12 @@ public class UserController {
 
   @GetMapping("/users/{user_id}/")
   public ResponseEntity<User> getUserById(@PathVariable final Integer user_id) {
-    try {
-      User user = userService.getUserById(user_id);
-      return ResponseEntity.ok(user);
-    } catch (NotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
+    // try {
+    User user = userService.getUserById(user_id);
+    return ResponseEntity.ok(user);
+    // } catch (NotFoundException e) {
+    // return ResponseEntity.notFound().build();
+    // }
   }
 
   @PostMapping("/users/")

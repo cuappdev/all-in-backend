@@ -1,6 +1,7 @@
 Web scraper
 Creating a contract (Done?)
-Add different error responses for exceptions
+Exception Handling
+Request Validation
 Capitalize all enums
 Add test suite
 Authentication and authorization

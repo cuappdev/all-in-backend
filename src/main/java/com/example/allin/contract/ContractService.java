@@ -52,7 +52,7 @@ public class ContractService {
   public Contract getContractById(final Integer contract_id) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
     return contractOptional.get();
   }
@@ -60,7 +60,7 @@ public class ContractService {
   public List<Contract> getContractsByPlayerId(final Integer player_id) throws NotFoundException {
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     Player player = playerOptional.get();
     return contractRepo.findByPlayer(player);
@@ -69,7 +69,7 @@ public class ContractService {
   public List<Contract> getContractsByUserId(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User user = userOptional.get();
     return contractRepo.findByOwner(user);
@@ -80,13 +80,13 @@ public class ContractService {
     Optional<User> userOptional = userRepo.findById(user_id);
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (userOptional.isEmpty() || playerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User or player not found.");
     }
     User user = userOptional.get();
     Player player = playerOptional.get();
 
     if (buyPrice > user.getBalance()) {
-      throw new OverdrawnException();
+      throw new OverdrawnException("User balance is too low.");
     }
 
     ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
@@ -106,7 +106,7 @@ public class ContractService {
   public Contract updateContract(final Integer contract_id, final Contract contract) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
     Contract contractToUpdate = contractOptional.get();
     contractToUpdate.setRarity(contract.getRarity());
@@ -122,7 +122,7 @@ public class ContractService {
   public Contract deleteContract(final Integer contract_id) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
     contractRepo.deleteById(contract_id);
     return contractOptional.get();
@@ -136,19 +136,19 @@ public class ContractService {
       throws NotFoundException, OverdrawnException, NotForSaleException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
 
     Contract contractToBuy = contractOptional.get();
 
     if (!contractToBuy.getForSale()) {
-      throw new NotForSaleException();
+      throw new NotForSaleException("Contract is not for sale.");
     }
 
     Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner().getId());
     Optional<User> buyerOptional = userRepo.findById(buyer_id);
     if (sellerOptional.isEmpty() || buyerOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Seller or buyer not found.");
     }
 
     User seller = contractToBuy.getOwner();
@@ -156,7 +156,7 @@ public class ContractService {
     Double sellPrice = contractToBuy.getSellPrice();
 
     if (sellPrice > buyer.getBalance()) {
-      throw new OverdrawnException();
+      throw new OverdrawnException("Buyer balance is too low.");
     }
 
     seller.setBalance(seller.getBalance() + sellPrice);
@@ -176,7 +176,7 @@ public class ContractService {
   public Contract sellContract(final Integer contract_id, final Double sellPrice) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
 
     Contract contractToSell = contractOptional.get();
@@ -201,7 +201,7 @@ public class ContractService {
   public Contract recallContract(final Integer contract_id) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
 
     Contract contractToRecall = contractOptional.get();

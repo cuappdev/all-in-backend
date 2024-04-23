@@ -28,7 +28,7 @@ public class UserService {
   public User getUserById(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     return userOptional.get();
   }
@@ -39,7 +39,7 @@ public class UserService {
       if (existingUser.getEmail().equals(user.getEmail())) {
         return existingUser;
       } else {
-        throw new ForbiddenException();
+        throw new ForbiddenException("Username " + user.getUsername() + " already exists.");
       }
     }
     return userRepo.save(user);
@@ -48,7 +48,7 @@ public class UserService {
   public User updateUser(final Integer user_id, final User user) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User userToUpdate = userOptional.get();
     userToUpdate.setUsername(user.getUsername());
@@ -60,7 +60,7 @@ public class UserService {
   public User deleteUser(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     userRepo.deleteById(user_id);
     return userOptional.get();
@@ -81,7 +81,7 @@ public class UserService {
       throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User userToUpdate = userOptional.get();
     String uniqueFileName = user_id + "_" + image.getOriginalFilename();
@@ -108,12 +108,12 @@ public class UserService {
       throws NotFoundException, ForbiddenException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User userToUpdate = userOptional.get();
     String image = userToUpdate.getImage();
     if (image.equals(defaultImage)) {
-      throw new ForbiddenException();
+      throw new ForbiddenException("Cannot delete default image");
     }
     Path pathToFile = Path.of(userToUpdate.getImage());
     try {

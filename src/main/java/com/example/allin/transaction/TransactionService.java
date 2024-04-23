@@ -32,7 +32,7 @@ public class TransactionService {
   public Transaction getTransactionById(final Integer transaction_id) throws NotFoundException {
     Optional<Transaction> transactionOptional = transactionRepo.findById(transaction_id);
     if (transactionOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Transaction with id " + transaction_id + " not found.");
     }
     return transactionOptional.get();
   }
@@ -44,7 +44,7 @@ public class TransactionService {
   public List<Transaction> getTransactionsByUserId(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findBySellerOrBuyer(user, user);
@@ -53,7 +53,7 @@ public class TransactionService {
   public List<Transaction> getSellerTransactionsByUserId(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findBySeller(user);
@@ -62,7 +62,7 @@ public class TransactionService {
   public List<Transaction> getBuyerTransactionsByUserId(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("User with id " + user_id + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findByBuyer(user);
@@ -76,7 +76,7 @@ public class TransactionService {
       throws NotFoundException {
     Optional<Transaction> transactionOptional = transactionRepo.findById(transaction_id);
     if (transactionOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Transaction with id " + transaction_id + " not found.");
     }
     Transaction transactionToUpdate = transactionOptional.get();
     transactionToUpdate.setTransactionDate(transaction.getTransactionDate());
@@ -87,7 +87,7 @@ public class TransactionService {
   public Transaction deleteTransaction(final Integer transaction_id) throws NotFoundException {
     Optional<Transaction> transactionOptional = transactionRepo.findById(transaction_id);
     if (transactionOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Transaction with id " + transaction_id + " not found.");
     }
     Transaction transactionToDelete = transactionOptional.get();
     transactionRepo.delete(transactionToDelete);
@@ -97,7 +97,7 @@ public class TransactionService {
   public List<Transaction> getTransactionsByContractId(final Integer contract_id) throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
-      throw new NotFoundException();
+      throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
     Contract contract = contractOptional.get();
     return transactionRepo.findByContract(contract);
