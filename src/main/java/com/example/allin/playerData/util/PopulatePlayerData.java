@@ -4,12 +4,17 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.example.allin.player.Player;
+import com.example.allin.player.PlayerRepo;
+
 import com.example.allin.playerData.PlayerData;
 import com.example.allin.playerData.PlayerDataRepo;
 
 public class PopulatePlayerData {
 
+  private PlayerRepo playerRepo;
   private PlayerDataRepo playerDataRepo;
+  String baseUrl = "https://cornellbigred.com/boxscore.aspx?id=";
 
   int[] ids = {
       58875,
@@ -43,19 +48,17 @@ public class PopulatePlayerData {
       59254
   };
 
-  public PopulatePlayerData(PlayerDataRepo playerDataRepo) {
+  public PopulatePlayerData(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
+    this.playerRepo = playerRepo;
     this.playerDataRepo = playerDataRepo;
-  }
-
-  public String url(int id) {
-    return "https://www.basketball-reference.com/players/" + id + ".html";
   }
 
   public void populate() throws IOException {
     for (int id : ids) {
-      String url = url(id);
+      String url = baseUrl + id;
       Document doc = Jsoup.connect(url).get();
       System.out.println(doc);
+      break;
     }
 
     // PlayerData playerData = new PlayerData();

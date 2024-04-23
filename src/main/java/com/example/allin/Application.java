@@ -132,7 +132,7 @@ public class Application {
                         playerRepo.save(darius_ervin);
                         playerRepo.save(hayden_franson);
 
-                        PopulatePlayerData populatePlayerData = new PopulatePlayerData(playerDataRepo);
+                        PopulatePlayerData populatePlayerData = new PopulatePlayerData(playerRepo, playerDataRepo);
                         populatePlayerData.run();
                 };
         }
