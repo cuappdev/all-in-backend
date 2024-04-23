@@ -2,3 +2,4 @@ Web scraper
 Creating a contract (Done?)
 Add different error responses for exceptions
 Capitalize all enums
+Add test suite
