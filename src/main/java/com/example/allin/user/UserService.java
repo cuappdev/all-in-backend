@@ -16,6 +16,8 @@ public class UserService {
   private final UserRepo userRepo;
 
   public final String defaultImage = "src/main/resources/static/images/users/default.jpg";
+  // public final String defaultImage =
+  // "root/all-in-backend/src/main/resources/static/images/users/default.jpg";
 
   public UserService(UserRepo userRepo) {
     this.userRepo = userRepo;
@@ -119,7 +121,7 @@ public class UserService {
     try {
       byte[] deletedImage = Files.readAllBytes(pathToFile);
       Files.delete(pathToFile);
-      userToUpdate.setImage("src/main/resources/static/images/users/default.jpg");
+      userToUpdate.setImage(defaultImage);
       userRepo.save(userToUpdate);
       return deletedImage;
     } catch (Exception e) {

@@ -37,6 +37,10 @@ public class UserController {
   private final TransactionService transactionService;
   private final PlayerService playerService;
 
+  private String uploadDirectory = "src/main/resources/static/images/users/";
+  // private String uploadDirectory =
+  // "root/all-in-backend/src/main/resources/static/images/users/";
+
   public UserController(UserService userService, ContractService ContractService,
       TransactionService transactionService, PlayerService playerService) {
     this.userService = userService;
@@ -112,7 +116,6 @@ public class UserController {
   @PatchMapping("/users/{user_id}/image/")
   public ResponseEntity<byte[]> updateUserImageById(@PathVariable final Integer user_id,
       @RequestBody final MultipartFile image) {
-    String uploadDirectory = "src/main/resources/static/images/users/";
     try {
       byte[] uploadedImage = userService.updateUserImageById(user_id, image, uploadDirectory);
       HttpHeaders headers = new HttpHeaders();
@@ -125,7 +128,6 @@ public class UserController {
 
   @DeleteMapping("/users/{user_id}/image/")
   public ResponseEntity<byte[]> deleteUserImageById(@PathVariable final Integer user_id) {
-    String uploadDirectory = "src/main/resources/static/images/users/";
     try {
       byte[] deletedImage = userService.deleteUserImageById(user_id, uploadDirectory);
       HttpHeaders headers = new HttpHeaders();

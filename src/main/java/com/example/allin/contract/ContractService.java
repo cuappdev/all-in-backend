@@ -35,6 +35,8 @@ public class ContractService {
   private final PlayerDataRepo playerDataRepo;
 
   public final String imagePath = "src/main/resources/static/images/teams/";
+  // public final String imagePath =
+  // "root/all-in-backend/src/main/resources/static/images/teams/";
 
   public ContractService(ContractRepo contractRepo, UserRepo userRepo, TransactionRepo transactionRepo,
       PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
@@ -187,7 +189,6 @@ public class ContractService {
   }
 
   public byte[] getContractImageById(final String uploadDirectory, final String fileName) {
-    System.out.println(uploadDirectory);
     Path uploadPath = Path.of(uploadDirectory);
     Path filePath = uploadPath.resolve(fileName);
     try {
