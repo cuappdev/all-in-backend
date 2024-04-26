@@ -192,6 +192,9 @@ public class ContractGenerator {
       eventSD += Math.pow(data.getEvent(event) - eventAvg, 2);
     }
     eventSD = Math.sqrt(eventSD / N);
+    if (eventSD == 0.0) {
+      eventSD = 1.0;
+    }
     return new Double[] { eventAvg, eventSD };
   }
 
@@ -200,8 +203,8 @@ public class ContractGenerator {
     Double[] eventMetrics = getPlayerDataByEvent(player, event);
     Double eventAvg = eventMetrics[0];
     Double eventSD = eventMetrics[1];
-    NormalDistribution X = new NormalDistribution(eventAvg, Math.pow(eventSD, 2));
-    Integer threshold = (int) Math.round(X.inverseCumulativeProbability(1 - eventProb));
+    NormalDistribution X = new NormalDistribution(eventAvg, eventSD);
+    Integer threshold = (int) Math.ceil(X.inverseCumulativeProbability(1 - eventProb));
     return threshold;
   }
 }
