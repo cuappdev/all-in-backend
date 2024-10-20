@@ -21,11 +21,11 @@ Before setting up the project, ensure you have the following installed:
 
 Manually create an application.properties file in src/main/resources/ with the following content:
 
-spring.datasource.url=jdbc:mysql://localhost:3306/all_in
-spring.datasource.username=your_mysql_username
-spring.datasource.password=your_mysql_password
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+- spring.datasource.url=jdbc:mysql://localhost:3306/all_in
+- spring.datasource.username=your_mysql_username
+- spring.datasource.password=your_mysql_password
+- spring.jpa.hibernate.ddl-auto=update
+- spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ### 3. Set up the Database
 
@@ -37,6 +37,6 @@ CREATE DATABASE all_in;
 
 Run:
 
-mvn -N wrapper:wrapper
-pip install pre-commit
-zsh start.sh (on Mac)
+- mvn -N wrapper:wrapper
+- pip install pre-commit
+- zsh start.sh (on Mac)

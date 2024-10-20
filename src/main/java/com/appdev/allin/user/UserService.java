@@ -2,6 +2,7 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.exceptions.ForbiddenException;
 import com.appdev.allin.exceptions.NotFoundException;
+import com.appdev.allin.utils.Constants;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,11 +15,6 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepo userRepo;
-
-    public final String defaultImage = "src/main/resources/static/images/users/default.jpg";
-
-    // public final String defaultImage =
-    // "root/all-in-backend/src/main/resources/static/images/users/default.jpg";
 
     public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
@@ -119,14 +115,14 @@ public class UserService {
         }
         User userToUpdate = userOptional.get();
         String image = userToUpdate.getImage();
-        if (image.equals(defaultImage)) {
+        if (image.equals(Constants.DEFAULT_USER_IMAGE)) {
             throw new ForbiddenException("Cannot delete default image");
         }
         Path pathToFile = Path.of(userToUpdate.getImage());
         try {
             byte[] deletedImage = Files.readAllBytes(pathToFile);
             Files.delete(pathToFile);
-            userToUpdate.setImage(defaultImage);
+            userToUpdate.setImage(Constants.DEFAULT_USER_IMAGE);
             userRepo.save(userToUpdate);
             return deletedImage;
         } catch (Exception e) {

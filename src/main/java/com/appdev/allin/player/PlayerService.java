@@ -1,6 +1,7 @@
 package com.appdev.allin.player;
 
 import com.appdev.allin.exceptions.NotFoundException;
+import com.appdev.allin.utils.Constants;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +15,6 @@ import java.util.Optional;
 public class PlayerService {
 
     private final PlayerRepo playerRepo;
-
-    private final String defaultImage = "src/main/resources/static/images/players/default.jpg";
 
     public PlayerService(PlayerRepo playerRepo) {
         this.playerRepo = playerRepo;
@@ -114,7 +113,7 @@ public class PlayerService {
         }
         Player playerToUpdate = playerOptional.get();
         String image = playerToUpdate.getImage();
-        if (image.equals(defaultImage)) {
+        if (image.equals(Constants.DEFAULT_PLAYER_IMAGE)) {
             return false;
         }
         Path pathToFile = Path.of(playerToUpdate.getImage());
