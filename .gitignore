@@ -1,22 +1,47 @@
-HELP.md
-target/
+# Maven-specific files
+/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-!**/src/main/resources/application.properties
-application.properties
+!.mvn/wrapper/maven-wrapper.properties
+!.mvn/wrapper/MavenWrapperDownloader.java
+/mvnw
+/mvnw.cmd
 
-## Secrets ##
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Secrets #
 *.pem
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# MacOS
+.DS_Store
 
-### VS Code ###
-.vscode/
+# Logs
+*.log
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Java-specific
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot
+/*.env
+/*.config
+/*.properties
+
+# Sensitive configuration files
+.env
+application-*.yml
+application-*.properties

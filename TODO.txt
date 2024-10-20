@@ -1,7 +1,22 @@
+Features/Bugs:
+Fix README
 Web scraper
+Implement image processor
 Creating a contract (Done?)
 Exception Handling
 Request Validation
 Capitalize all enums
 Add test suite
 Authentication and authorization
+Pagination for requests
+Expired contracts microservice
+Abstract contract class to include all sports
+Scraper for opposing team
+Scraper for players
+Event Scraper
+
+
+Things to ask:
+Rarity thresholds
+How contracts work
+Starting money and how much contracts cost
