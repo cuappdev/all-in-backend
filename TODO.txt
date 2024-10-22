@@ -3,16 +3,15 @@ Fix README
 Web scraper
 Implement image processor
 Creating a contract (Done?)
-Exception Handling
-Request Validation
+Request Validations (Daniel)
 Capitalize all enums
-Add test suite
+Add test suite (Daniel)
 Authentication and authorization
 Pagination for requests
 Expired contracts microservice
 Abstract contract class to include all sports
 Scraper for opposing team
-Scraper for players
+Scraper for players (Daisy)
 Event Scraper
 
 
