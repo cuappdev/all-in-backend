@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 public class UserController {
@@ -177,7 +178,8 @@ public class UserController {
             Double buyPrice = (Double) body.get("buy_price");
             Rarity rarity = Rarity.valueOf((String) body.get("rarity"));
             Integer max_player_id = playerService.getAllPlayers().size();
-            Integer player_id = (int) (Math.random() * max_player_id) + 1;
+            Integer player_id =
+                    (int) (ThreadLocalRandom.current().nextDouble() * max_player_id) + 1;
             Contract createdContract =
                     contractService.createContract(user_id, player_id, buyPrice, rarity);
             return ResponseEntity.status(201).body(createdContract);

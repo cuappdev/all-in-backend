@@ -9,6 +9,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ContractGenerator {
 
@@ -117,48 +118,55 @@ public class ContractGenerator {
                 // Probability of event hitting ranges from COMMON_PROB_LOWER_BOUND -
                 // COMMON_PROB_UPPER_BOUND
                 eventProb =
-                        Math.random() * (COMMON_PROB_UPPER_BOUND - COMMON_PROB_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (COMMON_PROB_UPPER_BOUND - COMMON_PROB_LOWER_BOUND)
                                 + COMMON_PROB_LOWER_BOUND;
                 // Payout/buy_in ratio ranges from COMMON_PAYOUT_LOWER_BOUND -
                 // COMMON_PAYOUT_UPPER_BOUND
                 ratio =
-                        Math.random() * (COMMON_PAYOUT_UPPER_BOUND - COMMON_PAYOUT_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (COMMON_PAYOUT_UPPER_BOUND - COMMON_PAYOUT_LOWER_BOUND)
                                 + COMMON_PAYOUT_LOWER_BOUND;
                 break;
             case Rare:
                 // Probability of event hitting ranges from RARE_PROB_LOWER_BOUND -
                 // RARE_PROB_UPPER_BOUND
                 eventProb =
-                        Math.random() * (RARE_PROB_UPPER_BOUND - RARE_PROB_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (RARE_PROB_UPPER_BOUND - RARE_PROB_LOWER_BOUND)
                                 + RARE_PROB_LOWER_BOUND;
                 // Payout/buy_in ratio ranges from RARE_PAYOUT_LOWER_BOUND -
                 // RARE_PAYOUT_UPPER_BOUND
                 ratio =
-                        Math.random() * (RARE_PAYOUT_UPPER_BOUND - RARE_PAYOUT_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (RARE_PAYOUT_UPPER_BOUND - RARE_PAYOUT_LOWER_BOUND)
                                 + RARE_PAYOUT_LOWER_BOUND;
                 break;
             case Epic:
                 // Probability of event hitting ranges from EPIC_PROB_LOWER_BOUND -
                 // EPIC_PROB_UPPER_BOUND
                 eventProb =
-                        Math.random() * (EPIC_PROB_UPPER_BOUND - EPIC_PROB_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (EPIC_PROB_UPPER_BOUND - EPIC_PROB_LOWER_BOUND)
                                 + EPIC_PROB_LOWER_BOUND;
                 // Payout/buy_in ratio ranges from EPIC_PAYOUT_LOWER_BOUND -
                 // EPIC_PAYOUT_UPPER_BOUND
                 ratio =
-                        Math.random() * (EPIC_PAYOUT_UPPER_BOUND - EPIC_PAYOUT_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (EPIC_PAYOUT_UPPER_BOUND - EPIC_PAYOUT_LOWER_BOUND)
                                 + EPIC_PAYOUT_LOWER_BOUND;
                 break;
             case Legendary:
                 // Probability of event hitting ranges from LEGENDARY_PROB_LOWER_BOUND -
                 // LEGENDARY_PROB_UPPER_BOUND
                 eventProb =
-                        Math.random() * (LEGENDARY_PROB_UPPER_BOUND - LEGENDARY_PROB_LOWER_BOUND)
+                        ThreadLocalRandom.current().nextDouble()
+                                        * (LEGENDARY_PROB_UPPER_BOUND - LEGENDARY_PROB_LOWER_BOUND)
                                 + LEGENDARY_PROB_LOWER_BOUND;
                 // Payout/buy_in ratio ranges from LEGENDARY_PAYOUT_LOWER_BOUND -
                 // LEGENDARY_PAYOUT_UPPER_BOUND
                 ratio =
-                        Math.random()
+                        ThreadLocalRandom.current().nextDouble()
                                         * (LEGENDARY_PAYOUT_UPPER_BOUND
                                                 - LEGENDARY_PAYOUT_LOWER_BOUND)
                                 + LEGENDARY_PAYOUT_LOWER_BOUND;

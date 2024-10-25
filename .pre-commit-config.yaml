@@ -1,38 +1,28 @@
 repos:
-  # Update pre-commit hooks
--   repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
+  - repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
     rev: v0.5.1post1
     hooks:
-    -   id: pre-commit-update
+      - id: pre-commit-update
 
--   repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
     rev: v2.14.0
     hooks:
-    -   id: pretty-format-java
+      - id: pretty-format-java
         args: [--aosp, --autofix]
 
-  # Run Unit Tests
--   repo: local
+  - repo: local
     hooks:
-    -   id: maven-tests
+      - id: maven-tests
         name: Run Tests
         entry: mvn test
         language: system
         pass_filenames: false
         always_run: true
 
-    # Additional Pre-built Hooks from pre-commit-hooks
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      # Remove trailing whitespace
-    -   id: trailing-whitespace
-
-        # Ensure file ends with a newline
-    -   id: end-of-file-fixer
-
-        # Check YAML file validity (if applicable)
-    -   id: check-yaml
-
-        # Detect large files that should not be committed
-    -   id: detect-private-key
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: detect-private-key

@@ -1,5 +1,7 @@
 package com.appdev.allin.contract;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public enum Event {
     Points,
     Minutes,
@@ -14,6 +16,6 @@ public enum Event {
     Fouls;
 
     public static Event getRandomEvent() {
-        return values()[(int) (Math.random() * values().length)];
+        return values()[(int) (ThreadLocalRandom.current().nextDouble() * values().length)];
     }
 }
