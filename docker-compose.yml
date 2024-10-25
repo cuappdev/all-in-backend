@@ -11,7 +11,7 @@ services:
       - "3307:3306" # Changed port to avoid conflict with local MySQL
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d  # Mount the SQL init scripts
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - app-network
     healthcheck:

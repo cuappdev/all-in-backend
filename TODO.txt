@@ -1,5 +1,10 @@
 Features/Bugs:
-Fix README
+
+Testing
+Right now, we have no tests (the current tests are kinda useless)
+First step is to create factories through java Faker so we can easily create data
+Next is to actually write the tests
+
 Web scraper
 Implement image processor
 Creating a contract (Done?)
