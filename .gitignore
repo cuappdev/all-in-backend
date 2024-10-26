@@ -40,7 +40,6 @@
 # Spring Boot
 /*.env
 /*.config
-/*.properties
 
 # Sensitive configuration files
 .env
