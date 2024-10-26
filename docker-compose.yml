@@ -1,7 +1,6 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: all_in
@@ -21,8 +20,7 @@ services:
       retries: 5
 
   app:
-    build: .
-    container_name: all-in
+    image: cornellappdev/all-in:${IMAGE_TAG}
     ports:
       - "8080:8080"
     environment:
