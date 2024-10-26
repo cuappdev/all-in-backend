@@ -1,11 +1,8 @@
 services:
   mysql:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: all_in
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppassword
+    env_file:
+      - .mysql-env
     ports:
       - "3306:3306"
     volumes:
@@ -23,11 +20,8 @@ services:
     image: cornellappdev/all-in:${IMAGE_TAG}
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/all_in
-      SPRING_DATASOURCE_USERNAME: appuser
-      SPRING_DATASOURCE_PASSWORD: apppassword
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    env_file:
+      - .all-in-env
     depends_on:
       - mysql
     networks:
