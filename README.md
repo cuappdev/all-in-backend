@@ -40,3 +40,7 @@ Run:
 - mvn -N wrapper:wrapper
 - pip install pre-commit
 - zsh start.sh (on Mac)
+
+### 5. Documentation
+
+Swagger Docs API Documentation can be found at /swagger-ui/index.html
