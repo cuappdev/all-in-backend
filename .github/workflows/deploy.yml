@@ -41,7 +41,6 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           script: |
             export IMAGE_TAG=${{ steps.vars.outputs.sha_short }}
-            echo $IMAGE_TAG
             cd docker-compose
             docker stack rm thestack
             sleep 20s
