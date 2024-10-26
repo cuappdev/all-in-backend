@@ -2,8 +2,11 @@ name: Docker Build, Push, and Deploy to prod for all-in-backend
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   path-context:
@@ -20,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Get SHA
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: echo "::set-output name=sha_short::$(git rev-parse --short main)"
       - name: Docker Build & Push
         uses: docker/build-push-action@v2
         with:
@@ -43,4 +46,4 @@ jobs:
             docker stack rm thestack
             sleep 20s
             docker stack deploy -c docker-compose.yml thestack
-            docker system prune -a
+            docker system prune -a -f
