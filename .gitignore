@@ -17,6 +17,7 @@
 
 # Secrets #
 *.pem
+*.pub
 
 # MacOS
 .DS_Store

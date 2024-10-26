@@ -8,7 +8,7 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppassword
     ports:
-      - "3307:3306" # Changed port to avoid conflict with local MySQL
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
@@ -21,9 +21,7 @@ services:
       retries: 5
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: all-in
     ports:
       - "8080:8080"
