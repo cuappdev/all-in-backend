@@ -8,13 +8,11 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-
-FROM openjdk:17-oracle
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
-COPY --from=build /app/src/main/resources/static /app/static
 
 EXPOSE 8080
 
