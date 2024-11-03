@@ -63,6 +63,9 @@ public class Contract {
     @Column(name = "value", nullable = false)
     private Double value;
 
+    @Column(name = "expirationTime", nullable = false)
+    private LocalDate expirationTime;
+
     @Column(name = "expired")
     private Boolean expired;
 
@@ -88,6 +91,7 @@ public class Contract {
             Integer eventThreshold,
             LocalDate creationTime,
             Double value,
+            LocalDate expirationTime,
             Boolean expired,
             Boolean forSale,
             Double sellPrice) {
@@ -101,6 +105,7 @@ public class Contract {
         this.eventThreshold = eventThreshold;
         this.creationTime = creationTime;
         this.value = value;
+        this.expirationTime = expirationTime;
         this.expired = expired;
         this.forSale = forSale;
         this.sellPrice = sellPrice;
@@ -214,6 +219,14 @@ public class Contract {
         this.value = value;
     }
 
+    public LocalDate getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDate expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+    
     public Boolean getExpired() {
         return expired;
     }
@@ -248,6 +261,8 @@ public class Contract {
                 + event
                 + ", eventThreshold="
                 + eventThreshold
+                + ", expirationTime="
+                + expirationTime
                 + ", expired="
                 + expired
                 + ", forSale="

@@ -1,10 +1,17 @@
 package com.appdev.allin;
 
+import com.appdev.allin.contract.Contract;
+import com.appdev.allin.contract.ContractRepo;
 import com.appdev.allin.player.Player;
 import com.appdev.allin.player.PlayerRepo;
 import com.appdev.allin.player.Position;
 import com.appdev.allin.playerData.PlayerDataRepo;
 import com.appdev.allin.playerData.util.PopulatePlayerData;
+import com.appdev.allin.user.User;
+import com.appdev.allin.user.UserService;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,12 +19,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.scheduling.annotation.Scheduled;
+
 @SpringBootApplication
 public class Application {
 
-    @Autowired PlayerRepo playerRepo;
+    @Autowired
+    PlayerRepo playerRepo;
 
-    @Autowired PlayerDataRepo playerDataRepo;
+    @Autowired
+    PlayerDataRepo playerDataRepo;
+
+    @Autowired
+    ContractRepo contractRepo;
+
+    @Autowired
+    UserService userService;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -32,7 +49,7 @@ public class Application {
                     new Player(
                             "Chris",
                             "Manon",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             30,
                             "6'5",
                             209,
@@ -43,7 +60,7 @@ public class Application {
                     new Player(
                             "Nazir",
                             "Williams",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             1,
                             "6'3",
                             180,
@@ -54,7 +71,7 @@ public class Application {
                     new Player(
                             "Isaiah",
                             "Gray",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             13,
                             "6'3",
                             219,
@@ -65,7 +82,7 @@ public class Application {
                     new Player(
                             "Guy",
                             "Ragland Jr.",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             21,
                             "6'8",
                             246,
@@ -76,7 +93,7 @@ public class Application {
                     new Player(
                             "Sean",
                             "Hansen",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             20,
                             "6'9",
                             246,
@@ -87,7 +104,7 @@ public class Application {
                     new Player(
                             "Cooper",
                             "Noard",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             31,
                             "6'2",
                             190,
@@ -98,7 +115,7 @@ public class Application {
                     new Player(
                             "AK",
                             "Okereke",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             12,
                             "6'7",
                             235,
@@ -109,7 +126,7 @@ public class Application {
                     new Player(
                             "Keller",
                             "Boothby",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             15,
                             "6'7",
                             223,
@@ -120,7 +137,7 @@ public class Application {
                     new Player(
                             "Ian",
                             "Imegwu",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             2,
                             "6'9",
                             226,
@@ -131,7 +148,7 @@ public class Application {
                     new Player(
                             "Jake",
                             "Fiegen",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             22,
                             "6'4",
                             205,
@@ -142,7 +159,7 @@ public class Application {
                     new Player(
                             "Jacob",
                             "Beccles",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             5,
                             "6'3",
                             178,
@@ -153,7 +170,7 @@ public class Application {
                     new Player(
                             "Max",
                             "Watson",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             25,
                             "6'4",
                             195,
@@ -164,7 +181,7 @@ public class Application {
                     new Player(
                             "Chris",
                             "Cain",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             33,
                             "6'8",
                             223,
@@ -175,7 +192,7 @@ public class Application {
                     new Player(
                             "Evan",
                             "Williams",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             0,
                             "6'7",
                             220,
@@ -186,7 +203,7 @@ public class Application {
                     new Player(
                             "Adam",
                             "Tsang Hinton",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             11,
                             "6'5",
                             213,
@@ -197,7 +214,7 @@ public class Application {
                     new Player(
                             "DJ",
                             "Nix",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             23,
                             "6'6",
                             216,
@@ -208,7 +225,7 @@ public class Application {
                     new Player(
                             "Ryan",
                             "Kiachian",
-                            new Position[] {Position.Forward, Position.Center},
+                            new Position[]{Position.Forward, Position.Center},
                             3,
                             "6'10",
                             228,
@@ -219,7 +236,7 @@ public class Application {
                     new Player(
                             "Darius",
                             "Ervin",
-                            new Position[] {Position.Guard},
+                            new Position[]{Position.Guard},
                             14,
                             "5'8",
                             170,
@@ -230,7 +247,7 @@ public class Application {
                     new Player(
                             "Hayden",
                             "Franson",
-                            new Position[] {Position.Forward},
+                            new Position[]{Position.Forward},
                             10,
                             "6'8",
                             218,
@@ -262,5 +279,32 @@ public class Application {
                     new PopulatePlayerData(playerRepo, playerDataRepo);
             populatePlayerData.run();
         };
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void checkAndProcessContracts() {
+        List<Contract> allContracts = contractRepo.findAll();
+
+        for (Contract contract : allContracts) {
+
+            if (!contract.getExpired() &&
+                    (contract.getExpirationTime().isBefore(LocalDate.now()) ||
+                            contract.getExpirationTime().isEqual(LocalDate.now()))) {
+
+                processPayout(contract);
+
+                contract.setExpired(true);
+
+                contractRepo.save(contract);
+            }
+        }
+    }
+
+    private void processPayout(Contract contract) {
+        User owner = contract.getOwner();
+        if (owner != null) {
+            Double payoutAmount = contract.getValue();
+            userService.updateUserBalance(owner.getId(), payoutAmount);
+        }
     }
 }
