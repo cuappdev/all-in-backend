@@ -4,8 +4,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: all_in
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: password
       MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
