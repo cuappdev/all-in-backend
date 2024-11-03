@@ -64,3 +64,5 @@ Things to ask the entire team:
 Rarity thresholds
 How contracts work
 Starting money and how much contracts cost
+Possible incorporation of new players when they have no data
+Refund feature of a contract if a certain player does not play/start
