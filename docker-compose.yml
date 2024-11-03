@@ -1,13 +1,17 @@
 services:
   mysql:
     image: mysql:8.0
-    env_file:
-      - .mysql-env
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: all_in
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
     networks:
       - app-network
     healthcheck:
