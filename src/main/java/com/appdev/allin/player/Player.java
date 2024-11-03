@@ -49,6 +49,9 @@ public class Player {
     @Column(name = "image", nullable = false)
     private String image = "src/main/resources/static/images/players/default.jpg";
 
+    @Column(name = "sport", nullable = false)
+    private String sport;
+
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private List<Contract> contracts = new LinkedList<>();
 
@@ -65,7 +68,8 @@ public class Player {
             String height,
             Integer weight,
             String hometown,
-            String highSchool) {
+            String highSchool,
+            String sport) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
@@ -74,6 +78,7 @@ public class Player {
         this.weight = weight;
         this.hometown = hometown;
         this.highSchool = highSchool;
+        this.sport = sport;
     }
 
     public Player(
@@ -85,7 +90,8 @@ public class Player {
             Integer weight,
             String hometown,
             String highSchool,
-            String image) {
+            String image,
+            String sport) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
@@ -95,6 +101,7 @@ public class Player {
         this.hometown = hometown;
         this.highSchool = highSchool;
         this.image = image;
+        this.sport = sport;
     }
 
     public Integer getId() {
@@ -177,6 +184,16 @@ public class Player {
     @JsonIgnore
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @JsonIgnore
+    public String getSport() {
+        return sport;
+    }
+
+    @JsonIgnore
+    public void setSport(String sport) {
+        this.sport = sport;
     }
 
     public List<Contract> getContracts() {

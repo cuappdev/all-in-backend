@@ -1,5 +1,13 @@
 package com.appdev.allin.contract;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.appdev.allin.exceptions.NotForSaleException;
 import com.appdev.allin.exceptions.NotFoundException;
 import com.appdev.allin.exceptions.OverdrawnException;
@@ -10,14 +18,6 @@ import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.transaction.TransactionRepo;
 import com.appdev.allin.user.User;
 import com.appdev.allin.user.UserRepo;
-
-import org.springframework.stereotype.Service;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContractService {
@@ -94,7 +94,7 @@ public class ContractService {
             throw new OverdrawnException("User balance is too low.");
         }
 
-        ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+        ContractGenerator contractGenerator = new BasketballContractGenerator(playerDataRepo);
         Contract contract = contractGenerator.generateContract(user, player, buyPrice, rarity);
         contractRepo.save(contract);
 

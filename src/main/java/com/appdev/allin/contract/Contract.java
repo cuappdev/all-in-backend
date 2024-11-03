@@ -1,5 +1,12 @@
 package com.appdev.allin.contract;
 
+import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.appdev.allin.player.Player;
 import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
@@ -14,13 +21,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 @Table(name = "contracts")
