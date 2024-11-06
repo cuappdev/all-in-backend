@@ -13,9 +13,9 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 10
 
   all-in:
     image: cornellappdev/all-in:${IMAGE_TAG}
