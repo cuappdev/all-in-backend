@@ -59,7 +59,6 @@ TODO Features/Bugs:
 - Will discuss more when authentication is finished
 
 
-
 Things to ask the entire team:
 Rarity thresholds
 How contracts work
