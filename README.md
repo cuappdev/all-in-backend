@@ -19,30 +19,34 @@ Before setting up the project, ensure you have the following installed:
 
 ### 2. Create application.properties
 
-Create a new `application.properties` file located in src/main/resources/ by copying the `application.properties.template` file in the same directory. Fill in the values for the fields below with your MySQL credentials:
+Create a new `application.properties` file located in `src/main/resources/` by copying the `application.properties.template` file in the same directory. Run:
 
-- spring.datasource.username=
-- spring.datasource.password=
+`cp application.properties.template application.properties`
 
-Change `spring.datasource.url=` if you are not hosting a MySQL instance locally.
+Fill in the values in `application.properties` for the fields below with your MySQL credentials:
+
+- `spring.datasource.username`
+- `spring.datasource.password`
+
+Change `spring.datasource.url` if you are not hosting a MySQL instance locally.
 
 ### 3. Set up the Database
 
 Enter the MySQL Shell by running:
 
-mysql -u {MYSQL USERNAME} -p
+`mysql -u {MYSQL USERNAME} -p`
 
 Create the all_in database with:
 
-CREATE DATABASE all_in;
+`CREATE DATABASE all_in;`
 
 ### 4. Running the project
 
 Run:
 
-- mvn -N wrapper:wrapper
-- pip install pre-commit
-- ./mvnw spring-boot:run
+- `mvn -N wrapper:wrapper`
+- `pip install pre-commit`
+- `./mvnw spring-boot:run`
 
 ### 5. Documentation
 
