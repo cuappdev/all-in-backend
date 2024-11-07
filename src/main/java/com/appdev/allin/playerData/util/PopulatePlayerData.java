@@ -89,7 +89,6 @@ public class PopulatePlayerData {
                 int points = Integer.parseInt(playerStats.get(14).text());
                 Player player = playerRepo.findByNumber(playerNumber);
 
-                // TODO: fix later, don't hardcode enum opposing teams in the future
                 PlayerData playerData =
                         new PlayerData(
                                 player,
@@ -106,7 +105,10 @@ public class PopulatePlayerData {
                                 blocks,
                                 turnovers,
                                 personalFouls);
-                playerDataRepo.save(playerData);
+
+                if (playerDataRepo.findByPlayerAndGameDate(player, gameDate) == null) {
+                    playerDataRepo.save(playerData);
+                }
                 ++i;
             }
         }

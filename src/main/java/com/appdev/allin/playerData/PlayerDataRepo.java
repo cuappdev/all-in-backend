@@ -14,4 +14,6 @@ public interface PlayerDataRepo extends JpaRepository<PlayerData, Integer> {
     List<PlayerData> findByPlayer(Player player);
 
     List<PlayerData> findByGameDate(LocalDate gameDate);
+
+    PlayerData findByPlayerAndGameDate(Player player, LocalDate gameDate);
 }
