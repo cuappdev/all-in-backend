@@ -42,10 +42,8 @@
 /*.config
 
 # Sensitive configuration files
-.env
 .mysql-env
 .all-in-env
 mysql-init.sql
-application-*.yml
-application-*.properties
-src/main/resources/application.properties
+/deployment
+application.properties
