@@ -20,9 +20,7 @@ public class ContractFactory {
     private final UserFactory userFactory = new UserFactory();
 
 
-    public Contract createRandomContract() {
-        Player player = playerFactory.createFakePlayer();
-        User owner = userFactory.createRandomUser();
+    public Contract createRandomContract(Player player, User owner) {
         Double buyPrice = faker.number().randomDouble(2, 100, 5000);  // Random buy price between 100 and 5000
         Rarity rarity = Rarity.getRandomRarity();  // Random rarity
         OpposingTeam opposingTeam = OpposingTeam.getRandomOpposingTeam();

@@ -2,6 +2,8 @@ package com.appdev.allin.data;
 import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
 import com.appdev.allin.contract.Contract;
+import com.appdev.allin.data.PlayerFactory;
+import com.appdev.allin.player.Player;
 import com.appdev.allin.data.ContractFactory;
 import com.github.javafaker.Faker;
 
@@ -19,8 +21,9 @@ public class TransactionFactory {
         while (buyer.equals(seller)) {  // Ensure buyer and seller are different
             buyer = userFactory.createRandomUser();
         }
+        Player player = PlayerFactory.createFakePlayer();
 
-        Contract contract = contractFactory.createRandomContract();
+        Contract contract = contractFactory.createRandomContract(player,seller);
         LocalDate transactionDate = LocalDate.now().minusDays(faker.number().numberBetween(1, 365));  // Date within the past year
         Double price = faker.number().randomDouble(2, 100, 10000);  // Random price between 100 and 10000
 
