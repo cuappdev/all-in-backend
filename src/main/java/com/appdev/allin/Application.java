@@ -306,14 +306,14 @@ public class Application {
 
     // abstracted
     private boolean isContractHit(Contract contract) {
-        return true;
+        return false;
     }
 
     private void processPayout(Contract contract) {
         User owner = contract.getOwner();
         if (owner != null) {
             Double payoutAmount = contract.getValue();
-            userService.updateUserBalance(owner.getId(), payoutAmount);
+            userService.addToUserBalance(owner.getId(), payoutAmount);
         }
     }
 }

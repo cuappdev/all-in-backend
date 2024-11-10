@@ -56,7 +56,7 @@ public class UserService {
         return userRepo.save(userToUpdate);
     }
 
-    public User updateUserBalance(Integer userId, Double amount) throws NotFoundException {
+    public User addToUserBalance(Integer userId, Double amount) throws NotFoundException {
         Optional<User> userOptional = userRepo.findById(userId);
         if (userOptional.isEmpty()) {
             throw new NotFoundException("User with id " + userId + " not found.");
