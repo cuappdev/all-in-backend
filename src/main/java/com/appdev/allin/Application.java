@@ -291,13 +291,22 @@ public class Application {
                     (contract.getExpirationTime().isBefore(LocalDate.now()) ||
                             contract.getExpirationTime().isEqual(LocalDate.now()))) {
 
-                processPayout(contract);
+                boolean contractHit = isContractHit(contract);
+
+                if (contractHit) {
+                    processPayout(contract);
+                }
 
                 contract.setExpired(true);
 
                 contractRepo.save(contract);
             }
         }
+    }
+
+    // abstracted
+    private boolean isContractHit(Contract contract) {
+        return true;
     }
 
     private void processPayout(Contract contract) {
