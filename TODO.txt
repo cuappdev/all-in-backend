@@ -1,7 +1,0 @@
-Web scraper
-Creating a contract (Done?)
-Exception Handling
-Request Validation
-Capitalize all enums
-Add test suite
-Authentication and authorization

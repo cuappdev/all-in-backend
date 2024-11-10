@@ -1,0 +1,35 @@
+services:
+  mysql:
+    image: mysql:8.0
+    env_file:
+      - .mysql-env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  all-in:
+    image: cornellappdev/all-in:${IMAGE_TAG}
+    ports:
+      - "8080:8080"
+    env_file:
+      - .all-in-env
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  mysql-data:
