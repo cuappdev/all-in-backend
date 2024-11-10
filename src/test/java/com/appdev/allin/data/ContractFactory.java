@@ -1,11 +1,11 @@
-package com.example.allin.data;
-import com.example.allin.contract.OpposingTeam;
-import com.example.allin.contract.Rarity;
-import com.example.allin.user.User;
-import com.example.allin.player.Player;
-import com.example.allin.contract.Contract;
-import com.example.allin.contract.Event;
-import com.example.allin.data.PlayerFactory;
+package com.appdev.allin.data;
+import com.appdev.allin.contract.OpposingTeam;
+import com.appdev.allin.contract.Rarity;
+import com.appdev.allin.user.User;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.contract.Contract;
+import com.appdev.allin.contract.Event;
+import com.appdev.allin.data.PlayerFactory;
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;

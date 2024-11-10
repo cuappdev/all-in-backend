@@ -1,8 +1,8 @@
-package com.example.allin.data;
-import com.example.allin.transaction.Transaction;
-import com.example.allin.user.User;
-import com.example.allin.contract.Contract;
-import com.example.allin.data.ContractFactory;
+package com.appdev.allin.data;
+import com.appdev.allin.transaction.Transaction;
+import com.appdev.allin.user.User;
+import com.appdev.allin.contract.Contract;
+import com.appdev.allin.data.ContractFactory;
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;
