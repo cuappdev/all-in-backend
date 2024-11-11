@@ -132,7 +132,7 @@ class AllInApplicationTests {
                         "Akron, OH",
                         "St. Vincent-St. Mary",
                         "src/main/resources/static/images/players/default.jpg");
-    
+
         Contract contract = contractGenerator.generateContract(user, player, 100.0, Rarity.Common);
         System.out.println("Contract: " + contract.toString());
     }
