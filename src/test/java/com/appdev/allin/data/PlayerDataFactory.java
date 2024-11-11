@@ -1,7 +1,7 @@
-package com.example.allin.data;
-import com.example.allin.player.Player;
-import com.example.allin.contract.OpposingTeam;
-import com.example.allin.playerData.PlayerData;
+package com.appdev.allin.data;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.contract.OpposingTeam;
+import com.appdev.allin.playerData.PlayerData;
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;
