@@ -1,5 +1,5 @@
-package com.example.allin.data;
-import com.example.allin.user.User;
+package com.appdev.allin.data;
+import com.appdev.allin.user.User;
 import com.github.javafaker.Faker;
 
 public class UserFactory {
