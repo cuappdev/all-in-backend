@@ -45,17 +45,9 @@ public class ContractFactory {
         String opposingTeamImage = faker.internet().avatar(); // Random image URL
         Event event = Event.getRandomEvent();
         Integer eventThreshold = faker.number().numberBetween(1, 100); // Random event threshold
-        // LocalDate creationTime = LocalDate.now().minusDays(faker.number().numberBetween(1, 365)); // Past year
         Double value = faker.number().randomDouble(2, 100, 5000); // Random value
-        // LocalDate expirationTime = creationTime.plusDays(faker.number().numberBetween(1, 365)); // Within a year
         LocalDate creationTime = now.minusDays(faker.number().numberBetween(1, 365));
         LocalDate expirationTime = creationTime.plusDays(faker.number().numberBetween(1, 365));
-
-        if (expirationTime.isBefore(now)) {
-            expirationTime = now.plusDays(1);
-        }
-
-        // Boolean expired = expirationTime.isBefore(LocalDate.now()); // Calculate expired status
         Boolean expired = expirationTime.isBefore(now);
 
         Boolean forSale = faker.bool().bool();
