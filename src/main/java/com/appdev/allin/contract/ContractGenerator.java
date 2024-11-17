@@ -188,9 +188,9 @@ public class ContractGenerator {
                 eventThreshold,
                 LocalDate.now(),
                 buyPrice * ratio,
-                null,
+                (LocalDate) null,
                 false,
-                null);
+                (Double) null);
     }
 
     // public Contract generateContract(User user, Player player, Double buyPrice,

@@ -78,7 +78,93 @@ public class Contract {
     @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
     private List<Transaction> transactions = new LinkedList<>();
 
-    public Contract() {}
+    public Contract() {
+    }
+
+    public Contract(
+            Player player,          // Player
+            User owner,             // User
+            Double buyPrice,        // Double
+            Rarity rarity,          // Rarity
+            OpposingTeam opposingTeam, // OpposingTeam
+            String opposingTeamImage,  // String
+            Event event,            // Event
+            Integer eventThreshold, // Integer
+            LocalDate creationTime, // LocalDate
+            Double value,           // Double
+            LocalDate expirationTime, // LocalDate (nullable, since it's passed as null)
+            Boolean expired,        // Boolean
+            Double sellPrice        // Double (nullable, since it's passed as null)
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.buyPrice = buyPrice;
+        this.rarity = rarity;
+        this.opposingTeam = opposingTeam;
+        this.opposingTeamImage = opposingTeamImage;
+        this.event = event;
+        this.eventThreshold = eventThreshold;
+        this.creationTime = creationTime;
+        this.value = value;
+        this.expirationTime = expirationTime; // nullable, allows passing null
+        this.expired = expired;
+        this.forSale = false; // default value not passed in instantiation
+        this.sellPrice = sellPrice; // nullable, allows passing null
+    }
+
+    public Contract(
+            Player player,
+            User owner,
+            Double buyPrice,
+            Rarity rarity,
+            OpposingTeam opposingTeam,
+            String opposingTeamImage,
+            Event event,
+            Integer eventThreshold,
+            LocalDate creationTime,
+            Double value,
+            Boolean expired,
+            Boolean forSale,
+            Double sellPrice
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.buyPrice = buyPrice;
+        this.rarity = rarity;
+        this.opposingTeam = opposingTeam;
+        this.opposingTeamImage = opposingTeamImage;
+        this.event = event;
+        this.eventThreshold = eventThreshold;
+        this.creationTime = creationTime;
+        this.value = value;
+        this.expired = expired;
+        this.forSale = forSale;
+        this.sellPrice = sellPrice;
+    }
+
+    public Contract(
+            Player player,
+            User owner,
+            Double value,
+            LocalDate expirationTime,
+            Boolean expired
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.value = value;
+        this.expirationTime = expirationTime;
+        this.expired = expired;
+        this.creationTime = LocalDate.now();
+        this.buyPrice = 0.0;
+        this.rarity = Rarity.Common;
+        this.forSale = false;
+        this.sellPrice = null;
+        this.event = null;
+        this.eventThreshold = 0;
+        this.opposingTeam = null;
+        this.opposingTeamImage = "default.jpg";
+    }
+
 
     public Contract(
             Player player,
@@ -226,7 +312,7 @@ public class Contract {
     public void setExpirationTime(LocalDate expirationTime) {
         this.expirationTime = expirationTime;
     }
-    
+
     public Boolean getExpired() {
         return expired;
     }

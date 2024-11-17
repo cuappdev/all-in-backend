@@ -4,6 +4,7 @@ import com.appdev.allin.contract.Contract;
 import com.appdev.allin.contract.ContractRepo;
 import com.appdev.allin.player.Player;
 import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.player.Position;
 import com.appdev.allin.playerData.PlayerDataRepo;
 import com.appdev.allin.playerData.util.PopulatePlayerData;
 import com.appdev.allin.user.User;
@@ -13,9 +14,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @SpringBootApplication
