@@ -48,8 +48,7 @@ public class ExpiredContractPayoutTest {
         MockitoAnnotations.openMocks(this);
 
         // Initialize the factory
-        PlayerFactory playerFactory = new PlayerFactory();
-        contractFactory = new ContractFactory(playerFactory, userService);
+        contractFactory = new ContractFactory();
 
         // Create a random user using UserFactory
         owner = UserFactory.createRandomUser();
@@ -64,11 +63,6 @@ public class ExpiredContractPayoutTest {
         unexpiredContract = contractFactory.createRandomContract(owner);
         unexpiredContract.setExpirationTime(LocalDate.now().plusDays(30)); // Not expired yet
         unexpiredContract.setExpired(false);
-
-        // System.out.println("unexpiredContract creationTime: " + unexpiredContract.getCreationTime());
-        // System.out.println("unexpiredContract expirationTime: " + unexpiredContract.getExpirationTime());
-        // System.out.println("Current date (LocalDate.now()): " + LocalDate.now());
-
 
         // Mock contract repository to return the contracts
         when(contractRepo.findAll()).thenReturn(Arrays.asList(expiredContract, unexpiredContract));
