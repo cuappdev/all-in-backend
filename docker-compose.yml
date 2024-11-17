@@ -7,14 +7,15 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 10
 
   all-in:
     image: cornellappdev/all-in:${IMAGE_TAG}

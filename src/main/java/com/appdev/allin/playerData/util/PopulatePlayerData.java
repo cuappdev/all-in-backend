@@ -21,9 +21,12 @@ public class PopulatePlayerData {
     String baseUrl = "https://cornellbigred.com/boxscore.aspx?id=";
 
     int[] ids = {
-        58875, 59093, 59018, 58876, 59200, 59057, 58877, 58878, 58874, 58879, 59092, 58881, 58882,
-        57826, 57827, 57828, 59255, 57829, 57830, 57831, 57832, 57833, 57834, 57835, 57836, 57837,
-        57838, 57839, 59254
+        58875,
+        // 59093, 59018, 58876, 59200, 59057, 58877, 58878, 58874, 58879, 59092, 58881,
+        // 58882,
+        // 57826, 57827, 57828, 59255, 57829, 57830, 57831, 57832, 57833, 57834, 57835,
+        // 57836, 57837,
+        // 57838, 57839, 59254
     };
 
     public PopulatePlayerData(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
@@ -86,7 +89,6 @@ public class PopulatePlayerData {
                 int points = Integer.parseInt(playerStats.get(14).text());
                 Player player = playerRepo.findByNumber(playerNumber);
 
-                // TODO: fix later, don't hardcode enum opposing teams in the future
                 PlayerData playerData =
                         new PlayerData(
                                 player,
@@ -103,7 +105,10 @@ public class PopulatePlayerData {
                                 blocks,
                                 turnovers,
                                 personalFouls);
-                playerDataRepo.save(playerData);
+
+                if (playerDataRepo.findByPlayerAndGameDate(player, gameDate) == null) {
+                    playerDataRepo.save(playerData);
+                }
                 ++i;
             }
         }

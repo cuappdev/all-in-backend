@@ -19,27 +19,34 @@ Before setting up the project, ensure you have the following installed:
 
 ### 2. Create application.properties
 
-Manually create an application.properties file in src/main/resources/ with the following content:
+Create a new `application.properties` file located in `src/main/resources/` by copying the `application.properties.template` file in the same directory. Run:
 
-- spring.datasource.url=jdbc:mysql://localhost:3306/all_in
-- spring.datasource.username=your_mysql_username
-- spring.datasource.password=your_mysql_password
-- spring.jpa.hibernate.ddl-auto=update
-- spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+`cp application.properties.template application.properties`
+
+Fill in the values in `application.properties` for the fields below with your MySQL credentials:
+
+- `spring.datasource.username`
+- `spring.datasource.password`
+
+Change `spring.datasource.url` if you are not hosting a MySQL instance locally.
 
 ### 3. Set up the Database
 
-Ensure you have a running MySQL instance and create a database named all_in:
+Enter the MySQL Shell by running:
 
-CREATE DATABASE all_in;
+`mysql -u {MYSQL USERNAME} -p`
+
+Create the all_in database with:
+
+`CREATE DATABASE all_in;`
 
 ### 4. Running the project
 
 Run:
 
-- mvn -N wrapper:wrapper
-- pip install pre-commit
-- zsh start.sh (on Mac)
+- `mvn -N wrapper:wrapper`
+- `pip install pre-commit`
+- `./mvnw spring-boot:run`
 
 ### 5. Documentation
 
