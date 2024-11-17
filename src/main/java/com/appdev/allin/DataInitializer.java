@@ -35,7 +35,7 @@ public class DataInitializer {
                 new Player(
                         "Chris",
                         "Manon",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         30,
                         "6'5",
                         209,
@@ -46,7 +46,7 @@ public class DataInitializer {
                 new Player(
                         "Nazir",
                         "Williams",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         1,
                         "6'3",
                         180,
@@ -57,7 +57,7 @@ public class DataInitializer {
                 new Player(
                         "Isaiah",
                         "Gray",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         13,
                         "6'3",
                         219,
@@ -68,7 +68,7 @@ public class DataInitializer {
                 new Player(
                         "Guy",
                         "Ragland Jr.",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         21,
                         "6'8",
                         246,
@@ -79,7 +79,7 @@ public class DataInitializer {
                 new Player(
                         "Sean",
                         "Hansen",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         20,
                         "6'9",
                         246,
@@ -90,7 +90,7 @@ public class DataInitializer {
                 new Player(
                         "Cooper",
                         "Noard",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         31,
                         "6'2",
                         190,
@@ -101,7 +101,7 @@ public class DataInitializer {
                 new Player(
                         "AK",
                         "Okereke",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         12,
                         "6'7",
                         235,
@@ -112,7 +112,7 @@ public class DataInitializer {
                 new Player(
                         "Keller",
                         "Boothby",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         15,
                         "6'7",
                         223,
@@ -123,7 +123,7 @@ public class DataInitializer {
                 new Player(
                         "Ian",
                         "Imegwu",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         2,
                         "6'9",
                         226,
@@ -134,7 +134,7 @@ public class DataInitializer {
                 new Player(
                         "Jake",
                         "Fiegen",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.FORWARD},
                         22,
                         "6'4",
                         205,
@@ -145,7 +145,7 @@ public class DataInitializer {
                 new Player(
                         "Jacob",
                         "Beccles",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         5,
                         "6'3",
                         178,
@@ -156,7 +156,7 @@ public class DataInitializer {
                 new Player(
                         "Max",
                         "Watson",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         25,
                         "6'4",
                         195,
@@ -167,7 +167,7 @@ public class DataInitializer {
                 new Player(
                         "Chris",
                         "Cain",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         33,
                         "6'8",
                         223,
@@ -178,7 +178,7 @@ public class DataInitializer {
                 new Player(
                         "Evan",
                         "Williams",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         0,
                         "6'7",
                         220,
@@ -189,7 +189,7 @@ public class DataInitializer {
                 new Player(
                         "Adam",
                         "Tsang Hinton",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         11,
                         "6'5",
                         213,
@@ -200,7 +200,7 @@ public class DataInitializer {
                 new Player(
                         "DJ",
                         "Nix",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         23,
                         "6'6",
                         216,
@@ -211,7 +211,7 @@ public class DataInitializer {
                 new Player(
                         "Ryan",
                         "Kiachian",
-                        new Position[] {Position.Forward, Position.Center},
+                        new Position[] {Position.FORWARD, Position.CENTER},
                         3,
                         "6'10",
                         228,
@@ -222,7 +222,7 @@ public class DataInitializer {
                 new Player(
                         "Darius",
                         "Ervin",
-                        new Position[] {Position.Guard},
+                        new Position[] {Position.GUARD},
                         14,
                         "5'8",
                         170,
@@ -233,7 +233,7 @@ public class DataInitializer {
                 new Player(
                         "Hayden",
                         "Franson",
-                        new Position[] {Position.Forward},
+                        new Position[] {Position.FORWARD},
                         10,
                         "6'8",
                         218,

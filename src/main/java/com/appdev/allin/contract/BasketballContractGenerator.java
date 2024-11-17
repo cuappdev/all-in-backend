@@ -92,7 +92,7 @@ public class BasketballContractGenerator extends ContractGenerator {
                 buyPrice,
                 rarity,
                 opposingTeam,
-                "src/main/resources/static/images/teams/" + opposingTeam + ".png",
+                "src/main/resources/static/images/teams/" + opposingTeam.toString().toLowerCase() + ".png",
                 event,
                 eventThreshold,
                 LocalDate.now(),

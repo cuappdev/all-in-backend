@@ -44,17 +44,17 @@ public class PopulatePlayerData {
             int index = opposingTeamElement.get(0).text().indexOf("vs ");
             String opposingTeam = opposingTeamElement.get(0).text().substring(index + 3);
             if (opposingTeam.equals("SUNY Morrisville")) {
-                opposingTeam = "Morrisville";
+                opposingTeam = "MORRISVILLE";
             } else if (opposingTeam.equals("George Mason")) {
-                opposingTeam = "George";
+                opposingTeam = "GEORGE";
             } else if (opposingTeam.equals("Cal St. Fullerton")) {
-                opposingTeam = "Fullerton";
+                opposingTeam = "FULLERTON";
             } else if (opposingTeam.equals("Utah Valley")) {
-                opposingTeam = "Utah";
+                opposingTeam = "UTAH";
             } else if (opposingTeam.equals("Robert Morris")) {
-                opposingTeam = "Robert";
+                opposingTeam = "ROBERT";
             } else if (opposingTeam.equals("Ohio St.")) {
-                opposingTeam = "Ohio";
+                opposingTeam = "OHIO";
             }
             Elements sections = doc.getElementsByTag("section");
             // check which section whose aria label contains Cornell
@@ -93,7 +93,7 @@ public class PopulatePlayerData {
                         new PlayerData(
                                 player,
                                 gameDate,
-                                OpposingTeam.valueOf(opposingTeam),
+                                OpposingTeam.valueOf(opposingTeam.toUpperCase()),
                                 points,
                                 minutes,
                                 fieldGoalsMade,

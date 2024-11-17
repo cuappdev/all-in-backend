@@ -127,14 +127,14 @@ class ContractGeneratorTest {
                 new Player(
                         "LeBron",
                         "James",
-                        new Position[] {Position.Center},
+                        new Position[] {Position.CENTER},
                         23,
                         "6'9",
                         250,
                         "Akron, OH",
                         "St. Vincent-St. Mary",
                         "src/main/resources/static/images/players/default.jpg");
-        Contract contract = contractGenerator.generateContract(user, player, 100.0, Rarity.Common);
+        Contract contract = contractGenerator.generateContract(user, player, 100.0, Rarity.COMMON);
         System.out.println("Contract: " + contract.toString());
     }
 }
