@@ -2,7 +2,13 @@ package com.appdev.allin.data;
 import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
 import com.appdev.allin.contract.Contract;
+
 import com.appdev.allin.player.Player;
+
+import com.appdev.allin.data.PlayerFactory;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.data.ContractFactory;
+
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;

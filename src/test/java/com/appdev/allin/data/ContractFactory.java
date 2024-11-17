@@ -5,11 +5,22 @@ import com.appdev.allin.user.User;
 import com.appdev.allin.player.Player;
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.contract.Event;
+
 import com.appdev.allin.user.UserService;
 import com.github.javafaker.Faker;
 
 import java.time.Clock;
 import java.time.LocalDate;
+
+import com.appdev.allin.data.PlayerFactory;
+import com.appdev.allin.user.UserRepo;
+import com.appdev.allin.user.UserService;
+import com.github.javafaker.Faker;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 //needs tests
