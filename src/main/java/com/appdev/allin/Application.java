@@ -304,7 +304,7 @@ public class Application {
     }
 
     // abstracted
-    private boolean isContractHit(Contract contract) {
+    public boolean isContractHit(Contract contract) {
         return false;
     }
 
