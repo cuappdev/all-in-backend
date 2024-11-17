@@ -1,7 +1,9 @@
 package com.appdev.allin;
 
+import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 
+import com.appdev.allin.contract.BasketballContractGenerator;
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.contract.ContractGenerator;
 import com.appdev.allin.contract.Rarity;
@@ -10,15 +12,13 @@ import com.appdev.allin.player.Position;
 import com.appdev.allin.playerData.PlayerDataRepo;
 import com.appdev.allin.user.User;
 
-import org.junit.jupiter.api.Test;
-
 class ContractGeneratorTest {
 
     @Test
     public void testGenerateContract() {
 
         PlayerDataRepo playerDataRepo = mock(PlayerDataRepo.class);
-        ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+        BasketballContractGenerator contractGenerator = new BasketballContractGenerator(playerDataRepo);
 
         System.out.println("Testing ContractGenerator.generateContract()");
         System.out.println(

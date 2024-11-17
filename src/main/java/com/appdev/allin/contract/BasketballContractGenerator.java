@@ -19,7 +19,6 @@ public class BasketballContractGenerator extends ContractGenerator {
         OpposingTeam opposingTeam = OpposingTeam.getRandomOpposingTeam();
         Double eventProb = 0.5;
         Double ratio = 2.0;
-        generateBounds();
 
         // Determine event probability and ratio based on rarity
         switch (rarity) {
