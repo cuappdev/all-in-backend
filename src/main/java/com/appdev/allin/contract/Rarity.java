@@ -3,21 +3,21 @@ package com.appdev.allin.contract;
 import java.util.concurrent.ThreadLocalRandom;
 
 public enum Rarity {
-    Common,
-    Rare,
-    Epic,
-    Legendary;
+    COMMON,
+    RARE,
+    EPIC,
+    LEGENDARY;
 
     public static Rarity getRandomRarity() {
         double random = ThreadLocalRandom.current().nextDouble();
         if (random < 0.55) {
-            return Common;
+            return COMMON;
         } else if (random < 0.8) {
-            return Rare;
+            return RARE;
         } else if (random < 0.95) {
-            return Epic;
+            return EPIC;
         } else {
-            return Legendary;
+            return LEGENDARY;
         }
     }
 }
