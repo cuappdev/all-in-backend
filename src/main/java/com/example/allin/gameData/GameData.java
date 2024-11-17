@@ -1,10 +1,10 @@
-package com.appdev.allin.gameData;
+package com.example.allin.gameData;
 
 
-import com.appdev.allin.contract.Event;
-import com.appdev.allin.contract.OpposingTeam;
-import com.appdev.allin.player.Player;
-import com.appdev.alalin.gameData.GameData;
+import com.example.allin.contract.Event;
+import com.example.allin.contract.OpposingTeam;
+import com.example.allin.player.Player;
+import com.example.allin.gameData.GameData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
