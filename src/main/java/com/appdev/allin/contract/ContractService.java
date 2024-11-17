@@ -94,7 +94,7 @@ public class ContractService {
             throw new OverdrawnException("User balance is too low.");
         }
 
-        ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+        ContractGenerator contractGenerator = new BasketballContractGenerator(playerDataRepo);
         Contract contract = contractGenerator.generateContract(user, player, buyPrice, rarity);
         contractRepo.save(contract);
 

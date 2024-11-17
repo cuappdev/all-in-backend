@@ -12,13 +12,15 @@ import com.appdev.allin.user.User;
 
 import org.junit.jupiter.api.Test;
 
+import com.appdev.allin.contract.BasketballContractGenerator;
+
 class AllInApplicationTests {
 
     @Test
     public void testGenerateContract() {
 
         PlayerDataRepo playerDataRepo = mock(PlayerDataRepo.class);
-        ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+        ContractGenerator contractGenerator = new BasketballContractGenerator(playerDataRepo);
 
         System.out.println("Testing ContractGenerator.generateContract()");
         System.out.println(
