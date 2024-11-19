@@ -8,31 +8,35 @@ import org.springframework.context.annotation.Bean;
 
 import com.appdev.allin.player.PlayerRepo;
 import com.appdev.allin.playerData.PlayerDataRepo;
-import com.appdev.allin.playerData.util.PopulatePlayerData;
+// import com.appdev.allin.playerData.util.PopulatePlayerData;
 
 import scrapers.PlayerDataScraper;
+import scrapers.PlayerStatsScraper;
 
 @SpringBootApplication
 public class Application {
 
-    @Autowired PlayerRepo playerRepo;
+        @Autowired
+        PlayerRepo playerRepo;
 
-    @Autowired PlayerDataRepo playerDataRepo;
+        @Autowired
+        PlayerDataRepo playerDataRepo;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-    
-    @Bean
-    public CommandLineRunner populatePlayers(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
-            return (args) -> {
-                    PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo);
-                    playerDataScraper.populate();
+        public static void main(String[] args) {
+                SpringApplication.run(Application.class, args);
+        }
 
+        @Bean
+        public CommandLineRunner populatePlayers(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
+                return (args) -> {
+                        // Scrape player data (name, height, age, etc)
+                        PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo);
+                        playerDataScraper.populate();
 
-                    PopulatePlayerData populatePlayerData = new PopulatePlayerData(playerRepo, playerDataRepo);
-                    populatePlayerData.run();
-            };
-    }
+                        // Scrape player stats (points, rebounds, assists, etc)
+                        PlayerStatsScraper playerStatsScraper = new PlayerStatsScraper(playerRepo, playerDataRepo);
+                        playerStatsScraper.run();
+                };
+        }
+
 }
-

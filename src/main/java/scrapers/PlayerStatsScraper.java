@@ -1,10 +1,10 @@
 package scrapers;
 
-import com.example.allin.player.Player;
-import com.example.allin.player.PlayerRepo;
-import com.example.allin.playerData.PlayerData;
-import com.example.allin.playerData.PlayerDataRepo;
-import com.example.allin.contract.OpposingTeam;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.playerData.PlayerData;
+import com.appdev.allin.playerData.PlayerDataRepo;
+import com.appdev.allin.contract.OpposingTeam;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
