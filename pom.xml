@@ -82,6 +82,7 @@
 						<endWithNewline />
         </java>
 				<pom>
+				
     <sortPom />
   		</pom>
     </configuration>
