@@ -1,13 +1,7 @@
-#!/bin/sh
-
-stagedFiles=$(git diff --staged --name-only)
-
+# Run linter and formatter
 echo "Running spotless. Formatting and linting code..."
 mvn spotless:apply
 
-# Readding changed files
-for file in $stagedFiles; do
-  if test -f "$file"; then
-    git add $file
-  fi
-done
+# Run tests
+echo "Running tests..."
+mvn test
