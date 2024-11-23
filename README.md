@@ -19,8 +19,8 @@ Before setting up the project, ensure you have the following installed:
 
 After cloning, `cd` into the repo and run:
 
-`git config core.hooksPath .github/hooks` to enable the pre-commit hook
-`chmod +x .github/hooks/pre-commit` to mark the hook as an executable
+- `git config core.hooksPath .github/hooks` to enable the pre-commit hook
+- `chmod +x .github/hooks/pre-commit` to mark the hook as an executable
 
 ### 2. Create application.properties
 
