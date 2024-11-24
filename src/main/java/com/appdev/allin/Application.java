@@ -10,8 +10,12 @@ import com.appdev.allin.player.PlayerRepo;
 import com.appdev.allin.playerData.PlayerDataRepo;
 // import com.appdev.allin.playerData.util.PopulatePlayerData;
 
+import com.appdev.allin.gameData.GameDataRepo;
+
 import scrapers.PlayerDataScraper;
 import scrapers.PlayerStatsScraper;
+import scrapers.GameDataScraper;
+
 
 @SpringBootApplication
 public class Application {
@@ -22,10 +26,23 @@ public class Application {
         @Autowired
         PlayerDataRepo playerDataRepo;
 
+        @Autowired
+        GameDataRepo gameDataRepo;
+
+
         public static void main(String[] args) {
                 SpringApplication.run(Application.class, args);
         }
 
+        @Bean
+        public CommandLineRunner populateGameData(GameDataRepo gameDataRepo) {
+                return args -> {
+                        System.out.println("Starting GameDataScraper!");
+                        GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                        gameDataScraper.run();
+                };
+        }
+        
         @Bean
         public CommandLineRunner populatePlayers(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
                 return (args) -> {
@@ -38,5 +55,5 @@ public class Application {
                         playerStatsScraper.run();
                 };
         }
-
+        
 }
