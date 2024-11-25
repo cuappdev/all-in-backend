@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - expired-contract-microservice
   pull_request:
     branches:
       - main
