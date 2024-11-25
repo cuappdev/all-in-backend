@@ -42,17 +42,27 @@ public class UserService {
     return userRepo.save(user);
   }
 
-  public User updateUser(final Integer user_id, final User user) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findById(user_id);
-    if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + user_id + " not found.");
+    public User updateUser(final Integer user_id, final User user) throws NotFoundException {
+        Optional<User> userOptional = userRepo.findById(user_id);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("User with id " + user_id + " not found.");
+        }
+        User userToUpdate = userOptional.get();
+        userToUpdate.setUsername(user.getUsername());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setBalance(user.getBalance());
+        return userRepo.save(userToUpdate);
     }
-    User userToUpdate = userOptional.get();
-    userToUpdate.setUsername(user.getUsername());
-    userToUpdate.setEmail(user.getEmail());
-    userToUpdate.setBalance(user.getBalance());
-    return userRepo.save(userToUpdate);
-  }
+
+    public User addToUserBalance(Integer userId, Double amount) throws NotFoundException {
+        Optional<User> userOptional = userRepo.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("User with id " + userId + " not found.");
+        }
+        User user = userOptional.get();
+        user.setBalance(user.getBalance() + amount);
+        return userRepo.save(user);
+    }
 
   public User deleteUser(final Integer user_id) throws NotFoundException {
     Optional<User> userOptional = userRepo.findById(user_id);
