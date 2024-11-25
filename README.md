@@ -17,6 +17,11 @@ Before setting up the project, ensure you have the following installed:
 
 ### 1. Clone the Repository
 
+After cloning, `cd` into the repo and run:
+
+- `git config core.hooksPath .github/hooks` to enable the pre-commit hook
+- `chmod +x .github/hooks/pre-commit` to mark the hook as an executable
+
 ### 2. Create application.properties
 
 Create a new `application.properties` file located in `src/main/resources/` by copying the `application.properties.template` file in the same directory. Run:
