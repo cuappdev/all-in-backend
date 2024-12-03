@@ -8,6 +8,7 @@
 
 # IntelliJ
 .idea/
+.idea
 *.iml
 *.iws
 *.ipr
@@ -42,7 +43,8 @@
 /*.config
 
 # Sensitive configuration files
-.env
-application-*.yml
-application-*.properties
-src/main/resources/application.properties
+.mysql-env
+.all-in-env
+mysql-init.sql
+/deployment
+application.properties
