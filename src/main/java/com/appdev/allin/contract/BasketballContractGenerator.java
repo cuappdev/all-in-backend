@@ -22,7 +22,7 @@ public class BasketballContractGenerator extends ContractGenerator {
 
         // Determine event probability and ratio based on rarity
         switch (rarity) {
-            case Common:
+            case COMMON:
                 // Probability of event hitting ranges from COMMON_PROB_LOWER_BOUND -
                 // COMMON_PROB_UPPER_BOUND
                 eventProb =
@@ -36,7 +36,7 @@ public class BasketballContractGenerator extends ContractGenerator {
                                         * (COMMON_PAYOUT_UPPER_BOUND - COMMON_PAYOUT_LOWER_BOUND)
                                 + COMMON_PAYOUT_LOWER_BOUND;
                 break;
-            case Rare:
+            case RARE:
                 // Probability of event hitting ranges from RARE_PROB_LOWER_BOUND -
                 // RARE_PROB_UPPER_BOUND
                 eventProb =
@@ -50,7 +50,7 @@ public class BasketballContractGenerator extends ContractGenerator {
                                         * (RARE_PAYOUT_UPPER_BOUND - RARE_PAYOUT_LOWER_BOUND)
                                 + RARE_PAYOUT_LOWER_BOUND;
                 break;
-            case Epic:
+            case EPIC:
                 // Probability of event hitting ranges from EPIC_PROB_LOWER_BOUND -
                 // EPIC_PROB_UPPER_BOUND
                 eventProb =
@@ -64,7 +64,7 @@ public class BasketballContractGenerator extends ContractGenerator {
                                         * (EPIC_PAYOUT_UPPER_BOUND - EPIC_PAYOUT_LOWER_BOUND)
                                 + EPIC_PAYOUT_LOWER_BOUND;
                 break;
-            case Legendary:
+            case LEGENDARY:
                 // Probability of event hitting ranges from LEGENDARY_PROB_LOWER_BOUND -
                 // LEGENDARY_PROB_UPPER_BOUND
                 eventProb =
