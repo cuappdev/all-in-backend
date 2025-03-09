@@ -86,7 +86,7 @@ public class PlayerController {
 
   // Images Operations
 
-  @GetMapping("/players/{player_id}/image/")
+  @GetMapping("/players/{player_id}/image")
   public ResponseEntity<byte[]> getPlayerImageById(@PathVariable final Integer player_id)
       throws NotFoundException {
     try {
@@ -103,7 +103,7 @@ public class PlayerController {
     }
   }
 
-  @PatchMapping("/players/{player_id}/image/")
+  @PatchMapping("/players/{player_id}/image")
   public ResponseEntity<String> updatePlayerImageById(
       @PathVariable final Integer player_id, @RequestBody final MultipartFile image) {
     String uploadDirectory = "src/main/resources/static/images/players/";
@@ -115,7 +115,7 @@ public class PlayerController {
     }
   }
 
-  @DeleteMapping("/players/{player_id}/image/")
+  @DeleteMapping("/players/{player_id}/image")
   public ResponseEntity<String> deletePlayerImageById(@PathVariable final Integer player_id) {
     String uploadDirectory = "src/main/resources/static/images/players/";
     try {
