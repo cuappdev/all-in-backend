@@ -11,14 +11,26 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import org.springframework.context.annotation.Bean;
+
+import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.playerData.PlayerDataRepo;
+// import com.appdev.allin.playerData.util.PopulatePlayerData;
+
+import com.appdev.allin.gameData.GameDataRepo;
+
+import scrapers.PlayerDataScraper;
+import scrapers.PlayerStatsScraper;
+import scrapers.GameDataScraper;
 import org.springframework.scheduling.annotation.Scheduled;
 
 
 @SpringBootApplication
 public class Application {
-
   @Autowired PlayerRepo playerRepo;
 
   @Autowired PlayerDataRepo playerDataRepo;
@@ -68,5 +80,4 @@ public class Application {
           userService.addToUserBalance(owner.getId(), payoutAmount);
       }
   }
-
 }

@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlayerRepo extends JpaRepository<Player, Integer> {
-
-  Player findByNumber(Integer number);
+    Player findByFirstNameAndLastName(String firstName, String lastName);
+    Player findByNumber(Integer number);
 }
