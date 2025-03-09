@@ -83,20 +83,22 @@ public class BasketballContractGenerator extends ContractGenerator {
 
     Integer eventThreshold = normalizeEventThreshold(player, event, eventProb);
 
-    // Generate the basketball-specific contract
-    return new Contract(
-        player,
-        user,
-        buyPrice,
-        rarity,
-        opposingTeam,
-        "src/main/resources/static/images/teams/" + opposingTeam + ".png",
-        event,
-        eventThreshold,
-        LocalDate.now(),
-        buyPrice * ratio,
-        null,
-        false,
-        null);
-  }
+        // Generate the basketball-specific contract
+        return new Contract(
+                player,
+                user,
+                buyPrice,
+                rarity,
+                opposingTeam,
+                "src/main/resources/static/images/teams/" + opposingTeam + ".png",
+                event,
+                eventThreshold,
+                LocalDate.now(),
+                buyPrice * ratio,
+                null,
+                false,
+                false,
+                null
+        );        
+    }
 }
