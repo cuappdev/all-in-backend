@@ -20,21 +20,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Arrays;
 
 @Component
 public class PlayerStatsScraper {
     private static final Logger logger = LoggerFactory.getLogger(PlayerStatsScraper.class);
-    
+
     private final PlayerRepo playerRepo;
     private final PlayerDataRepo playerDataRepo;
     private static final String BASE_URL = "https://cornellbigred.com";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
-    
+
     // Set to track processed game URLs to avoid duplicates
     private final Set<String> processedGameUrls = new HashSet<>();
-    
+
     // Set to track unmatched teams
     private final Set<String> unmatchedTeams = new TreeSet<>(); // TreeSet for sorted output
 
@@ -49,9 +48,9 @@ public class PlayerStatsScraper {
 
         for (int year = startYear; year <= endYear; year++) {
             // Format: 2023-24
-            String yearFormat = String.format("%d-%d", year, (year + 1) % 100);
-            String scheduleUrl = String.format("%s/sports/mens-basketball/schedule/%s", BASE_URL, yearFormat);
-            
+            String yearFormat = "%d-%d".formatted(year, (year + 1) % 100);
+            String scheduleUrl = "%s/sports/mens-basketball/schedule/%s".formatted(BASE_URL, yearFormat);
+
             try {
                 logger.info("Scraping schedule for season: {}", yearFormat);
                 scrapeGameStats(scheduleUrl);
@@ -65,16 +64,16 @@ public class PlayerStatsScraper {
         logger.info("Scraping game stats from URL: {}", scheduleUrl);
         try {
             Document scheduleDoc = Jsoup.connect(scheduleUrl)
-                .userAgent(USER_AGENT)
-                .get();
-            
+                    .userAgent(USER_AGENT)
+                    .get();
+
             // Find all box score links from the schedule page
             Elements gameLinks = scheduleDoc.select("a[href*=/boxscore/]");
             logger.info("Found {} game links", gameLinks.size());
-            
+
             for (Element gameLink : gameLinks) {
                 String gameUrl = BASE_URL + gameLink.attr("href");
-                
+
                 // Skip if we've already processed this game URL
                 if (!processedGameUrls.add(gameUrl)) {
                     logger.info("Skipping already processed game: {}", gameUrl);
@@ -83,8 +82,8 @@ public class PlayerStatsScraper {
 
                 try {
                     Document gameDoc = Jsoup.connect(gameUrl)
-                        .userAgent(USER_AGENT)
-                        .get();
+                            .userAgent(USER_AGENT)
+                            .get();
                     processGameStats(gameDoc);
                 } catch (Exception e) {
                     logger.error("Error scraping individual game {}: {}", gameUrl, e.getMessage());
@@ -101,26 +100,27 @@ public class PlayerStatsScraper {
         String date = gameDoc.select("dl dt:containsOwn(Date) + dd").text().trim();
         if (date.isEmpty()) {
             throw new IllegalStateException("No date found in game document");
-        }        
+        }
         LocalDate gameDate = LocalDate.parse(date, dateFormatter);
         logger.info("Processing game for date: {}", gameDate);
-        
+
         // Get opponent (filtering out Cornell)
         String opponent = gameDoc.select("table.sidearm-table tbody tr").stream()
-            .filter(row -> !row.select("td span").text().contains("Cornell"))
-            .findFirst()
-            .map(row -> row.select("td span:not(.sr-only)").last().text())
-            .orElseThrow(() -> new IllegalStateException("No opponent found"));
-        
+                .filter(row -> !row.select("td span").text().contains("Cornell"))
+                .findFirst()
+                .map(row -> row.select("td span:not(.sr-only)").last().text())
+                .orElseThrow(() -> new IllegalStateException("No opponent found"));
+
         OpposingTeam opposingTeam = findOpposingTeam(opponent);
         logger.info("Processing game against: {}", opposingTeam);
 
         // Get the Cornell stats table only
-        Element cornellTable = gameDoc.select("table.overall-stats.full.hide-caption.highlight-hover.highlight-column-hover")
-            .stream()
-            .filter(table -> !table.select("caption").text().contains(opponent))
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("Cornell stats table not found"));
+        Element cornellTable = gameDoc
+                .select("table.overall-stats.full.hide-caption.highlight-hover.highlight-column-hover")
+                .stream()
+                .filter(table -> !table.select("caption").text().contains(opponent))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Cornell stats table not found"));
 
         // Process only Cornell players
         Elements playerRows = cornellTable.select("tbody tr:not(:contains(TEAM))");
@@ -205,7 +205,7 @@ public class PlayerStatsScraper {
 
     private OpposingTeam findOpposingTeam(String scrapedTeamName) {
         String processedName = scrapedTeamName.trim();
-        
+
         try {
             // Try to find a matching team
             for (OpposingTeam team : OpposingTeam.values()) {
@@ -213,7 +213,7 @@ public class PlayerStatsScraper {
                     return team;
                 }
             }
-            
+
             // If no match found, add to unmatched set and return a default
             unmatchedTeams.add(processedName);
             logger.warn("No matching team found for: {}", scrapedTeamName);
@@ -231,10 +231,10 @@ public class PlayerStatsScraper {
             logger.warn("Invalid name format: {}", fullName);
             return null;
         }
-        
+
         String lastName = nameParts[0].trim();
         String firstName = nameParts[1].trim();
-        
+
         logger.debug("Looking up player: firstName='{}', lastName='{}'", firstName, lastName);
         return playerRepo.findByFirstNameAndLastName(firstName, lastName);
     }

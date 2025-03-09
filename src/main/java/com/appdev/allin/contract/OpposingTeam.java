@@ -1,5 +1,7 @@
 package com.appdev.allin.contract;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public enum OpposingTeam {
     LEHIGH,
     MORRISVILLE,
@@ -25,7 +27,7 @@ public enum OpposingTeam {
     OHIO;
 
     public static OpposingTeam getRandomOpposingTeam() {
-        return values()[(int) (Math.random() * values().length)];
+        return values()[(int) (ThreadLocalRandom.current().nextDouble() * values().length)];
     }
 
     // Helper method to find matching team
