@@ -32,8 +32,14 @@ public class User {
   @Column(name = "balance", nullable = false)
   private Double balance = 1000.0;
 
-  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-  private List<Contract> contracts = new LinkedList<>();
+    @Column(name = "firebase_uid", nullable = false, unique = true)
+    private String firebaseUid;
+
+    @OneToMany (mappedBy = "sessionId", fetch = FetchType.EAGER)
+    private List<UserSession> sessions = new LinkedList<>();
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<Contract> contracts = new LinkedList<>();
 
   @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
   private List<Transaction> sellerTransactions = new LinkedList<>();
@@ -92,9 +98,17 @@ public class User {
     this.balance = balance;
   }
 
-  public List<Contract> getContracts() {
-    return contracts;
-  }
+    public String getFirebaseUid() {
+        return firebaseUid;
+    }
+
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
+    }
+
+    public List<Contract> getContracts() {
+        return contracts;
+    }
 
   public void setContracts(List<Contract> contracts) {
     this.contracts = contracts;
