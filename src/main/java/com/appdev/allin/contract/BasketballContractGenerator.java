@@ -99,7 +99,8 @@ public class BasketballContractGenerator extends ContractGenerator {
                 buyPrice * ratio,
                 null,
                 false,
+                false,
                 null
-        );
+        );        
     }
 }
