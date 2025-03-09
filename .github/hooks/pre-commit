@@ -1,7 +1,1 @@
-# Run linter and formatter
-echo "Running spotless. Formatting and linting code..."
-mvn spotless:apply
 
-# Run tests
-echo "Running tests..."
-mvn test
