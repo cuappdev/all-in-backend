@@ -12,13 +12,15 @@ import com.appdev.allin.user.User;
 
 import org.junit.jupiter.api.Test;
 
+import com.appdev.allin.contract.BasketballContractGenerator;
+
 class AllInApplicationTests {
 
     @Test
     public void testGenerateContract() {
 
         PlayerDataRepo playerDataRepo = mock(PlayerDataRepo.class);
-        ContractGenerator contractGenerator = new ContractGenerator(playerDataRepo);
+        ContractGenerator contractGenerator = new BasketballContractGenerator(playerDataRepo);
 
         System.out.println("Testing ContractGenerator.generateContract()");
         System.out.println(
@@ -125,7 +127,7 @@ class AllInApplicationTests {
                 new Player(
                         "LeBron",
                         "James",
-                        new Position[] {Position.Center},
+                        new Position[] {Position.CENTER},
                         23,
                         "6'9",
                         250,
@@ -133,7 +135,7 @@ class AllInApplicationTests {
                         "St. Vincent-St. Mary",
                         "src/main/resources/static/images/players/default.jpg");
 
-        Contract contract = contractGenerator.generateContract(user, player, 100.0, Rarity.Common);
+        Contract contract = contractGenerator.generateContract(user, player, 100.0, Rarity.COMMON);
         System.out.println("Contract: " + contract.toString());
     }
 }

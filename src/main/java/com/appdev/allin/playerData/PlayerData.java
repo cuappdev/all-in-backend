@@ -269,27 +269,27 @@ public class PlayerData {
 
     public Integer getEvent(Event e) {
         switch (e) {
-            case Points:
+            case POINTS:
                 return getPoints();
-            case Minutes:
+            case MINUTES:
                 return getMinutes();
-            case Field_Goals:
+            case FIELD_GOALS:
                 return getFieldGoals();
-            case Three_Pointers:
+            case THREE_POINTERS:
                 return getThreePointers();
-            case Free_Throws:
+            case FREE_THROWS:
                 return getFreeThrows();
-            case Rebounds:
+            case REBOUNDS:
                 return getRebounds();
-            case Assists:
+            case ASSISTS:
                 return getAssists();
-            case Steals:
+            case STEALS:
                 return getSteals();
-            case Blocks:
+            case BLOCKS:
                 return getBlocks();
-            case Turnovers:
+            case TURNOVERS:
                 return getTurnovers();
-            case Fouls:
+            case FOULS:
                 return getFouls();
             default:
                 return 0;

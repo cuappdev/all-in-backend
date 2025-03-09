@@ -23,24 +23,24 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Get SHA
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short main)"
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Docker Build & Push
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: cornellappdev/all-in:${{ steps.vars.outputs.sha_short }}
+          tags: cornellappdev/all-in:${{ env.sha_short }}
       - name: Remote SSH and Deploy
         uses: appleboy/ssh-action@master
         env:
-          IMAGE_TAG: ${{ steps.vars.outputs.sha_short }}
+          IMAGE_TAG: ${{ env.sha_short }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            export IMAGE_TAG=${{ steps.vars.outputs.sha_short }}
+            export IMAGE_TAG=${{ env.sha_short }}
             cd docker-compose
             docker stack rm thestack
             sleep 20s

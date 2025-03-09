@@ -4,7 +4,6 @@ import com.appdev.allin.player.Player;
 import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,68 +13,101 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "contracts")
 public class Contract {
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
+  private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "player_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Player player;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "player_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Player player;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private User owner;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "owner_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private User owner;
 
-    @Column(name = "buyPrice", nullable = false)
-    private Double buyPrice;
+  @Column(name = "buyPrice", nullable = false)
+  private Double buyPrice;
 
-    @Column(name = "rarity", nullable = false)
-    private Rarity rarity;
+  @Column(name = "rarity", nullable = false)
+  private Rarity rarity;
 
-    @Column(name = "opposingTeam", nullable = false)
-    private OpposingTeam opposingTeam;
+  @Column(name = "opposingTeam", nullable = false)
+  private OpposingTeam opposingTeam;
 
-    @Column(name = "opposingTeamImage", nullable = false)
-    private String opposingTeamImage = "src/main/resources/static/images/teams/default.jpg";
+  @Column(name = "opposingTeamImage", nullable = false)
+  private String opposingTeamImage = "src/main/resources/static/images/teams/default.jpg";
 
-    @Column(name = "event", nullable = false)
-    private Event event;
+  @Column(name = "event", nullable = false)
+  private Event event;
 
-    @Column(name = "eventThreshold", nullable = false)
-    private Integer eventThreshold;
+  @Column(name = "eventThreshold", nullable = false)
+  private Integer eventThreshold;
 
-    @Column(name = "creationTime", nullable = false)
-    private LocalDate creationTime = LocalDate.now();
+  @Column(name = "creationTime", nullable = false)
+  private LocalDate creationTime = LocalDate.now();
 
     @Column(name = "value", nullable = false)
     private Double value;
 
-    @Column(name = "expired")
-    private Boolean expired;
+    @Column(name = "expirationTime", nullable = false)
+    private LocalDate expirationTime;
 
-    @Column(name = "forSale", nullable = false)
-    private Boolean forSale = false;
+  @Column(name = "expired")
+  private Boolean expired;
 
-    @Column(name = "sellPrice")
-    private Double sellPrice;
+  @Column(name = "forSale", nullable = false)
+  private Boolean forSale = false;
 
-    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
-    private List<Transaction> transactions = new LinkedList<>();
+  @Column(name = "sellPrice")
+  private Double sellPrice;
 
-    public Contract() {}
+  @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
+  private List<Transaction> transactions = new LinkedList<>();
+
+    public Contract() {
+    }
+
+    public Contract(
+            Player player,          // Player
+            User owner,             // User
+            Double buyPrice,        // Double
+            Rarity rarity,          // Rarity
+            OpposingTeam opposingTeam, // OpposingTeam
+            String opposingTeamImage,  // String
+            Event event,            // Event
+            Integer eventThreshold, // Integer
+            LocalDate creationTime, // LocalDate
+            Double value,           // Double
+            LocalDate expirationTime, // LocalDate (nullable, since it's passed as null)
+            Boolean expired,        // Boolean
+            Double sellPrice        // Double (nullable, since it's passed as null)
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.buyPrice = buyPrice;
+        this.rarity = rarity;
+        this.opposingTeam = opposingTeam;
+        this.opposingTeamImage = opposingTeamImage;
+        this.event = event;
+        this.eventThreshold = eventThreshold;
+        this.creationTime = creationTime;
+        this.value = value;
+        this.expirationTime = expirationTime; // nullable, allows passing null
+        this.expired = expired;
+        this.forSale = false; // default value not passed in instantiation
+        this.sellPrice = sellPrice; // nullable, allows passing null
+    }
 
     public Contract(
             Player player,
@@ -90,6 +122,61 @@ public class Contract {
             Double value,
             Boolean expired,
             Boolean forSale,
+            Double sellPrice
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.buyPrice = buyPrice;
+        this.rarity = rarity;
+        this.opposingTeam = opposingTeam;
+        this.opposingTeamImage = opposingTeamImage;
+        this.event = event;
+        this.eventThreshold = eventThreshold;
+        this.creationTime = creationTime;
+        this.value = value;
+        this.expired = expired;
+        this.forSale = forSale;
+        this.sellPrice = sellPrice;
+    }
+
+    public Contract(
+            Player player,
+            User owner,
+            Double value,
+            LocalDate expirationTime,
+            Boolean expired
+    ) {
+        this.player = player;
+        this.owner = owner;
+        this.value = value;
+        this.expirationTime = expirationTime;
+        this.expired = expired;
+        this.creationTime = LocalDate.now();
+        this.buyPrice = 0.0;
+        this.rarity = Rarity.Common;
+        this.forSale = false;
+        this.sellPrice = null;
+        this.event = null;
+        this.eventThreshold = 0;
+        this.opposingTeam = null;
+        this.opposingTeamImage = "default.jpg";
+    }
+
+
+    public Contract(
+            Player player,
+            User owner,
+            Double buyPrice,
+            Rarity rarity,
+            OpposingTeam opposingTeam,
+            String opposingTeamImage,
+            Event event,
+            Integer eventThreshold,
+            LocalDate creationTime,
+            Double value,
+            LocalDate expirationTime,
+            Boolean expired,
+            Boolean forSale,
             Double sellPrice) {
         this.player = player;
         this.owner = owner;
@@ -101,142 +188,151 @@ public class Contract {
         this.eventThreshold = eventThreshold;
         this.creationTime = creationTime;
         this.value = value;
+        this.expirationTime = expirationTime;
         this.expired = expired;
         this.forSale = forSale;
         this.sellPrice = sellPrice;
     }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    @JsonIgnore
-    public Player getPlayer() {
-        return player;
-    }
+  @JsonIgnore
+  public Player getPlayer() {
+    return player;
+  }
 
-    public Integer getPlayerId() {
-        if (player == null) {
-            return null;
-        }
-        return player.getId();
+  public Integer getPlayerId() {
+    if (player == null) {
+      return null;
     }
+    return player.getId();
+  }
 
-    @JsonIgnore
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+  @JsonIgnore
+  public void setPlayer(Player player) {
+    this.player = player;
+  }
 
-    @JsonIgnore
-    public User getOwner() {
-        return owner;
-    }
+  @JsonIgnore
+  public User getOwner() {
+    return owner;
+  }
 
-    public Integer getOwnerId() {
-        if (owner == null) {
-            return null;
-        }
-        return owner.getId();
+  public Integer getOwnerId() {
+    if (owner == null) {
+      return null;
     }
+    return owner.getId();
+  }
 
-    @JsonIgnore
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
+  @JsonIgnore
+  public void setOwner(User owner) {
+    this.owner = owner;
+  }
 
-    public Double getBuyPrice() {
-        return buyPrice;
-    }
+  public Double getBuyPrice() {
+    return buyPrice;
+  }
 
-    public void setBuyPrice(Double buyPrice) {
-        this.buyPrice = buyPrice;
-    }
+  public void setBuyPrice(Double buyPrice) {
+    this.buyPrice = buyPrice;
+  }
 
-    public Rarity getRarity() {
-        return rarity;
-    }
+  public Rarity getRarity() {
+    return rarity;
+  }
 
-    public void setRarity(Rarity rarity) {
-        this.rarity = rarity;
-    }
+  public void setRarity(Rarity rarity) {
+    this.rarity = rarity;
+  }
 
-    public OpposingTeam getOpposingTeam() {
-        return opposingTeam;
-    }
+  public OpposingTeam getOpposingTeam() {
+    return opposingTeam;
+  }
 
-    public void setOpposingTeam(OpposingTeam opposingTeam) {
-        this.opposingTeam = opposingTeam;
-    }
+  public void setOpposingTeam(OpposingTeam opposingTeam) {
+    this.opposingTeam = opposingTeam;
+  }
 
-    @JsonIgnore
-    public String getOpposingTeamImage() {
-        return opposingTeamImage;
-    }
+  @JsonIgnore
+  public String getOpposingTeamImage() {
+    return opposingTeamImage;
+  }
 
-    @JsonIgnore
-    public void setOpposingTeamImage(String opposingTeamImage) {
-        this.opposingTeamImage = opposingTeamImage;
-    }
+  @JsonIgnore
+  public void setOpposingTeamImage(String opposingTeamImage) {
+    this.opposingTeamImage = opposingTeamImage;
+  }
 
-    public Event getEvent() {
-        return event;
-    }
+  public Event getEvent() {
+    return event;
+  }
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
+  public void setEvent(Event event) {
+    this.event = event;
+  }
 
-    public Integer getEventThreshold() {
-        return eventThreshold;
-    }
+  public Integer getEventThreshold() {
+    return eventThreshold;
+  }
 
-    public void setEventThreshold(Integer eventThreshold) {
-        this.eventThreshold = eventThreshold;
-    }
+  public void setEventThreshold(Integer eventThreshold) {
+    this.eventThreshold = eventThreshold;
+  }
 
-    public LocalDate getCreationTime() {
-        return creationTime;
-    }
+  public LocalDate getCreationTime() {
+    return creationTime;
+  }
 
-    public void setCreationTime(LocalDate creationTime) {
-        this.creationTime = creationTime;
-    }
+  public void setCreationTime(LocalDate creationTime) {
+    this.creationTime = creationTime;
+  }
 
-    public Double getValue() {
-        return value;
-    }
+  public Double getValue() {
+    return value;
+  }
 
     public void setValue(Double value) {
         this.value = value;
     }
 
-    public Boolean getExpired() {
-        return expired;
+    public LocalDate getExpirationTime() {
+        return expirationTime;
     }
 
-    public void setExpired(Boolean expired) {
-        this.expired = expired;
+    public void setExpirationTime(LocalDate expirationTime) {
+        this.expirationTime = expirationTime;
     }
 
-    public Boolean getForSale() {
-        return forSale;
-    }
+  public Boolean getExpired() {
+    return expired;
+  }
 
-    public void setForSale(Boolean forSale) {
-        this.forSale = forSale;
-    }
+  public void setExpired(Boolean expired) {
+    this.expired = expired;
+  }
 
-    public Double getSellPrice() {
-        return sellPrice;
-    }
+  public Boolean getForSale() {
+    return forSale;
+  }
 
-    public void setSellPrice(Double sellPrice) {
-        this.sellPrice = sellPrice;
-    }
+  public void setForSale(Boolean forSale) {
+    this.forSale = forSale;
+  }
+
+  public Double getSellPrice() {
+    return sellPrice;
+  }
+
+  public void setSellPrice(Double sellPrice) {
+    this.sellPrice = sellPrice;
+  }
 
     @Override
     public String toString() {
@@ -248,6 +344,8 @@ public class Contract {
                 + event
                 + ", eventThreshold="
                 + eventThreshold
+                + ", expirationTime="
+                + expirationTime
                 + ", expired="
                 + expired
                 + ", forSale="
