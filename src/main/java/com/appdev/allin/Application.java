@@ -11,73 +11,62 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import org.springframework.context.annotation.Bean;
-
-import com.appdev.allin.player.PlayerRepo;
-import com.appdev.allin.playerData.PlayerDataRepo;
-// import com.appdev.allin.playerData.util.PopulatePlayerData;
-
-import com.appdev.allin.gameData.GameDataRepo;
-
-import scrapers.PlayerDataScraper;
-import scrapers.PlayerStatsScraper;
-import scrapers.GameDataScraper;
 import org.springframework.scheduling.annotation.Scheduled;
-
 
 @SpringBootApplication
 public class Application {
-  @Autowired PlayerRepo playerRepo;
+    @Autowired
+    PlayerRepo playerRepo;
 
-  @Autowired PlayerDataRepo playerDataRepo;
+    @Autowired
+    PlayerDataRepo playerDataRepo;
 
-  @Autowired
-  ContractRepo contractRepo;
+    @Autowired
+    ContractRepo contractRepo;
 
-  @Autowired
-  UserService userService;
+    @Autowired
+    UserService userService;
 
-  public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
-  @Scheduled(cron = "0 0 0 * * *")
-  public void checkAndProcessContracts() {
-      List<Contract> allContracts = contractRepo.findAll();
+    @Scheduled(cron = "0 0 0 * * *")
+    public void checkAndProcessContracts() {
+        List<Contract> allContracts = contractRepo.findAll();
 
-      for (Contract contract : allContracts) {
+        for (Contract contract : allContracts) {
 
-          if (!contract.getExpired() &&
-                  (contract.getExpirationTime().isBefore(LocalDate.now()) ||
-                          contract.getExpirationTime().isEqual(LocalDate.now()))) {
+            if (!contract.getExpired() &&
+                    (contract.getExpirationTime().isBefore(LocalDate.now()) ||
+                            contract.getExpirationTime().isEqual(LocalDate.now()))) {
 
-              boolean contractHit = isContractHit(contract);
+                boolean contractHit = isContractHit(contract);
 
-              if (contractHit) {
-                  processPayout(contract);
-              }
+                if (contractHit) {
+                    processPayout(contract);
+                }
 
-              contract.setExpired(true);
+                contract.setExpired(true);
 
-              contractRepo.save(contract);
-          }
-      }
-  }
+                contractRepo.save(contract);
+            }
+        }
+    }
 
-  // abstracted
-  public boolean isContractHit(Contract contract) {
-      return false;
-  }
+    // abstracted
+    public boolean isContractHit(Contract contract) {
+        return false;
+    }
 
-  private void processPayout(Contract contract) {
-      User owner = contract.getOwner();
-      if (owner != null) {
-          Double payoutAmount = contract.getValue();
-          userService.addToUserBalance(owner.getId(), payoutAmount);
-      }
-  }
+    private void processPayout(Contract contract) {
+        User owner = contract.getOwner();
+        if (owner != null) {
+            Double payoutAmount = contract.getValue();
+            userService.addToUserBalance(owner.getId(), payoutAmount);
+        }
+    }
 }

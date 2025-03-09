@@ -32,12 +32,6 @@ public enum OpposingTeam {
 
     // Helper method to find matching team
     public boolean matches(String teamName) {
-        String normalizedTeamName = teamName.toLowerCase().trim();
-        for (String alias : aliases) {
-            if (normalizedTeamName.contains(alias.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
+        return this.name().equalsIgnoreCase(teamName);
     }
 }

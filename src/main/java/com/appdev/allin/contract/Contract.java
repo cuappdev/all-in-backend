@@ -57,11 +57,11 @@ public class Contract {
   @Column(name = "creationTime", nullable = false)
   private LocalDate creationTime = LocalDate.now();
 
-    @Column(name = "value", nullable = false)
-    private Double value;
+  @Column(name = "value", nullable = false)
+  private Double value;
 
-    @Column(name = "expirationTime", nullable = false)
-    private LocalDate expirationTime;
+  @Column(name = "expirationTime", nullable = false)
+  private LocalDate expirationTime;
 
   @Column(name = "expired")
   private Boolean expired;
@@ -75,124 +75,121 @@ public class Contract {
   @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
   private List<Transaction> transactions = new LinkedList<>();
 
-    public Contract() {
-    }
+  public Contract() {
+  }
 
-    public Contract(
-            Player player,          // Player
-            User owner,             // User
-            Double buyPrice,        // Double
-            Rarity rarity,          // Rarity
-            OpposingTeam opposingTeam, // OpposingTeam
-            String opposingTeamImage,  // String
-            Event event,            // Event
-            Integer eventThreshold, // Integer
-            LocalDate creationTime, // LocalDate
-            Double value,           // Double
-            LocalDate expirationTime, // LocalDate (nullable, since it's passed as null)
-            Boolean expired,        // Boolean
-            Double sellPrice        // Double (nullable, since it's passed as null)
-    ) {
-        this.player = player;
-        this.owner = owner;
-        this.buyPrice = buyPrice;
-        this.rarity = rarity;
-        this.opposingTeam = opposingTeam;
-        this.opposingTeamImage = opposingTeamImage;
-        this.event = event;
-        this.eventThreshold = eventThreshold;
-        this.creationTime = creationTime;
-        this.value = value;
-        this.expirationTime = expirationTime; // nullable, allows passing null
-        this.expired = expired;
-        this.forSale = false; // default value not passed in instantiation
-        this.sellPrice = sellPrice; // nullable, allows passing null
-    }
+  public Contract(
+      Player player, // Player
+      User owner, // User
+      Double buyPrice, // Double
+      Rarity rarity, // Rarity
+      OpposingTeam opposingTeam, // OpposingTeam
+      String opposingTeamImage, // String
+      Event event, // Event
+      Integer eventThreshold, // Integer
+      LocalDate creationTime, // LocalDate
+      Double value, // Double
+      LocalDate expirationTime, // LocalDate (nullable, since it's passed as null)
+      Boolean expired, // Boolean
+      Double sellPrice // Double (nullable, since it's passed as null)
+  ) {
+    this.player = player;
+    this.owner = owner;
+    this.buyPrice = buyPrice;
+    this.rarity = rarity;
+    this.opposingTeam = opposingTeam;
+    this.opposingTeamImage = opposingTeamImage;
+    this.event = event;
+    this.eventThreshold = eventThreshold;
+    this.creationTime = creationTime;
+    this.value = value;
+    this.expirationTime = expirationTime; // nullable, allows passing null
+    this.expired = expired;
+    this.forSale = false; // default value not passed in instantiation
+    this.sellPrice = sellPrice; // nullable, allows passing null
+  }
 
-    public Contract(
-            Player player,
-            User owner,
-            Double buyPrice,
-            Rarity rarity,
-            OpposingTeam opposingTeam,
-            String opposingTeamImage,
-            Event event,
-            Integer eventThreshold,
-            LocalDate creationTime,
-            Double value,
-            Boolean expired,
-            Boolean forSale,
-            Double sellPrice
-    ) {
-        this.player = player;
-        this.owner = owner;
-        this.buyPrice = buyPrice;
-        this.rarity = rarity;
-        this.opposingTeam = opposingTeam;
-        this.opposingTeamImage = opposingTeamImage;
-        this.event = event;
-        this.eventThreshold = eventThreshold;
-        this.creationTime = creationTime;
-        this.value = value;
-        this.expired = expired;
-        this.forSale = forSale;
-        this.sellPrice = sellPrice;
-    }
+  public Contract(
+      Player player,
+      User owner,
+      Double buyPrice,
+      Rarity rarity,
+      OpposingTeam opposingTeam,
+      String opposingTeamImage,
+      Event event,
+      Integer eventThreshold,
+      LocalDate creationTime,
+      Double value,
+      Boolean expired,
+      Boolean forSale,
+      Double sellPrice) {
+    this.player = player;
+    this.owner = owner;
+    this.buyPrice = buyPrice;
+    this.rarity = rarity;
+    this.opposingTeam = opposingTeam;
+    this.opposingTeamImage = opposingTeamImage;
+    this.event = event;
+    this.eventThreshold = eventThreshold;
+    this.creationTime = creationTime;
+    this.value = value;
+    this.expired = expired;
+    this.forSale = forSale;
+    this.sellPrice = sellPrice;
+  }
 
-    public Contract(
-            Player player,
-            User owner,
-            Double value,
-            LocalDate expirationTime,
-            Boolean expired
-    ) {
-        this.player = player;
-        this.owner = owner;
-        this.value = value;
-        this.expirationTime = expirationTime;
-        this.expired = expired;
-        this.creationTime = LocalDate.now();
-        this.buyPrice = 0.0;
-        this.rarity = Rarity.Common;
-        this.forSale = false;
-        this.sellPrice = null;
-        this.event = null;
-        this.eventThreshold = 0;
-        this.opposingTeam = null;
-        this.opposingTeamImage = "default.jpg";
-    }
+  public Contract(
+      Player player,
+      User owner,
+      Double value,
+      LocalDate expirationTime,
+      Boolean expired) {
+    this.player = player;
+    this.owner = owner;
+    this.value = value;
+    this.expirationTime = expirationTime;
+    this.expired = expired;
+    this.creationTime = LocalDate.now();
+    this.buyPrice = 0.0;
+    this.rarity = Rarity.COMMON;
+    this.forSale = false;
+    this.sellPrice = null;
+    this.event = null;
+    this.eventThreshold = 0;
+    this.opposingTeam = null;
+    this.opposingTeamImage = "default.jpg";
+  }
 
-
-    public Contract(
-            Player player,
-            User owner,
-            Double buyPrice,
-            Rarity rarity,
-            OpposingTeam opposingTeam,
-            String opposingTeamImage,
-            Event event,
-            Integer eventThreshold,
-            LocalDate creationTime,
-            Double value,
-            LocalDate expirationTime,
-            Boolean expired,
-            Boolean forSale,
-            Double sellPrice) {
-        this.player = player;
-        this.owner = owner;
-        this.buyPrice = buyPrice;
-        this.rarity = rarity;
-        this.opposingTeam = opposingTeam;
-        this.opposingTeamImage = opposingTeamImage;
-        this.event = event;
-        this.eventThreshold = eventThreshold;
-        this.creationTime = creationTime;
-        this.value = value;
-        this.expirationTime = expirationTime;
-        this.expired = expired;
-        this.forSale = forSale;
-        this.sellPrice = sellPrice;
-    }
+  public Contract(
+      Player player,
+      User owner,
+      Double buyPrice,
+      Rarity rarity,
+      OpposingTeam opposingTeam,
+      String opposingTeamImage,
+      Event event,
+      Integer eventThreshold,
+      LocalDate creationTime,
+      Double value,
+      LocalDate expirationTime,
+      Boolean expired,
+      Boolean forSale,
+      Double sellPrice) {
+    this.player = player;
+    this.owner = owner;
+    this.buyPrice = buyPrice;
+    this.rarity = rarity;
+    this.opposingTeam = opposingTeam;
+    this.opposingTeamImage = opposingTeamImage;
+    this.event = event;
+    this.eventThreshold = eventThreshold;
+    this.creationTime = creationTime;
+    this.value = value;
+    this.expirationTime = expirationTime;
+    this.expired = expired;
+    this.forSale = forSale;
+    this.sellPrice = sellPrice;
+  }
 
   public Integer getId() {
     return id;
@@ -298,17 +295,17 @@ public class Contract {
     return value;
   }
 
-    public void setValue(Double value) {
-        this.value = value;
-    }
+  public void setValue(Double value) {
+    this.value = value;
+  }
 
-    public LocalDate getExpirationTime() {
-        return expirationTime;
-    }
+  public LocalDate getExpirationTime() {
+    return expirationTime;
+  }
 
-    public void setExpirationTime(LocalDate expirationTime) {
-        this.expirationTime = expirationTime;
-    }
+  public void setExpirationTime(LocalDate expirationTime) {
+    this.expirationTime = expirationTime;
+  }
 
   public Boolean getExpired() {
     return expired;
@@ -334,38 +331,38 @@ public class Contract {
     this.sellPrice = sellPrice;
   }
 
-    @Override
-    public String toString() {
-        return "Contract [buyPrice="
-                + buyPrice
-                + ", creationTime="
-                + creationTime
-                + ", event="
-                + event
-                + ", eventThreshold="
-                + eventThreshold
-                + ", expirationTime="
-                + expirationTime
-                + ", expired="
-                + expired
-                + ", forSale="
-                + forSale
-                + ", id="
-                + id
-                + ", opposingTeam="
-                + opposingTeam
-                + ", opposingTeamImage="
-                + opposingTeamImage
-                + ", owner="
-                + owner
-                + ", player="
-                + player
-                + ", rarity="
-                + rarity
-                + ", sellPrice="
-                + sellPrice
-                + ", value="
-                + value
-                + "]";
-    }
+  @Override
+  public String toString() {
+    return "Contract [buyPrice="
+        + buyPrice
+        + ", creationTime="
+        + creationTime
+        + ", event="
+        + event
+        + ", eventThreshold="
+        + eventThreshold
+        + ", expirationTime="
+        + expirationTime
+        + ", expired="
+        + expired
+        + ", forSale="
+        + forSale
+        + ", id="
+        + id
+        + ", opposingTeam="
+        + opposingTeam
+        + ", opposingTeamImage="
+        + opposingTeamImage
+        + ", owner="
+        + owner
+        + ", player="
+        + player
+        + ", rarity="
+        + rarity
+        + ", sellPrice="
+        + sellPrice
+        + ", value="
+        + value
+        + "]";
+  }
 }

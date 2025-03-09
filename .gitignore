@@ -41,7 +41,6 @@
 # Spring Boot
 /*.env
 /*.config
-/src/main/resources/application.properties
 
 # Sensitive configuration files
 .mysql-env
