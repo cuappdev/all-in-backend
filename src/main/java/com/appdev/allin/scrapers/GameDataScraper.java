@@ -1,4 +1,4 @@
-package scrapers;
+package com.appdev.allin.scrapers;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -17,6 +17,7 @@ public class GameDataScraper {
     private static final Logger logger = LoggerFactory.getLogger(GameDataScraper.class);
 
     private final GameDataRepo gameDataRepo;
+
     public GameDataScraper(GameDataRepo gameDataRepo) {
         this.gameDataRepo = Objects.requireNonNull(gameDataRepo);
     }
@@ -32,7 +33,6 @@ public class GameDataScraper {
             Elements dateElements = doc.select("div.sidearm-schedule-game-opponent-date");
             Elements locationElements = doc.select("div.sidearm-schedule-game-location");
             Elements logoElements = doc.select("div.sidearm-schedule-game-opponent-logo img");
-
 
             logger.info("Found {} upcoming games on the schedule page.", gameElements.size());
 
@@ -50,7 +50,8 @@ public class GameDataScraper {
                 String logoUrl = "";
                 if (i < logoElements.size()) {
                     Element logoElement = logoElements.get(i);
-                    logoUrl = logoElement.attr("data-src").isEmpty() ? logoElement.attr("src") : logoElement.attr("data-src");
+                    logoUrl = logoElement.attr("data-src").isEmpty() ? logoElement.attr("src")
+                            : logoElement.attr("data-src");
                     logoUrl = "https://cornellbigred.com" + logoUrl;
                 }
 
@@ -59,11 +60,11 @@ public class GameDataScraper {
                     continue;
                 }
 
-                logger.info("Upcoming Game {}: {} on {} in {}, Logo URL: {}", i + 1, opponentName, gameDate, fullLocation, logoUrl);
+                logger.info("Upcoming Game {}: {} on {} in {}, Logo URL: {}", i + 1, opponentName, gameDate,
+                        fullLocation, logoUrl);
                 GameData gameData = new GameData(opponentName, gameDate, fullLocation, logoUrl);
                 gameDataRepo.save(gameData);
             }
-            
 
             logger.info("Game schedule scraping completed");
 

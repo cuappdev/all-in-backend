@@ -49,8 +49,7 @@ Create the all_in database with:
 
 Run:
 
-- `mvn -N wrapper:wrapper`
-- `pip install pre-commit`
+- `pip3 install pre-commit`
 - `./mvnw spring-boot:run`
 
 ### 5. Documentation

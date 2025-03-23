@@ -34,30 +34,26 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    // Once a day at midnight
     @Scheduled(cron = "0 0 0 * * *")
     public void checkAndProcessContracts() {
-        List<Contract> allContracts = contractRepo.findAll();
-
-        for (Contract contract : allContracts) {
-
+        List<Contract> contracts = contractRepo.findAll();
+        for (Contract contract : contracts) {
             if (!contract.getExpired() &&
                     (contract.getExpirationTime().isBefore(LocalDate.now()) ||
                             contract.getExpirationTime().isEqual(LocalDate.now()))) {
-
-                boolean contractHit = isContractHit(contract);
-
-                if (contractHit) {
+                if (isContractHit(contract)) {
                     processPayout(contract);
                 }
 
                 contract.setExpired(true);
-
                 contractRepo.save(contract);
             }
         }
+        contractRepo.flush();
     }
 
-    // abstracted
+    // TODO: Finish
     public boolean isContractHit(Contract contract) {
         return false;
     }

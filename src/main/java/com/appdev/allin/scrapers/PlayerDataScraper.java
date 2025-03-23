@@ -1,4 +1,4 @@
-package scrapers;
+package com.appdev.allin.scrapers;
 
 import java.io.IOException;
 import java.util.Arrays;

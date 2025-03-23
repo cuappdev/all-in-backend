@@ -1,4 +1,4 @@
-package com.appdev.allin.data;
+package com.appdev.allin.factories;
 
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.contract.Event;

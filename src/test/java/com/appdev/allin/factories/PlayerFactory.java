@@ -1,4 +1,4 @@
-package com.appdev.allin.data;
+package com.appdev.allin.factories;
 
 import com.appdev.allin.player.Player;
 import com.appdev.allin.player.Position;
@@ -13,11 +13,9 @@ public class PlayerFactory {
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
     Position[] positions = generateRandomPositions();
-    Integer number =
-        faker.number().numberBetween(1, 99); // Jersey numbers typically range from 1-99
+    Integer number = faker.number().numberBetween(1, 99); // Jersey numbers typically range from 1-99
     String height = generateRandomHeight();
-    Integer weight =
-        faker.number().numberBetween(150, 250); // Weight in pounds, adjustable as needed
+    Integer weight = faker.number().numberBetween(150, 250); // Weight in pounds, adjustable as needed
     String hometown = faker.address().city() + ", " + faker.address().state();
     String highSchool = faker.educator().secondarySchool();
     return new Player(firstName, lastName, positions, number, height, weight, hometown, highSchool);

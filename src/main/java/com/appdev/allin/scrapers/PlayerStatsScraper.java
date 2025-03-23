@@ -1,4 +1,4 @@
-package scrapers;
+package com.appdev.allin.scrapers;
 
 import com.appdev.allin.player.Player;
 import com.appdev.allin.player.PlayerRepo;

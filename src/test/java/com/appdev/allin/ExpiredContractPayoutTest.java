@@ -22,8 +22,8 @@ import java.util.Arrays;
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.user.User;
 import com.appdev.allin.contract.ContractRepo;
-import com.appdev.allin.data.ContractFactory;
-import com.appdev.allin.data.UserFactory;
+import com.appdev.allin.factories.ContractFactory;
+import com.appdev.allin.factories.UserFactory;
 import com.appdev.allin.user.UserService;
 
 public class ExpiredContractPayoutTest {

@@ -1,4 +1,4 @@
-package com.appdev.allin.data;
+package com.appdev.allin.factories;
 
 import com.appdev.allin.contract.OpposingTeam;
 import com.appdev.allin.player.Player;
