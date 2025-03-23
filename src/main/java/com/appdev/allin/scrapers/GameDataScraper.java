@@ -63,7 +63,11 @@ public class GameDataScraper {
                 logger.info("Upcoming Game {}: {} on {} in {}, Logo URL: {}", i + 1, opponentName, gameDate,
                         fullLocation, logoUrl);
                 GameData gameData = new GameData(opponentName, gameDate, fullLocation, logoUrl);
-                gameDataRepo.save(gameData);
+                if (gameDataRepo.findByOpposingTeamAndGameDateTime(opponentName, gameDate) == null) {
+                    gameDataRepo.save(gameData);
+                } else {
+                    logger.info("Game {} with opponent: {} already exists in the database", i + 1, opponentName);
+                }
             }
 
             logger.info("Game schedule scraping completed");

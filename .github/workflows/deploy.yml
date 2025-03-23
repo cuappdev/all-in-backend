@@ -33,8 +33,6 @@ jobs:
           tags: cornellappdev/all-in:${{ env.sha_short }}
       - name: Remote SSH and Deploy
         uses: appleboy/ssh-action@master
-        env:
-          IMAGE_TAG: ${{ env.sha_short }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
