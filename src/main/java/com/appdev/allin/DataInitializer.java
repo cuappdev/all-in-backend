@@ -8,10 +8,9 @@ import com.appdev.allin.scrapers.PlayerScraper;
 import com.appdev.allin.scrapers.PlayerDataScraper;
 import com.appdev.allin.scrapers.GameDataScraper;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+// import java.util.concurrent.Executors;
+// import java.util.concurrent.ScheduledExecutorService;
+// import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -32,21 +31,30 @@ public class DataInitializer {
 
         @EventListener(ApplicationReadyEvent.class)
         public void initializeData() {
-                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+                PlayerScraper playerScraper = new PlayerScraper(playerRepo);
+                playerScraper.run();
 
-                scheduler.scheduleAtFixedRate(() -> {
-                        try {
-                                PlayerScraper playerScraper = new PlayerScraper(playerRepo);
-                                playerScraper.run();
+                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo, playerDataRepo);
+                playerDataScraper.run();
 
-                                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo, playerDataRepo);
-                                playerDataScraper.run();
+                GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                gameDataScraper.run();
+                // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-                                GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
-                                gameDataScraper.run();
-                        } catch (Exception e) {
-                                e.printStackTrace();
-                        }
-                }, 0, 1, TimeUnit.DAYS); // Initial delay: 0, Repeat every 1 day
+                // scheduler.scheduleAtFixedRate(() -> {
+                // try {
+                // PlayerScraper playerScraper = new PlayerScraper(playerRepo);
+                // playerScraper.run();
+
+                // PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
+                // playerDataRepo);
+                // playerDataScraper.run();
+
+                // GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                // gameDataScraper.run();
+                // } catch (Exception e) {
+                // e.printStackTrace();
+                // }
+                // }, 0, 1, TimeUnit.DAYS); // Initial delay: 0, Repeat every 1 day
         }
 }
