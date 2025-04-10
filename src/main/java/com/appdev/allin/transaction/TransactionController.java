@@ -1,12 +1,10 @@
 package com.appdev.allin.transaction;
 
-import com.appdev.allin.exceptions.NotFoundException;
 import com.appdev.allin.user.User;
 import com.appdev.allin.utils.Pagination;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,17 +51,4 @@ public class TransactionController {
         startDate, endDate);
     return ResponseEntity.ok(dailySums);
   }
-
-  // TODO: Move to contracts
-  // @GetMapping("/contract/{contract_id}")
-  // public ResponseEntity<List<Transaction>> getTransactionsByContractId(
-  // @PathVariable final Integer contract_id) {
-  // try {
-  // List<Transaction> transactions =
-  // transactionService.getTransactionsByContractId(contract_id);
-  // return ResponseEntity.ok(transactions);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
 }

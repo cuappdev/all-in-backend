@@ -44,6 +44,18 @@ public class ContractController {
     }
   }
 
+  // @GetMapping("/contract/{contract_id}")
+  // public ResponseEntity<List<Transaction>> getTransactionsByContractId(
+  // @PathVariable final Integer contract_id) {
+  // try {
+  // List<Transaction> transactions =
+  // transactionService.getTransactionsByContractId(contract_id);
+  // return ResponseEntity.ok(transactions);
+  // } catch (NotFoundException e) {
+  // return ResponseEntity.notFound().build();
+  // }
+  // }
+
   @PatchMapping("/contracts/{contract_id}/")
   public ResponseEntity<Contract> updateContract(
       @PathVariable final Integer contract_id, @RequestBody final Contract contract) {
