@@ -62,7 +62,7 @@ public class Application {
         User owner = contract.getOwner();
         if (owner != null) {
             Double payoutAmount = contract.getValue();
-            userService.addToUserBalance(owner.getId(), payoutAmount);
+            userService.addToUserBalance(owner.getUid(), payoutAmount);
         }
     }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -14,32 +13,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
   @Id
-  @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
-  private Integer id;
+  @Column(name = "uid", nullable = false, unique = true)
+  private String uid;
 
-  @Column(name = "username", nullable = false, unique = true)
+  // TODO: Add unique = true when users can choose their own usernames
+  @Column(name = "username", nullable = false)
   private String username;
 
   @Column(name = "email", nullable = false, unique = true)
   private String email;
 
   @Column(name = "image", nullable = false)
-  private String image = "src/main/resources/static/images/users/default.jpg";
+  private String image;
 
+  // Integers are used to represent money in cents, prevents floating point errors
   @Column(name = "balance", nullable = false)
-  private Double balance = 1000.0;
+  private Integer balance = 100000; // $1000.00 default
 
-    @Column(name = "firebase_uid", nullable = false, unique = true)
-    private String firebaseUid;
-
-    @OneToMany (mappedBy = "sessionId", fetch = FetchType.EAGER)
-    private List<UserSession> sessions = new LinkedList<>();
-
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Contract> contracts = new LinkedList<>();
+  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+  private List<Contract> contracts = new LinkedList<>();
 
   @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
   private List<Transaction> sellerTransactions = new LinkedList<>();
@@ -47,21 +42,35 @@ public class User {
   @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
   private List<Transaction> buyerTransactions = new LinkedList<>();
 
-  public User() {}
+  public User() {
+  }
 
-  public User(String username, String email, String image, Double balance) {
+  // Use this constructor when creating a new user
+  public User(String uid, String username, String email, String image) {
+    this.uid = uid;
+    this.username = username;
+    this.email = email;
+    this.image = image;
+  }
+
+  public User(String uid, String username, String email, String image, Integer balance,
+      List<Contract> contracts, List<Transaction> sellerTransactions, List<Transaction> buyerTransactions) {
+    this.uid = uid;
     this.username = username;
     this.email = email;
     this.image = image;
     this.balance = balance;
+    this.contracts = contracts;
+    this.sellerTransactions = sellerTransactions;
+    this.buyerTransactions = buyerTransactions;
   }
 
-  public Integer getId() {
-    return id;
+  public String getUid() {
+    return uid;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setUid(String uid) {
+    this.uid = uid;
   }
 
   public String getUsername() {
@@ -80,35 +89,29 @@ public class User {
     this.email = email;
   }
 
-  @JsonIgnore
+  // TODO: Check if this annotation is needed
+  // @JsonIgnore
   public String getImage() {
     return image;
   }
 
-  @JsonIgnore
+  // TODO: Check if this annotation is needed
+  // @JsonIgnore
   public void setImage(String image) {
     this.image = image;
   }
 
-  public Double getBalance() {
+  public Integer getBalance() {
     return balance;
   }
 
-  public void setBalance(Double balance) {
+  public void setBalance(Integer balance) {
     this.balance = balance;
   }
 
-    public String getFirebaseUid() {
-        return firebaseUid;
-    }
-
-    public void setFirebaseUid(String firebaseUid) {
-        this.firebaseUid = firebaseUid;
-    }
-
-    public List<Contract> getContracts() {
-        return contracts;
-    }
+  public List<Contract> getContracts() {
+    return contracts;
+  }
 
   public void setContracts(List<Contract> contracts) {
     this.contracts = contracts;
@@ -156,16 +159,39 @@ public class User {
 
   @Override
   public String toString() {
-    return "User [id="
-        + id
-        + ", username="
-        + username
-        + ", email="
-        + email
-        + ", image="
-        + image
-        + ", balance="
-        + balance
-        + "]";
+    return "User{" +
+        "uid='" + uid + '\'' +
+        ", username='" + username + '\'' +
+        ", email='" + email + '\'' +
+        ", image='" + image + '\'' +
+        ", balance=" + balance +
+        ", contracts=" + contracts +
+        ", sellerTransactions=" + sellerTransactions +
+        ", buyerTransactions=" + buyerTransactions +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof User user))
+      return false;
+
+    if (!getUid().equals(user.getUid()))
+      return false;
+    if (!getUsername().equals(user.getUsername()))
+      return false;
+    if (!getEmail().equals(user.getEmail()))
+      return false;
+    if (!getImage().equals(user.getImage()))
+      return false;
+    if (!getBalance().equals(user.getBalance()))
+      return false;
+    if (!getContracts().equals(user.getContracts()))
+      return false;
+    if (!getSellerTransactions().equals(user.getSellerTransactions()))
+      return false;
+    return getBuyerTransactions().equals(user.getBuyerTransactions());
   }
 }

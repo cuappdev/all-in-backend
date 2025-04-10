@@ -19,6 +19,7 @@
 # Secrets #
 *.pem
 *.pub
+firebaseServiceAccount.json
 
 # MacOS
 .DS_Store
