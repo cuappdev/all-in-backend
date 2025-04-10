@@ -2,7 +2,6 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.transaction.Transaction;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -89,14 +88,10 @@ public class User {
     this.email = email;
   }
 
-  // TODO: Check if this annotation is needed
-  // @JsonIgnore
   public String getImage() {
     return image;
   }
 
-  // TODO: Check if this annotation is needed
-  // @JsonIgnore
   public void setImage(String image) {
     this.image = image;
   }

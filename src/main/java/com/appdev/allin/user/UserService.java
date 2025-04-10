@@ -2,13 +2,14 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.exceptions.ForbiddenException;
 import com.appdev.allin.exceptions.NotFoundException;
-import com.appdev.allin.utils.Constants;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -22,125 +23,53 @@ public class UserService {
     return userRepo.findAll();
   }
 
-  public User getUserByUid(final String uid) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findByUid(uid);
-    if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + uid + " not found.");
-    }
-    return userOptional.get();
+  public Optional<User> getUserByUid(final String uid) {
+    return userRepo.findByUid(uid);
   }
 
-  public User createUser(final User user) throws ForbiddenException {
-    // User existingUser = userRepo.findByUsername(user.getUsername());
-    // if (existingUser != null) {
-    // if (existingUser.getEmail().equals(user.getEmail())) {
-    // return existingUser;
-    // } else {
-    // throw new ForbiddenException("Username " + user.getUsername() + " already
-    // exists.");
-    // }
-    // }
+  public User getUserByUidOrThrow(final String uid) {
+    User user = userRepo.findByUid(uid)
+        .orElseThrow(() -> new NotFoundException("User with id " + uid + " not found."));
+    return user;
+  }
+
+  public User createUser(final User user) {
+    User existingUsernameUser = userRepo.findByUsername(user.getUsername());
+    if (existingUsernameUser != null) {
+      throw new ForbiddenException("Username " + user.getUsername() + " already exists.");
+    }
+
+    User existingEmailUser = userRepo.findByEmail(user.getEmail());
+    if (existingEmailUser != null) {
+      throw new ForbiddenException("Email " + user.getEmail() + " already exists.");
+    }
     return userRepo.save(user);
   }
 
-  // public User updateUser(final Integer user_id, final User user) throws
-  // NotFoundException {
-  // Optional<User> userOptional = userRepo.findById(user_id);
-  // if (userOptional.isEmpty()) {
-  // throw new NotFoundException("User with id " + user_id + " not found.");
-  // }
-  // User userToUpdate = userOptional.get();
-  // userToUpdate.setUsername(user.getUsername());
-  // userToUpdate.setEmail(user.getEmail());
-  // userToUpdate.setBalance(user.getBalance());
-  // return userRepo.save(userToUpdate);
-  // }
-
-  public User addToUserBalance(String firebaseUid, Integer amount) throws NotFoundException {
-    return null;
-    // Optional<User> userOptional = userRepo.findByFirebaseUid(firebaseUid);
-    // if (userOptional.isEmpty()) {
-    // throw new NotFoundException("User with id " + userId + " not found.");
-    // }
-    // User user = userOptional.get();
-    // user.setBalance(user.getBalance() + amount);
-    // return userRepo.save(user);
+  public User updateUserByUid(final String uid, final User updatedUser) {
+    User user = getUserByUidOrThrow(uid);
+    user.setUsername(updatedUser.getUsername());
+    user.setImage(updatedUser.getImage());
+    return userRepo.save(user);
   }
 
-  // public User deleteUser(final Integer user_id) throws NotFoundException {
-  // Optional<User> userOptional = userRepo.findById(user_id);
-  // if (userOptional.isEmpty()) {
-  // throw new NotFoundException("User with id " + user_id + " not found.");
-  // }
-  // userRepo.deleteById(user_id);
-  // return userOptional.get();
-  // }
+  public User addToUserBalance(final String uid, Integer amount) {
+    User user = getUserByUidOrThrow(uid);
+    user.setBalance(user.getBalance() + amount);
+    return userRepo.save(user);
+  }
 
-  // public byte[] getUserImageById(final String uploadDirectory, final String
-  // fileName) {
-  // Path uploadPath = Path.of(uploadDirectory);
-  // Path filePath = uploadPath.resolve(fileName);
-  // try {
-  // return Files.readAllBytes(filePath);
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // return null;
-  // }
+  public User deleteUser(final String uid) {
+    User user = getUserByUidOrThrow(uid);
+    userRepo.deleteById(uid);
+    return user;
+  }
 
-  // public byte[] updateUserImageById(
-  // final Integer user_id, final MultipartFile image, final String
-  // uploadDirectory)
-  // throws NotFoundException {
-  // Optional<User> userOptional = userRepo.findById(user_id);
-  // if (userOptional.isEmpty()) {
-  // throw new NotFoundException("User with id " + user_id + " not found.");
-  // }
-  // User userToUpdate = userOptional.get();
-  // String uniqueFileName = user_id + "_" + image.getOriginalFilename();
-  // Path uploadPath = Path.of(uploadDirectory);
-  // Path filePath = uploadPath.resolve(uniqueFileName);
-  // if (!Files.exists(uploadPath)) {
-  // try {
-  // Files.createDirectories(uploadPath);
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // }
-  // try {
-  // Files.copy(
-  // image.getInputStream(), filePath,
-  // java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // userToUpdate.setImage(uploadDirectory + uniqueFileName);
-  // userRepo.save(userToUpdate);
-  // return getUserImageById(uploadDirectory, uniqueFileName);
-  // }
-
-  // public byte[] deleteUserImageById(final Integer user_id, final String
-  // uploadDirectory)
-  // throws NotFoundException, ForbiddenException {
-  // Optional<User> userOptional = userRepo.findById(user_id);
-  // if (userOptional.isEmpty()) {
-  // throw new NotFoundException("User with id " + user_id + " not found.");
-  // }
-  // User userToUpdate = userOptional.get();
-  // String image = userToUpdate.getImage();
-  // if (image.equals(Constants.DEFAULT_USER_IMAGE)) {
-  // throw new ForbiddenException("Cannot delete default image");
-  // }
-  // Path pathToFile = Path.of(userToUpdate.getImage());
-  // try {
-  // byte[] deletedImage = Files.readAllBytes(pathToFile);
-  // Files.delete(pathToFile);
-  // userToUpdate.setImage(Constants.DEFAULT_USER_IMAGE);
-  // userRepo.save(userToUpdate);
-  // return deletedImage;
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // return null;
-  // }
+  public Page<User> getLeaderboard(Integer page, Integer size) {
+    if (page < 0 || size <= 0) {
+      throw new IllegalArgumentException("Page and size must be greater than 0");
+    }
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "balance"));
+    return userRepo.findAll(pageable);
+  }
 }

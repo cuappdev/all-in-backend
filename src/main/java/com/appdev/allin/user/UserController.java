@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 @RestController
 public class UserController {
@@ -54,89 +56,44 @@ public class UserController {
   }
 
   @GetMapping("/users/{uid}/")
-  public ResponseEntity<User> getUserById(@PathVariable final String uid) {
-    User user = userService.getUserByUid(uid);
+  public ResponseEntity<User> getUser(@PathVariable final String uid) {
+    User user = userService.getUserByUidOrThrow(uid);
     return ResponseEntity.ok(user);
   }
 
   // TODO: Delete
   @PostMapping("/users/")
   public ResponseEntity<User> createUser(@RequestBody final User user) {
-    return ResponseEntity.status(201).body(userService.createUser(user));
+    User newUser = userService.createUser(user);
+    return ResponseEntity.status(201).body(newUser);
   }
 
+  // Creates the default account or returns the existing one, will likely be
+  // changed as frontend auth scheme changes
   @GetMapping("/users/authorize")
   public ResponseEntity<User> authorizeUser(@AuthenticationPrincipal User user) {
     return ResponseEntity.ok(user);
   }
 
-  // @PatchMapping("/users/{uid}/")
-  // public ResponseEntity<User> updateUser(
-  // @PathVariable final String uid, @RequestBody final User user) {
-  // try {
-  // User updatedUser = userService.updateUserByUid(uid, user);
-  // return ResponseEntity.ok(updatedUser);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @PatchMapping("/users/")
+  public ResponseEntity<User> updateUser(
+      @AuthenticationPrincipal User user, @RequestBody final User updatedUser) {
+    User newUser = userService.updateUserByUid(user.getUid(), updatedUser);
+    return ResponseEntity.ok(newUser);
+  }
 
-  // @DeleteMapping("/users/")
-  // public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
-  // try {
-  // userService.deleteUser(user.getUid());
-  // return ResponseEntity.ok(user);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
+  @DeleteMapping("/users/")
+  public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
+    userService.deleteUser(user.getUid());
+    return ResponseEntity.ok(user);
+  }
 
-  // @GetMapping("/users/{uid}/image/")
-  // public ResponseEntity<byte[]> getUserImageById(@PathVariable final String
-  // uid) {
-  // try {
-  // User user = userService.getUserByUid(uid);
-  // String currentDirectory = user.getImage();
-  // String imageName =
-  // currentDirectory.substring(currentDirectory.lastIndexOf('/') + 1);
-  // currentDirectory = currentDirectory.replace(imageName, "");
-  // byte[] image = userService.getUserImageById(currentDirectory, imageName);
-  // HttpHeaders headers = new HttpHeaders();
-  // headers.setContentType(MediaType.IMAGE_JPEG);
-  // return new ResponseEntity<>(image, headers, HttpStatus.OK);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
-
-  // @PatchMapping("/users/{uid}/image/")
-  // public ResponseEntity<byte[]> updateUserImageById(
-  // @PathVariable final String uid, @RequestBody final MultipartFile image) {
-  // try {
-  // byte[] uploadedImage = userService.updateUserImageById(uid, image,
-  // uploadDirectory);
-  // HttpHeaders headers = new HttpHeaders();
-  // headers.setContentType(MediaType.IMAGE_JPEG);
-  // return new ResponseEntity<>(uploadedImage, headers, HttpStatus.OK);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // }
-  // }
-
-  // @DeleteMapping("/users/{uid}/image/")
-  // public ResponseEntity<byte[]> deleteUserImageById(@PathVariable final String
-  // uid) {
-  // try {
-  // byte[] deletedImage = userService.deleteUserImageById(uid, uploadDirectory);
-  // HttpHeaders headers = new HttpHeaders();
-  // headers.setContentType(MediaType.IMAGE_JPEG);
-  // return new ResponseEntity<>(deletedImage, headers, HttpStatus.OK);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // } catch (ForbiddenException e) {
-  // return ResponseEntity.status(403).build();
-  // }
-  // }
+  @GetMapping("/users/leaderboard")
+  public ResponseEntity<Page<User>> getLeaderboard(@RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size) {
+    Page<User> leaderboard = userService.getLeaderboard(page, size);
+    return ResponseEntity.ok(leaderboard);
+  }
 
   // Contract operations
 

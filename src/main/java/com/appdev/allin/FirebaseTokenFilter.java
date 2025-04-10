@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.appdev.allin.exceptions.UnauthorizedException;
 import com.appdev.allin.user.User;
-import com.appdev.allin.user.UserRepo;
-
+import com.appdev.allin.user.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -23,10 +22,10 @@ import java.io.IOException;
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
 
-  private final UserRepo userRepo;
+  private final UserService userService;
 
-  public FirebaseTokenFilter(UserRepo userRepo) {
-    this.userRepo = userRepo;
+  public FirebaseTokenFilter(UserService userService) {
+    this.userService = userService;
   }
 
   @Override
@@ -38,20 +37,26 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     if (token == null) {
       throw new UnauthorizedException("Authorization token not provided");
     }
-    if (token.startsWith("Bearer ")) {
-      token = token.substring(7);
+    if (!token.startsWith("Bearer ")) {
+      throw new UnauthorizedException("Authorization token must start with 'Bearer '");
+    }
+    token = token.substring(7);
+
+    FirebaseToken decodedToken;
+    try {
+      decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+    } catch (FirebaseAuthException e) {
+      throw new UnauthorizedException("Error verifying token: " + e.getMessage());
     }
 
     try {
-      FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-
-      User user = userRepo.findByUid(decodedToken.getUid())
+      User user = userService.getUserByUid(decodedToken.getUid())
           .orElseGet(() -> {
             // Only create a user on the /users/authorize endpoint
             if (request.getRequestURI().equals("/users/authorize")) {
               User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
                   decodedToken.getPicture());
-              return userRepo.save(newUser);
+              return userService.createUser(newUser);
             }
             return null;
           });
@@ -75,20 +80,20 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
       };
       auth.setAuthenticated(true);
       SecurityContextHolder.getContext().setAuthentication(auth);
-
-    } catch (FirebaseAuthException e) {
-      throw new UnauthorizedException("Error verifying token: " + e.getMessage());
+    } catch (Exception e) {
+      throw new UnauthorizedException("Error processing token: " + e.getMessage());
     }
 
     chain.doFilter(request, response);
+
   }
 
   @Override
   public boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
     // TODO: Delete when done
-    // return true;
-    String path = request.getRequestURI();
-    return swaggerPath(path);
+    return true;
+    // String path = request.getRequestURI();
+    // return swaggerPath(path);
   }
 
   private boolean swaggerPath(String path) {
