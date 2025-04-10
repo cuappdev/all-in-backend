@@ -21,7 +21,7 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(requests -> requests
             .requestMatchers(
-                "/**", // TODO: Delete when done
+                // "/**", // TODO: Delete when done
                 "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",

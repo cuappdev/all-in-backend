@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
   private final UserService userService;
@@ -50,7 +52,7 @@ public class UserController {
 
   // CRUD operations
 
-  @GetMapping("/users/")
+  @GetMapping("/")
   public ResponseEntity<Page<User>> getAllUsers(@RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
       @RequestParam(defaultValue = "balance") String sortBy,
@@ -61,34 +63,34 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
-  @GetMapping("/users/{uid}/")
+  // Creates the default account or returns the existing one, will likely be
+  // changed as frontend auth scheme changes
+  @GetMapping("/me")
+  public ResponseEntity<User> getMe(@AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(user);
+  }
+
+  @GetMapping("/{uid}/")
   public ResponseEntity<User> getUser(@PathVariable final String uid) {
     User user = userService.getUserByUidOrThrow(uid);
     return ResponseEntity.ok(user);
   }
 
   // TODO: Delete
-  @PostMapping("/users/")
+  @PostMapping("/")
   public ResponseEntity<User> createUser(@RequestBody final User user) {
     User newUser = userService.createUser(user);
     return ResponseEntity.status(201).body(newUser);
   }
 
-  // Creates the default account or returns the existing one, will likely be
-  // changed as frontend auth scheme changes
-  @GetMapping("/users/authorize")
-  public ResponseEntity<User> authorizeUser(@AuthenticationPrincipal User user) {
-    return ResponseEntity.ok(user);
-  }
-
-  @PatchMapping("/users/")
+  @PatchMapping("/")
   public ResponseEntity<User> updateUser(
       @AuthenticationPrincipal User user, @RequestBody final User updatedUser) {
     User newUser = userService.updateUserByUid(user.getUid(), updatedUser);
     return ResponseEntity.ok(newUser);
   }
 
-  @DeleteMapping("/users/")
+  @DeleteMapping("/")
   public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
     userService.deleteUser(user.getUid());
     return ResponseEntity.ok(user);

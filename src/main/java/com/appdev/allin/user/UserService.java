@@ -2,7 +2,6 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.exceptions.ForbiddenException;
 import com.appdev.allin.exceptions.NotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;

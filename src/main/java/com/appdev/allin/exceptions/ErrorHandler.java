@@ -40,6 +40,12 @@ public class ErrorHandler {
     return createErrorResponse(e);
   }
 
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(IllegalArgumentException.class)
+  public Map<String, String> handleIllegalArgumentException(IllegalArgumentException e) {
+    return createErrorResponse(e);
+  }
+
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ExceptionHandler(ForbiddenException.class)
   public Map<String, String> handleForbiddenException(ForbiddenException e) {

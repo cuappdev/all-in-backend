@@ -52,8 +52,8 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     try {
       User user = userService.getUserByUid(decodedToken.getUid())
           .orElseGet(() -> {
-            // Only create a user on the /users/authorize endpoint
-            if (request.getRequestURI().equals("/users/authorize")) {
+            // Only create a user on the /users/me endpoint
+            if (request.getRequestURI().equals("/users/me")) {
               User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
                   decodedToken.getPicture());
               return userService.createUser(newUser);
@@ -91,9 +91,9 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
   @Override
   public boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
     // TODO: Delete when done
-    return true;
-    // String path = request.getRequestURI();
-    // return swaggerPath(path);
+    // return true;
+    String path = request.getRequestURI();
+    return swaggerPath(path);
   }
 
   private boolean swaggerPath(String path) {
