@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 @RestController
 public class UserController {
@@ -50,8 +51,13 @@ public class UserController {
   // CRUD operations
 
   @GetMapping("/users/")
-  public ResponseEntity<List<User>> getAllUsers() {
-    List<User> users = userService.getAllUsers();
+  public ResponseEntity<Page<User>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "balance") String sortBy,
+      @RequestParam(defaultValue = "desc") String direction) {
+    Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+    Page<User> users = userService.getAllUsers(page, size, sort);
     return ResponseEntity.ok(users);
   }
 
@@ -86,13 +92,6 @@ public class UserController {
   public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
     userService.deleteUser(user.getUid());
     return ResponseEntity.ok(user);
-  }
-
-  @GetMapping("/users/leaderboard")
-  public ResponseEntity<Page<User>> getLeaderboard(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size) {
-    Page<User> leaderboard = userService.getLeaderboard(page, size);
-    return ResponseEntity.ok(leaderboard);
   }
 
   // Contract operations

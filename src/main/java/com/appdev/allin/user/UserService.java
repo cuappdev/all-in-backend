@@ -19,8 +19,12 @@ public class UserService {
     this.userRepo = userRepo;
   }
 
-  public List<User> getAllUsers() {
-    return userRepo.findAll();
+  public Page<User> getAllUsers(Integer page, Integer size, Sort sort) {
+    if (page < 0 || size <= 0) {
+      throw new IllegalArgumentException("Page and size must be greater than 0");
+    }
+    Pageable pageable = PageRequest.of(page, size, sort);
+    return userRepo.findAll(pageable);
   }
 
   public Optional<User> getUserByUid(final String uid) {
@@ -63,13 +67,5 @@ public class UserService {
     User user = getUserByUidOrThrow(uid);
     userRepo.deleteById(uid);
     return user;
-  }
-
-  public Page<User> getLeaderboard(Integer page, Integer size) {
-    if (page < 0 || size <= 0) {
-      throw new IllegalArgumentException("Page and size must be greater than 0");
-    }
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "balance"));
-    return userRepo.findAll(pageable);
   }
 }
