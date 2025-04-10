@@ -35,10 +35,12 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
 
     String token = request.getHeader("Authorization");
     if (token == null) {
-      throw new UnauthorizedException("Authorization token not provided");
+      setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Authorization token not provided");
+      return;
     }
     if (!token.startsWith("Bearer ")) {
-      throw new UnauthorizedException("Authorization token must start with 'Bearer '");
+      setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Authorization token must start with 'Bearer '");
+      return;
     }
     token = token.substring(7);
 
@@ -46,7 +48,8 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     try {
       decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
     } catch (FirebaseAuthException e) {
-      throw new UnauthorizedException("Error verifying token: " + e.getMessage());
+      setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Error verifying token: " + e.getMessage());
+      return;
     }
 
     try {
@@ -62,7 +65,8 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
           });
 
       if (user == null) {
-        throw new UnauthorizedException("User not found");
+        setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "User not found");
+        return;
       }
 
       // Used to inject the user into the @AuthenticationPrincipal annotated variable
@@ -81,7 +85,9 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
       auth.setAuthenticated(true);
       SecurityContextHolder.getContext().setAuthentication(auth);
     } catch (Exception e) {
-      throw new UnauthorizedException("Error processing token: " + e.getMessage());
+      setErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+          "Error processing token: " + e.getMessage());
+      return;
     }
 
     chain.doFilter(request, response);
@@ -101,5 +107,11 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
         path.startsWith("/v3/api-docs") ||
         path.startsWith("/swagger-resources") ||
         path.startsWith("/webjars");
+  }
+
+  private void setErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+    response.setStatus(status);
+    response.setContentType("application/json");
+    response.getWriter().write("{\"error\": \"" + message + "\"}");
   }
 }
