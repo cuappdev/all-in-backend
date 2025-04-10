@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class User {
   @Column(name = "balance", nullable = false)
   private Integer balance = 100000; // $1000.00 default
 
+  @Column(name = "createdAt", nullable = false)
+  private LocalDateTime createdAt = LocalDateTime.now();
+
   @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private List<Contract> contracts = new LinkedList<>();
 
@@ -52,13 +57,14 @@ public class User {
     this.image = image;
   }
 
-  public User(String uid, String username, String email, String image, Integer balance,
+  public User(String uid, String username, String email, String image, Integer balance, LocalDateTime createdAt,
       List<Contract> contracts, List<Transaction> sellerTransactions, List<Transaction> buyerTransactions) {
     this.uid = uid;
     this.username = username;
     this.email = email;
     this.image = image;
     this.balance = balance;
+    this.createdAt = createdAt;
     this.contracts = contracts;
     this.sellerTransactions = sellerTransactions;
     this.buyerTransactions = buyerTransactions;
@@ -102,6 +108,14 @@ public class User {
 
   public void setBalance(Integer balance) {
     this.balance = balance;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
   public List<Contract> getContracts() {
@@ -160,6 +174,7 @@ public class User {
         ", email='" + email + '\'' +
         ", image='" + image + '\'' +
         ", balance=" + balance +
+        ", createdAt=" + createdAt +
         ", contracts=" + contracts +
         ", sellerTransactions=" + sellerTransactions +
         ", buyerTransactions=" + buyerTransactions +
@@ -182,6 +197,8 @@ public class User {
     if (!getImage().equals(user.getImage()))
       return false;
     if (!getBalance().equals(user.getBalance()))
+      return false;
+    if (!getCreatedAt().equals(user.getCreatedAt()))
       return false;
     if (!getContracts().equals(user.getContracts()))
       return false;

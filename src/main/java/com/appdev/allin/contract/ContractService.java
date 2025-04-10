@@ -77,7 +77,7 @@ public class ContractService {
   public Contract createContract(
       final String uid, final Integer player_id, final Integer buyPrice, final Rarity rarity)
       throws NotFoundException, OverdrawnException {
-    Optional<User> userOptional = userRepo.findByUid(uid);
+    Optional<User> userOptional = userRepo.findById(uid);
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (userOptional.isEmpty() || playerOptional.isEmpty()) {
       throw new NotFoundException("User or player not found.");
@@ -146,7 +146,7 @@ public class ContractService {
     }
 
     Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner().getUid());
-    Optional<User> buyerOptional = userRepo.findByUid(buyer_id);
+    Optional<User> buyerOptional = userRepo.findById(buyer_id);
     if (sellerOptional.isEmpty() || buyerOptional.isEmpty()) {
       throw new NotFoundException("Seller or buyer not found.");
     }

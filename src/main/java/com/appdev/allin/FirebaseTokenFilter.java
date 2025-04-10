@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.appdev.allin.exceptions.UnauthorizedException;
 import com.appdev.allin.user.User;
-import com.appdev.allin.user.UserService;
+import com.appdev.allin.user.UserRepo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -22,10 +22,10 @@ import java.io.IOException;
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
 
-  private final UserService userService;
+  private final UserRepo userRepo;
 
-  public FirebaseTokenFilter(UserService userService) {
-    this.userService = userService;
+  public FirebaseTokenFilter(UserRepo userRepo) {
+    this.userRepo = userRepo;
   }
 
   @Override
@@ -50,13 +50,13 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     }
 
     try {
-      User user = userService.getUserByUid(decodedToken.getUid())
+      User user = userRepo.findById(decodedToken.getUid())
           .orElseGet(() -> {
             // Only create a user on the /users/me endpoint
             if (request.getRequestURI().equals("/users/me")) {
               User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
                   decodedToken.getPicture());
-              return userService.createUser(newUser);
+              return userRepo.save(newUser);
             }
             return null;
           });

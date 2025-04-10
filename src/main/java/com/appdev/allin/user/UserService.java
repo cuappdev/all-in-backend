@@ -2,7 +2,6 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.exceptions.ForbiddenException;
 import com.appdev.allin.exceptions.NotFoundException;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +25,14 @@ public class UserService {
     return userRepo.findAll(pageable);
   }
 
-  public Optional<User> getUserByUid(final String uid) {
-    return userRepo.findByUid(uid);
-  }
-
-  public User getUserByUidOrThrow(final String uid) {
-    User user = userRepo.findByUid(uid)
+  public User getUserByUid(final String uid) {
+    User user = userRepo.findById(uid)
         .orElseThrow(() -> new NotFoundException("User with id " + uid + " not found."));
     return user;
+  }
+
+  public Integer getUserRank(final User user) {
+    return userRepo.countByBalanceGreaterThan(user.getBalance()) + 1;
   }
 
   public User createUser(final User user) {
@@ -49,22 +48,19 @@ public class UserService {
     return userRepo.save(user);
   }
 
-  public User updateUserByUid(final String uid, final User updatedUser) {
-    User user = getUserByUidOrThrow(uid);
+  public User updateUser(final User user, final User updatedUser) {
     user.setUsername(updatedUser.getUsername());
     user.setImage(updatedUser.getImage());
     return userRepo.save(user);
   }
 
-  public User addToUserBalance(final String uid, Integer amount) {
-    User user = getUserByUidOrThrow(uid);
+  public User addToUserBalance(final User user, Integer amount) {
     user.setBalance(user.getBalance() + amount);
     return userRepo.save(user);
   }
 
-  public User deleteUser(final String uid) {
-    User user = getUserByUidOrThrow(uid);
-    userRepo.deleteById(uid);
+  public User deleteUser(final User user) {
+    userRepo.delete(user);
     return user;
   }
 }

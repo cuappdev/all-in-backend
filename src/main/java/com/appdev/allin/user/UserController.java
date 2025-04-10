@@ -1,20 +1,6 @@
 package com.appdev.allin.user;
 
-import com.appdev.allin.contract.Contract;
-import com.appdev.allin.contract.ContractService;
-import com.appdev.allin.contract.Rarity;
-import com.appdev.allin.exceptions.ForbiddenException;
-import com.appdev.allin.exceptions.NotFoundException;
-import com.appdev.allin.exceptions.OverdrawnException;
-import com.appdev.allin.player.PlayerService;
-import com.appdev.allin.transaction.Transaction;
-import com.appdev.allin.transaction.TransactionService;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -35,25 +20,22 @@ import org.springframework.data.domain.Sort;
 public class UserController {
 
   private final UserService userService;
-  private final ContractService contractService;
-  private final TransactionService transactionService;
-  private final PlayerService playerService;
 
   public UserController(
-      UserService userService,
-      ContractService ContractService,
-      TransactionService transactionService,
-      PlayerService playerService) {
+      UserService userService) {
     this.userService = userService;
-    this.contractService = ContractService;
-    this.transactionService = transactionService;
-    this.playerService = playerService;
   }
 
-  // CRUD operations
+  // TODO: Delete, used for local testing
+  @PostMapping("/")
+  public ResponseEntity<User> createUser(@RequestBody final User user) {
+    User newUser = userService.createUser(user);
+    return ResponseEntity.status(201).body(newUser);
+  }
 
   @GetMapping("/")
-  public ResponseEntity<Page<User>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+  public ResponseEntity<Page<User>> getAllUsers(
+      @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
       @RequestParam(defaultValue = "balance") String sortBy,
       @RequestParam(defaultValue = "desc") String direction) {
@@ -65,39 +47,43 @@ public class UserController {
 
   // Creates the default account or returns the existing one, will likely be
   // changed as frontend auth scheme changes
-  @GetMapping("/me")
+  @GetMapping("/me/")
   public ResponseEntity<User> getMe(@AuthenticationPrincipal User user) {
     return ResponseEntity.ok(user);
   }
 
+  @GetMapping("/me/rank")
+  public ResponseEntity<Map<String, Integer>> getMyRank(@AuthenticationPrincipal User user) {
+    Integer rank = userService.getUserRank(user);
+    return ResponseEntity.ok(Map.of("rank", rank));
+  }
+
+  // Functionality does not exist yet based on the designs (users can only view
+  // their own profile)
   @GetMapping("/{uid}/")
   public ResponseEntity<User> getUser(@PathVariable final String uid) {
-    User user = userService.getUserByUidOrThrow(uid);
+    User user = userService.getUserByUid(uid);
     return ResponseEntity.ok(user);
   }
 
-  // TODO: Delete
-  @PostMapping("/")
-  public ResponseEntity<User> createUser(@RequestBody final User user) {
-    User newUser = userService.createUser(user);
-    return ResponseEntity.status(201).body(newUser);
-  }
-
+  // Functionality does not exist yet based on the designs (users cannot update
+  // their profile)
   @PatchMapping("/")
   public ResponseEntity<User> updateUser(
       @AuthenticationPrincipal User user, @RequestBody final User updatedUser) {
-    User newUser = userService.updateUserByUid(user.getUid(), updatedUser);
+    User newUser = userService.updateUser(user, updatedUser);
     return ResponseEntity.ok(newUser);
   }
 
-  @DeleteMapping("/")
+  // Functionality does not exist yet based on the designs (users cannot delete
+  // their profile)
+  @DeleteMapping("/me/")
   public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
-    userService.deleteUser(user.getUid());
+    userService.deleteUser(user);
     return ResponseEntity.ok(user);
   }
 
-  // Contract operations
-
+  // TODO: Move
   // @GetMapping("/users/{uid}/contracts/")
   // public ResponseEntity<List<Contract>> getUserContracts(@PathVariable final
   // String uid) {

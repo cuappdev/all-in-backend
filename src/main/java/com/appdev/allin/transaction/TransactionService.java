@@ -41,7 +41,7 @@ public class TransactionService {
   }
 
   public List<Transaction> getTransactionsByUserId(final String uid) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findByUid(uid);
+    Optional<User> userOptional = userRepo.findById(uid);
     if (userOptional.isEmpty()) {
       throw new NotFoundException("User with id " + uid + " not found.");
     }
@@ -51,7 +51,7 @@ public class TransactionService {
 
   public List<Transaction> getSellerTransactionsByUserId(final String uid)
       throws NotFoundException {
-    Optional<User> userOptional = userRepo.findByUid(uid);
+    Optional<User> userOptional = userRepo.findById(uid);
     if (userOptional.isEmpty()) {
       throw new NotFoundException("User with id " + uid + " not found.");
     }
@@ -61,7 +61,7 @@ public class TransactionService {
 
   public List<Transaction> getBuyerTransactionsByUserId(final String uid)
       throws NotFoundException {
-    Optional<User> userOptional = userRepo.findByUid(uid);
+    Optional<User> userOptional = userRepo.findById(uid);
     if (userOptional.isEmpty()) {
       throw new NotFoundException("User with id " + uid + " not found.");
     }
