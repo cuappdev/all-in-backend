@@ -38,16 +38,27 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     if (token == null) {
       throw new UnauthorizedException("Authorization token not provided");
     }
+    if (token.startsWith("Bearer ")) {
+      token = token.substring(7);
+    }
 
     try {
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
 
       User user = userRepo.findByUid(decodedToken.getUid())
           .orElseGet(() -> {
-            User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
-                decodedToken.getPicture());
-            return userRepo.save(newUser);
+            // Only create a user on the /users/authorize endpoint
+            if (request.getRequestURI().equals("/users/authorize")) {
+              User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
+                  decodedToken.getPicture());
+              return userRepo.save(newUser);
+            }
+            return null;
           });
+
+      if (user == null) {
+        throw new UnauthorizedException("User not found");
+      }
 
       // Used to inject the user into the @AuthenticationPrincipal annotated variable
       // used in the controller
@@ -77,7 +88,7 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     // TODO: Delete when done
     // return true;
     String path = request.getRequestURI();
-    return path.startsWith("/users/authorize") || swaggerPath(path);
+    return swaggerPath(path);
   }
 
   private boolean swaggerPath(String path) {

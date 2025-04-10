@@ -81,11 +81,11 @@ public class UserController {
   // }
   // }
 
-  // @DeleteMapping("/users/{uid}/")
-  // public ResponseEntity<User> deleteUser(@PathVariable final String uid) {
+  // @DeleteMapping("/users/")
+  // public ResponseEntity<User> deleteUser(@AuthenticationPrincipal User user) {
   // try {
-  // User deletedUser = userService.deleteUserByUid(uid);
-  // return ResponseEntity.ok(deletedUser);
+  // userService.deleteUser(user.getUid());
+  // return ResponseEntity.ok(user);
   // } catch (NotFoundException e) {
   // return ResponseEntity.notFound().build();
   // }
@@ -151,6 +151,7 @@ public class UserController {
   // }
   // }
 
+  // TODO: Move to contract controller
   // @PostMapping("/users/{uid}/players/{player_id}/contracts/")
   // public ResponseEntity<Contract> createContractByPlayerId(
   // @PathVariable final String uid,
@@ -171,6 +172,7 @@ public class UserController {
   // }
   // }
 
+  // TODO: Move to contract controller
   // @PostMapping("/users/{uid}/contracts/")
   // public ResponseEntity<Contract> createContractByRarity(
   // @PathVariable final String uid, @RequestBody final Map<String, Object> body)
