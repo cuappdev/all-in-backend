@@ -16,6 +16,7 @@ import java.io.IOException;
 
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
+
   /**
    * Authenticating user via fireBase authorizer verify fireBase token and extract
    * Uid and Email from token
@@ -57,5 +58,14 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     request.setAttribute("email", email);
 
     chain.doFilter(request, response);
+  }
+
+  @Override
+  protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+    String path = request.getRequestURI();
+    return path.startsWith("/swagger-ui") ||
+        path.startsWith("/v3/api-docs") ||
+        path.startsWith("/swagger-resources") ||
+        path.startsWith("/webjars");
   }
 }

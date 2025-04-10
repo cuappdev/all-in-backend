@@ -16,14 +16,19 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .csrf().disable()
-        .authorizeRequests()
-        // .antMatchers("/public/**").permitAll() // Uncomment to allow public endpoints
-        .anyRequest().authenticated() // Require authentication for all other endpoints
-        .and()
-        .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers(
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/swagger-resources/**",
+                "/webjars/**")
+            .permitAll()
+            .anyRequest().authenticated())
+        .addFilterBefore(firebaseTokenFilter,
+            UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
