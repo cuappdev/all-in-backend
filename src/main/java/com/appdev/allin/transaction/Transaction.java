@@ -2,7 +2,6 @@ package com.appdev.allin.transaction;
 
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.OnDelete;
@@ -128,26 +126,35 @@ public class Transaction {
     this.price = price;
   }
 
-  // @Override
-  // public String toString() {
-  // return "User{" +
-  // "uid='" + uid + '\'' +
-  // ", username='" + username + '\'' +
-  // ", email='" + email + '\'' +
-  // ", image='" + image + '\'' +
-  // ", balance=" + balance +
-  // ", createdAt=" + createdAt +
-  // ", contracts=" + contracts +
-  // ", sellerTransactions=" + sellerTransactions +
-  // ", buyerTransactions=" + buyerTransactions +
-  // '}';
-  // }
+  @Override
+  public String toString() {
+    return "Transaction{" +
+        "id='" + id + '\'' +
+        ", seller=" + seller +
+        ", buyer=" + buyer +
+        ", contract=" + contract +
+        ", transactionDate='" + transactionDate + '\'' +
+        ", price=" + price +
+        '}';
+  }
 
-  // @Override
-  // public String toString() {
-  // return "Transaction{" +
-  // "id='" + id + '\'' +
-  // ", seller='" + seller + '\'' +
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Transaction transaction))
+      return false;
 
-  // }
+    if (!getId().equals(transaction.getId()))
+      return false;
+    if (!getSeller().equals(transaction.getSeller()))
+      return false;
+    if (!getBuyer().equals(transaction.getBuyer()))
+      return false;
+    if (!getContract().equals(transaction.getContract()))
+      return false;
+    if (!getTransactionDate().equals(transaction.getTransactionDate()))
+      return false;
+    return getPrice().equals(transaction.getPrice());
+  }
 }

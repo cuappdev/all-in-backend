@@ -5,8 +5,6 @@ import com.appdev.allin.exceptions.NotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +15,7 @@ public class UserService {
     this.userRepo = userRepo;
   }
 
-  public Page<User> getAllUsers(Integer page, Integer size, Sort sort) {
-    if (page < 0 || size <= 0) {
-      throw new IllegalArgumentException("Page and size must be greater than 0");
-    }
-    Pageable pageable = PageRequest.of(page, size, sort);
+  public Page<User> getAllUsers(final Pageable pageable) {
     return userRepo.findAll(pageable);
   }
 

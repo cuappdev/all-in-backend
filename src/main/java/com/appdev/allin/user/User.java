@@ -174,7 +174,7 @@ public class User {
         ", email='" + email + '\'' +
         ", image='" + image + '\'' +
         ", balance=" + balance +
-        ", createdAt=" + createdAt +
+        ", createdAt='" + createdAt + '\'' +
         ", contracts=" + contracts +
         ", sellerTransactions=" + sellerTransactions +
         ", buyerTransactions=" + buyerTransactions +
