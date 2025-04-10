@@ -49,7 +49,8 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
             return userRepo.save(newUser);
           });
 
-      // Used to inject the user into the SecurityContext
+      // Used to inject the user into the @AuthenticationPrincipal annotated variable
+      // used in the controller
       AbstractAuthenticationToken auth = new AbstractAuthenticationToken(AuthorityUtils.NO_AUTHORITIES) {
         @Override
         public Object getCredentials() {
@@ -74,9 +75,9 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
   @Override
   public boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
     // TODO: Delete when done
-    return true;
-    // String path = request.getRequestURI();
-    // return path.startsWith("/users/authorize") || swaggerPath(path);
+    // return true;
+    String path = request.getRequestURI();
+    return path.startsWith("/users/authorize") || swaggerPath(path);
   }
 
   private boolean swaggerPath(String path) {
