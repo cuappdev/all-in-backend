@@ -37,7 +37,7 @@ public class Contract {
   private User owner;
 
   @Column(name = "buyPrice", nullable = false)
-  private Double buyPrice;
+  private Integer buyPrice;
 
   @Column(name = "rarity", nullable = false)
   private Rarity rarity;
@@ -58,7 +58,7 @@ public class Contract {
   private LocalDate creationTime = LocalDate.now();
 
   @Column(name = "value", nullable = false)
-  private Double value;
+  private Integer value;
 
   @Column(name = "expirationTime", nullable = false)
   private LocalDate expirationTime;
@@ -70,7 +70,7 @@ public class Contract {
   private Boolean forSale = false;
 
   @Column(name = "sellPrice")
-  private Double sellPrice;
+  private Integer sellPrice;
 
   @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
   private List<Transaction> transactions = new LinkedList<>();
@@ -79,20 +79,19 @@ public class Contract {
   }
 
   public Contract(
-      Player player, // Player
-      User owner, // User
-      Double buyPrice, // Double
-      Rarity rarity, // Rarity
-      OpposingTeam opposingTeam, // OpposingTeam
-      String opposingTeamImage, // String
-      Event event, // Event
-      Integer eventThreshold, // Integer
-      LocalDate creationTime, // LocalDate
-      Double value, // Double
-      LocalDate expirationTime, // LocalDate (nullable, since it's passed as null)
-      Boolean expired, // Boolean
-      Double sellPrice // Double (nullable, since it's passed as null)
-  ) {
+      Player player,
+      User owner,
+      Integer buyPrice,
+      Rarity rarity,
+      OpposingTeam opposingTeam,
+      String opposingTeamImage,
+      Event event,
+      Integer eventThreshold,
+      LocalDate creationTime,
+      Integer value,
+      LocalDate expirationTime,
+      Boolean expired,
+      Integer sellPrice) {
     this.player = player;
     this.owner = owner;
     this.buyPrice = buyPrice;
@@ -112,17 +111,17 @@ public class Contract {
   public Contract(
       Player player,
       User owner,
-      Double buyPrice,
+      Integer buyPrice,
       Rarity rarity,
       OpposingTeam opposingTeam,
       String opposingTeamImage,
       Event event,
       Integer eventThreshold,
       LocalDate creationTime,
-      Double value,
+      Integer value,
       Boolean expired,
       Boolean forSale,
-      Double sellPrice) {
+      Integer sellPrice) {
     this.player = player;
     this.owner = owner;
     this.buyPrice = buyPrice;
@@ -141,7 +140,7 @@ public class Contract {
   public Contract(
       Player player,
       User owner,
-      Double value,
+      Integer value,
       LocalDate expirationTime,
       Boolean expired) {
     this.player = player;
@@ -150,7 +149,7 @@ public class Contract {
     this.expirationTime = expirationTime;
     this.expired = expired;
     this.creationTime = LocalDate.now();
-    this.buyPrice = 0.0;
+    this.buyPrice = 0;
     this.rarity = Rarity.COMMON;
     this.forSale = false;
     this.sellPrice = null;
@@ -163,18 +162,18 @@ public class Contract {
   public Contract(
       Player player,
       User owner,
-      Double buyPrice,
+      Integer buyPrice,
       Rarity rarity,
       OpposingTeam opposingTeam,
       String opposingTeamImage,
       Event event,
       Integer eventThreshold,
       LocalDate creationTime,
-      Double value,
+      Integer value,
       LocalDate expirationTime,
       Boolean expired,
       Boolean forSale,
-      Double sellPrice) {
+      Integer sellPrice) {
     this.player = player;
     this.owner = owner;
     this.buyPrice = buyPrice;
@@ -221,11 +220,11 @@ public class Contract {
     return owner;
   }
 
-  public Integer getOwnerId() {
+  public String getOwnerUid() {
     if (owner == null) {
       return null;
     }
-    return owner.getId();
+    return owner.getUid();
   }
 
   @JsonIgnore
@@ -233,11 +232,11 @@ public class Contract {
     this.owner = owner;
   }
 
-  public Double getBuyPrice() {
+  public Integer getBuyPrice() {
     return buyPrice;
   }
 
-  public void setBuyPrice(Double buyPrice) {
+  public void setBuyPrice(Integer buyPrice) {
     this.buyPrice = buyPrice;
   }
 
@@ -291,11 +290,11 @@ public class Contract {
     this.creationTime = creationTime;
   }
 
-  public Double getValue() {
+  public Integer getValue() {
     return value;
   }
 
-  public void setValue(Double value) {
+  public void setValue(Integer value) {
     this.value = value;
   }
 
@@ -323,11 +322,11 @@ public class Contract {
     this.forSale = forSale;
   }
 
-  public Double getSellPrice() {
+  public Integer getSellPrice() {
     return sellPrice;
   }
 
-  public void setSellPrice(Double sellPrice) {
+  public void setSellPrice(Integer sellPrice) {
     this.sellPrice = sellPrice;
   }
 

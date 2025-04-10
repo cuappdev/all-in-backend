@@ -47,24 +47,20 @@ public abstract class ContractGenerator {
     double epic_payout_center = 1 / EPIC_PROBABILITY_THRESHOLD;
     double legendary_payout_center = 1 / LEGENDARY_PROBABILITY_THRESHOLD;
 
-    double common_prob_radius =
+    double common_prob_radius = (COMMON_PROBABILITY_THRESHOLD - RARE_PROBABILITY_THRESHOLD) / 2.0
+        + PROB_RANGE_OVERLAP / 2.0;
+    double rare_prob_radius = Math.min(
+        (RARE_PROBABILITY_THRESHOLD - EPIC_PROBABILITY_THRESHOLD) / 2.0
+            + PROB_RANGE_OVERLAP / 2.0,
         (COMMON_PROBABILITY_THRESHOLD - RARE_PROBABILITY_THRESHOLD) / 2.0
-            + PROB_RANGE_OVERLAP / 2.0;
-    double rare_prob_radius =
-        Math.min(
-            (RARE_PROBABILITY_THRESHOLD - EPIC_PROBABILITY_THRESHOLD) / 2.0
-                + PROB_RANGE_OVERLAP / 2.0,
-            (COMMON_PROBABILITY_THRESHOLD - RARE_PROBABILITY_THRESHOLD) / 2.0
-                + PROB_RANGE_OVERLAP / 2.0);
-    double epic_prob_radius =
-        Math.min(
-            (EPIC_PROBABILITY_THRESHOLD - LEGENDARY_PROBABILITY_THRESHOLD) / 2.0
-                + PROB_RANGE_OVERLAP / 2.0,
-            (RARE_PROBABILITY_THRESHOLD - EPIC_PROBABILITY_THRESHOLD) / 2.0
-                + PROB_RANGE_OVERLAP / 2.0);
-    double legendary_prob_radius =
+            + PROB_RANGE_OVERLAP / 2.0);
+    double epic_prob_radius = Math.min(
         (EPIC_PROBABILITY_THRESHOLD - LEGENDARY_PROBABILITY_THRESHOLD) / 2.0
-            + PROB_RANGE_OVERLAP / 2.0;
+            + PROB_RANGE_OVERLAP / 2.0,
+        (RARE_PROBABILITY_THRESHOLD - EPIC_PROBABILITY_THRESHOLD) / 2.0
+            + PROB_RANGE_OVERLAP / 2.0);
+    double legendary_prob_radius = (EPIC_PROBABILITY_THRESHOLD - LEGENDARY_PROBABILITY_THRESHOLD) / 2.0
+        + PROB_RANGE_OVERLAP / 2.0;
 
     COMMON_PROB_UPPER_BOUND = COMMON_PROBABILITY_THRESHOLD + common_prob_radius;
     RARE_PROB_UPPER_BOUND = RARE_PROBABILITY_THRESHOLD + rare_prob_radius;
@@ -75,22 +71,18 @@ public abstract class ContractGenerator {
     EPIC_PROB_LOWER_BOUND = EPIC_PROBABILITY_THRESHOLD - epic_prob_radius;
     LEGENDARY_PROB_LOWER_BOUND = LEGENDARY_PROBABILITY_THRESHOLD - legendary_prob_radius;
 
-    double common_payout_radius =
-        Math.min(
-            (common_payout_center - 1.0 / (COMMON_PROB_UPPER_BOUND)),
-            (common_payout_center - 1.0 / (COMMON_PROB_LOWER_BOUND)));
-    double rare_payout_radius =
-        Math.min(
-            (rare_payout_center - 1.0 / (RARE_PROB_UPPER_BOUND)),
-            (rare_payout_center - 1.0 / (RARE_PROB_LOWER_BOUND)));
-    double epic_payout_radius =
-        Math.min(
-            (epic_payout_center - 1.0 / (EPIC_PROB_UPPER_BOUND)),
-            (epic_payout_center - 1.0 / (EPIC_PROB_LOWER_BOUND)));
-    double legendary_payout_radius =
-        Math.min(
-            (legendary_payout_center - 1.0 / (LEGENDARY_PROB_UPPER_BOUND)),
-            (legendary_payout_center - 1.0 / (LEGENDARY_PROB_LOWER_BOUND)));
+    double common_payout_radius = Math.min(
+        (common_payout_center - 1.0 / (COMMON_PROB_UPPER_BOUND)),
+        (common_payout_center - 1.0 / (COMMON_PROB_LOWER_BOUND)));
+    double rare_payout_radius = Math.min(
+        (rare_payout_center - 1.0 / (RARE_PROB_UPPER_BOUND)),
+        (rare_payout_center - 1.0 / (RARE_PROB_LOWER_BOUND)));
+    double epic_payout_radius = Math.min(
+        (epic_payout_center - 1.0 / (EPIC_PROB_UPPER_BOUND)),
+        (epic_payout_center - 1.0 / (EPIC_PROB_LOWER_BOUND)));
+    double legendary_payout_radius = Math.min(
+        (legendary_payout_center - 1.0 / (LEGENDARY_PROB_UPPER_BOUND)),
+        (legendary_payout_center - 1.0 / (LEGENDARY_PROB_LOWER_BOUND)));
 
     COMMON_PAYOUT_UPPER_BOUND = common_payout_center + common_payout_radius;
     RARE_PAYOUT_UPPER_BOUND = rare_payout_center + rare_payout_radius;
@@ -103,7 +95,7 @@ public abstract class ContractGenerator {
   }
 
   public abstract Contract generateContract(
-      User user, Player player, Double buyPrice, Rarity rarity);
+      User user, Player player, Integer buyPrice, Rarity rarity);
 
   public Double[] getPlayerDataByEvent(Player player, Event event) {
     List<PlayerData> playerData = playerDataRepo.findByPlayer(player);
@@ -121,7 +113,7 @@ public abstract class ContractGenerator {
     if (eventSD == 0.0) {
       eventSD = 1.0;
     }
-    return new Double[] {eventAvg, eventSD};
+    return new Double[] { eventAvg, eventSD };
   }
 
   public Integer normalizeEventThreshold(Player player, Event event, Double eventProb) {

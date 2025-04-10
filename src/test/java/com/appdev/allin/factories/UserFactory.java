@@ -7,11 +7,11 @@ public class UserFactory {
   private static final Faker faker = new Faker();
 
   public static User createRandomUser() {
+    String uid = faker.idNumber().valid();
     String username = faker.name().username();
     String email = faker.internet().emailAddress();
     String image = faker.internet().avatar();
-    Double balance = faker.number().randomDouble(2, 10, 1000);
 
-    return new User(username, email, image, balance);
+    return new User(uid, username, email, image);
   }
 }

@@ -61,7 +61,7 @@ public class Application {
     private void processPayout(Contract contract) {
         User owner = contract.getOwner();
         if (owner != null) {
-            Double payoutAmount = contract.getValue();
+            Integer payoutAmount = contract.getValue();
             userService.addToUserBalance(owner.getUid(), payoutAmount);
         }
     }

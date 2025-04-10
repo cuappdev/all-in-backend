@@ -22,7 +22,7 @@ public class TransactionFactory {
     Contract contract = contractFactory.createRandomContract(seller);
     LocalDate transactionDate = LocalDate.now()
         .minusDays(faker.number().numberBetween(1, 365)); // Date within the past year
-    Double price = faker.number().randomDouble(2, 100, 10000); // Random price between 100 and 10000
+    Integer price = faker.number().randomDigit();
 
     return new Transaction(seller, buyer, contract, transactionDate, price);
   }

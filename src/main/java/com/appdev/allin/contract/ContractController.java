@@ -101,7 +101,7 @@ public class ContractController {
 
   @PostMapping("/contracts/{contract_id}/buy/")
   public ResponseEntity<Contract> buyContract(
-      @PathVariable final Integer contract_id, @RequestBody final Map<String, Integer> body) {
+      @PathVariable final Integer contract_id, @RequestBody final Map<String, String> body) {
     try {
       Contract boughtContract = contractService.buyContract(contract_id, body.get("buyer_id"));
       return ResponseEntity.ok(boughtContract);
@@ -116,7 +116,7 @@ public class ContractController {
 
   @PostMapping("/contracts/{contract_id}/sell/")
   public ResponseEntity<Contract> sellContract(
-      @PathVariable final Integer contract_id, @RequestBody final Map<String, Double> body) {
+      @PathVariable final Integer contract_id, @RequestBody final Map<String, Integer> body) {
     try {
       Contract soldContract = contractService.sellContract(contract_id, body.get("sell_price"));
       return ResponseEntity.ok(soldContract);

@@ -56,14 +56,15 @@ public class UserService {
   // return userRepo.save(userToUpdate);
   // }
 
-  public User addToUserBalance(String firebaseUid, Double amount) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findByFirebaseUid(firebaseUid);
-    if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + userId + " not found.");
-    }
-    User user = userOptional.get();
-    user.setBalance(user.getBalance() + amount);
-    return userRepo.save(user);
+  public User addToUserBalance(String firebaseUid, Integer amount) throws NotFoundException {
+    return null;
+    // Optional<User> userOptional = userRepo.findByFirebaseUid(firebaseUid);
+    // if (userOptional.isEmpty()) {
+    // throw new NotFoundException("User with id " + userId + " not found.");
+    // }
+    // User user = userOptional.get();
+    // user.setBalance(user.getBalance() + amount);
+    // return userRepo.save(user);
   }
 
   // public User deleteUser(final Integer user_id) throws NotFoundException {

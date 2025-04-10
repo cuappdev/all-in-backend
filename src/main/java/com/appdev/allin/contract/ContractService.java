@@ -65,19 +65,19 @@ public class ContractService {
     return contractRepo.findByPlayer(player);
   }
 
-  public List<Contract> getContractsByUserId(final Integer user_id) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findById(user_id);
+  public List<Contract> getContractsByUid(final String uid) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findById(uid);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + user_id + " not found.");
+      throw new NotFoundException("User with id " + uid + " not found.");
     }
     User user = userOptional.get();
     return contractRepo.findByOwner(user);
   }
 
   public Contract createContract(
-      final Integer user_id, final Integer player_id, final Double buyPrice, final Rarity rarity)
+      final String uid, final Integer player_id, final Integer buyPrice, final Rarity rarity)
       throws NotFoundException, OverdrawnException {
-    Optional<User> userOptional = userRepo.findById(user_id);
+    Optional<User> userOptional = userRepo.findByUid(uid);
     Optional<Player> playerOptional = playerRepo.findById(player_id);
     if (userOptional.isEmpty() || playerOptional.isEmpty()) {
       throw new NotFoundException("User or player not found.");
@@ -96,8 +96,7 @@ public class ContractService {
     user.setBalance(user.getBalance() - contract.getBuyPrice());
     userRepo.save(user);
 
-    Transaction transaction =
-        new Transaction(null, user, contract, contract.getCreationTime(), contract.getBuyPrice());
+    Transaction transaction = new Transaction(null, user, contract, contract.getCreationTime(), contract.getBuyPrice());
     transactionRepo.save(transaction);
 
     return contract;
@@ -133,7 +132,7 @@ public class ContractService {
     return contractRepo.findByForSale(true);
   }
 
-  public Contract buyContract(final Integer contract_id, final Integer buyer_id)
+  public Contract buyContract(final Integer contract_id, final String buyer_id)
       throws NotFoundException, OverdrawnException, NotForSaleException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
@@ -146,15 +145,16 @@ public class ContractService {
       throw new NotForSaleException("Contract is not for sale.");
     }
 
-    Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner().getId());
-    Optional<User> buyerOptional = userRepo.findById(buyer_id);
+    Optional<User> sellerOptional = userRepo.findById(contractToBuy.getOwner().getUid());
+    Optional<User> buyerOptional = userRepo.findByUid(buyer_id);
     if (sellerOptional.isEmpty() || buyerOptional.isEmpty()) {
       throw new NotFoundException("Seller or buyer not found.");
     }
 
     User seller = contractToBuy.getOwner();
     User buyer = buyerOptional.get();
-    Double sellPrice = contractToBuy.getSellPrice();
+
+    Integer sellPrice = contractToBuy.getSellPrice();
 
     if (sellPrice > buyer.getBalance()) {
       throw new OverdrawnException("Buyer balance is too low.");
@@ -167,14 +167,13 @@ public class ContractService {
     contractToBuy.setForSale(false);
     contractRepo.save(contractToBuy);
 
-    Transaction transaction =
-        new Transaction(seller, buyer, contractToBuy, LocalDate.now(), sellPrice);
+    Transaction transaction = new Transaction(seller, buyer, contractToBuy, LocalDate.now(), sellPrice);
     transactionRepo.save(transaction);
 
     return contractToBuy;
   }
 
-  public Contract sellContract(final Integer contract_id, final Double sellPrice)
+  public Contract sellContract(final Integer contract_id, final Integer sellPrice)
       throws NotFoundException {
     Optional<Contract> contractOptional = contractRepo.findById(contract_id);
     if (contractOptional.isEmpty()) {
@@ -207,7 +206,7 @@ public class ContractService {
 
     Contract contractToRecall = contractOptional.get();
     contractToRecall.setForSale(false);
-    contractToRecall.setSellPrice(0.0);
+    contractToRecall.setSellPrice(0);
 
     return contractRepo.save(contractToRecall);
   }

@@ -41,12 +41,13 @@ public class Transaction {
   private LocalDate transactionDate = LocalDate.now();
 
   @Column(name = "price", nullable = false)
-  private Double price;
+  private Integer price;
 
-  public Transaction() {}
+  public Transaction() {
+  }
 
   public Transaction(
-      User seller, User buyer, Contract contract, LocalDate transactionDate, Double price) {
+      User seller, User buyer, Contract contract, LocalDate transactionDate, Integer price) {
     this.seller = seller;
     this.buyer = buyer;
     this.contract = contract;
@@ -67,11 +68,11 @@ public class Transaction {
     return seller;
   }
 
-  public Integer getSellerId() {
+  public String getSellerUid() {
     if (seller == null) {
       return null;
     }
-    return seller.getId();
+    return seller.getUid();
   }
 
   @JsonIgnore
@@ -84,11 +85,11 @@ public class Transaction {
     return buyer;
   }
 
-  public Integer getBuyerId() {
+  public String getBuyerUid() {
     if (buyer == null) {
       return null;
     }
-    return buyer.getId();
+    return buyer.getUid();
   }
 
   @JsonIgnore
@@ -121,11 +122,11 @@ public class Transaction {
     this.transactionDate = transactionDate;
   }
 
-  public Double getPrice() {
+  public Integer getPrice() {
     return price;
   }
 
-  public void setPrice(Double price) {
+  public void setPrice(Integer price) {
     this.price = price;
   }
 

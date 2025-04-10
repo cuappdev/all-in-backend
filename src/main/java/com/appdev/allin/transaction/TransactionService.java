@@ -40,30 +40,30 @@ public class TransactionService {
     return transactionRepo.findByContract(contract);
   }
 
-  public List<Transaction> getTransactionsByUserId(final Integer user_id) throws NotFoundException {
-    Optional<User> userOptional = userRepo.findById(user_id);
+  public List<Transaction> getTransactionsByUserId(final String uid) throws NotFoundException {
+    Optional<User> userOptional = userRepo.findByUid(uid);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + user_id + " not found.");
+      throw new NotFoundException("User with id " + uid + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findBySellerOrBuyer(user, user);
   }
 
-  public List<Transaction> getSellerTransactionsByUserId(final Integer user_id)
+  public List<Transaction> getSellerTransactionsByUserId(final String uid)
       throws NotFoundException {
-    Optional<User> userOptional = userRepo.findById(user_id);
+    Optional<User> userOptional = userRepo.findByUid(uid);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + user_id + " not found.");
+      throw new NotFoundException("User with id " + uid + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findBySeller(user);
   }
 
-  public List<Transaction> getBuyerTransactionsByUserId(final Integer user_id)
+  public List<Transaction> getBuyerTransactionsByUserId(final String uid)
       throws NotFoundException {
-    Optional<User> userOptional = userRepo.findById(user_id);
+    Optional<User> userOptional = userRepo.findByUid(uid);
     if (userOptional.isEmpty()) {
-      throw new NotFoundException("User with id " + user_id + " not found.");
+      throw new NotFoundException("User with id " + uid + " not found.");
     }
     User user = userOptional.get();
     return transactionRepo.findByBuyer(user);
