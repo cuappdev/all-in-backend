@@ -12,7 +12,7 @@ import com.appdev.allin.user.User;
 import com.appdev.allin.user.UserRepo;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -167,7 +167,7 @@ public class ContractService {
     contractToBuy.setForSale(false);
     contractRepo.save(contractToBuy);
 
-    Transaction transaction = new Transaction(seller, buyer, contractToBuy, LocalDate.now(), sellPrice);
+    Transaction transaction = new Transaction(seller, buyer, contractToBuy, LocalDateTime.now(), sellPrice);
     transactionRepo.save(transaction);
 
     return contractToBuy;

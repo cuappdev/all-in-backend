@@ -11,7 +11,7 @@ import com.appdev.allin.user.User;
 import com.github.javafaker.Faker;
 
 import java.time.Clock;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,7 +33,7 @@ public class ContractFactory {
     }
 
     public Contract createRandomContract(User owner) {
-        LocalDate now = LocalDate.now(clock);
+        LocalDateTime now = LocalDateTime.now(clock);
 
         Player player = PlayerFactory.createFakePlayer();
         Integer buyPrice = faker.number().randomDigit();
@@ -43,8 +43,8 @@ public class ContractFactory {
         Event event = Event.getRandomEvent();
         Integer eventThreshold = faker.number().numberBetween(1, 100); // Random event threshold
         Integer value = faker.number().numberBetween(1, 100); // Random value
-        LocalDate creationTime = now.minusDays(faker.number().numberBetween(1, 365));
-        LocalDate expirationTime = creationTime.plusDays(faker.number().numberBetween(1, 365));
+        LocalDateTime creationTime = now.minusDays(faker.number().numberBetween(1, 365));
+        LocalDateTime expirationTime = creationTime.plusDays(faker.number().numberBetween(1, 365));
         Boolean expired = expirationTime.isBefore(now);
 
         Boolean forSale = faker.bool().bool();

@@ -5,7 +5,7 @@ import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
 
 import com.github.javafaker.Faker;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 // needs tests
 public class TransactionFactory {
@@ -20,7 +20,7 @@ public class TransactionFactory {
     }
 
     Contract contract = contractFactory.createRandomContract(seller);
-    LocalDate transactionDate = LocalDate.now()
+    LocalDateTime transactionDate = LocalDateTime.now()
         .minusDays(faker.number().numberBetween(1, 365)); // Date within the past year
     Integer price = faker.number().randomDigit();
 

@@ -12,23 +12,27 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 public class Transaction {
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "seller_id")
+  @JoinColumn(name = "seller_id") // If seller is null, then this is the first transaction with the contract (user
+                                  // bought the contract from us)
   @OnDelete(action = OnDeleteAction.NO_ACTION)
   private User seller;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "buyer_id", nullable = false)
+  @JoinColumn(name = "buyer_id") // If the buyer is null, then this is the last transaction with the contract
+                                 // (contract has matured and has been paid out if hit)
   @OnDelete(action = OnDeleteAction.NO_ACTION)
   private User buyer;
 
@@ -38,7 +42,7 @@ public class Transaction {
   private Contract contract;
 
   @Column(name = "transactionDate", nullable = false)
-  private LocalDate transactionDate = LocalDate.now();
+  private LocalDateTime transactionDate = LocalDateTime.now();
 
   @Column(name = "price", nullable = false)
   private Integer price;
@@ -47,7 +51,7 @@ public class Transaction {
   }
 
   public Transaction(
-      User seller, User buyer, Contract contract, LocalDate transactionDate, Integer price) {
+      User seller, User buyer, Contract contract, LocalDateTime transactionDate, Integer price) {
     this.seller = seller;
     this.buyer = buyer;
     this.contract = contract;
@@ -63,7 +67,6 @@ public class Transaction {
     this.id = id;
   }
 
-  @JsonIgnore
   public User getSeller() {
     return seller;
   }
@@ -75,12 +78,10 @@ public class Transaction {
     return seller.getUid();
   }
 
-  @JsonIgnore
   public void setSeller(User seller) {
     this.seller = seller;
   }
 
-  @JsonIgnore
   public User getBuyer() {
     return buyer;
   }
@@ -92,12 +93,10 @@ public class Transaction {
     return buyer.getUid();
   }
 
-  @JsonIgnore
   public void setBuyer(User buyer) {
     this.buyer = buyer;
   }
 
-  @JsonIgnore
   public Contract getContract() {
     return contract;
   }
@@ -109,16 +108,15 @@ public class Transaction {
     return contract.getId();
   }
 
-  @JsonIgnore
   public void setContract(Contract contract) {
     this.contract = contract;
   }
 
-  public LocalDate getTransactionDate() {
+  public LocalDateTime getTransactionDate() {
     return transactionDate;
   }
 
-  public void setTransactionDate(LocalDate transactionDate) {
+  public void setTransactionDate(LocalDateTime transactionDate) {
     this.transactionDate = transactionDate;
   }
 
@@ -130,20 +128,26 @@ public class Transaction {
     this.price = price;
   }
 
-  @Override
-  public String toString() {
-    return "Transaction [id="
-        + id
-        + ", seller="
-        + seller
-        + ", buyer="
-        + buyer
-        + ", contract="
-        + contract
-        + ", transactionDate="
-        + transactionDate
-        + ", price="
-        + price
-        + "]";
-  }
+  // @Override
+  // public String toString() {
+  // return "User{" +
+  // "uid='" + uid + '\'' +
+  // ", username='" + username + '\'' +
+  // ", email='" + email + '\'' +
+  // ", image='" + image + '\'' +
+  // ", balance=" + balance +
+  // ", createdAt=" + createdAt +
+  // ", contracts=" + contracts +
+  // ", sellerTransactions=" + sellerTransactions +
+  // ", buyerTransactions=" + buyerTransactions +
+  // '}';
+  // }
+
+  // @Override
+  // public String toString() {
+  // return "Transaction{" +
+  // "id='" + id + '\'' +
+  // ", seller='" + seller + '\'' +
+
+  // }
 }

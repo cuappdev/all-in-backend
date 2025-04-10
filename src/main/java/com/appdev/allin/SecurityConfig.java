@@ -21,7 +21,7 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(requests -> requests
             .requestMatchers(
-                // "/**", // TODO: Delete when done
+                // "/**", // Uncomment to bypass middleware when testing locally
                 "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",

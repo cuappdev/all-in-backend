@@ -1,6 +1,6 @@
 package com.appdev.allin.contract;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.appdev.allin.player.Player;
@@ -88,7 +88,7 @@ public class BasketballContractGenerator extends ContractGenerator {
                                                 + ".png",
                                 event,
                                 eventThreshold,
-                                LocalDate.now(),
+                                LocalDateTime.now(),
                                 buyPrice * 2,
                                 null,
                                 false,

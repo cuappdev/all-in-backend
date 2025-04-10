@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import org.hibernate.annotations.OnDelete;
@@ -55,13 +55,13 @@ public class Contract {
   private Integer eventThreshold;
 
   @Column(name = "creationTime", nullable = false)
-  private LocalDate creationTime = LocalDate.now();
+  private LocalDateTime creationTime = LocalDateTime.now();
 
   @Column(name = "value", nullable = false)
   private Integer value;
 
   @Column(name = "expirationTime", nullable = false)
-  private LocalDate expirationTime;
+  private LocalDateTime expirationTime;
 
   @Column(name = "expired")
   private Boolean expired;
@@ -87,9 +87,9 @@ public class Contract {
       String opposingTeamImage,
       Event event,
       Integer eventThreshold,
-      LocalDate creationTime,
+      LocalDateTime creationTime,
       Integer value,
-      LocalDate expirationTime,
+      LocalDateTime expirationTime,
       Boolean expired,
       Integer sellPrice) {
     this.player = player;
@@ -117,7 +117,7 @@ public class Contract {
       String opposingTeamImage,
       Event event,
       Integer eventThreshold,
-      LocalDate creationTime,
+      LocalDateTime creationTime,
       Integer value,
       Boolean expired,
       Boolean forSale,
@@ -141,14 +141,14 @@ public class Contract {
       Player player,
       User owner,
       Integer value,
-      LocalDate expirationTime,
+      LocalDateTime expirationTime,
       Boolean expired) {
     this.player = player;
     this.owner = owner;
     this.value = value;
     this.expirationTime = expirationTime;
     this.expired = expired;
-    this.creationTime = LocalDate.now();
+    this.creationTime = LocalDateTime.now();
     this.buyPrice = 0;
     this.rarity = Rarity.COMMON;
     this.forSale = false;
@@ -168,9 +168,9 @@ public class Contract {
       String opposingTeamImage,
       Event event,
       Integer eventThreshold,
-      LocalDate creationTime,
+      LocalDateTime creationTime,
       Integer value,
-      LocalDate expirationTime,
+      LocalDateTime expirationTime,
       Boolean expired,
       Boolean forSale,
       Integer sellPrice) {
@@ -282,11 +282,11 @@ public class Contract {
     this.eventThreshold = eventThreshold;
   }
 
-  public LocalDate getCreationTime() {
+  public LocalDateTime getCreationTime() {
     return creationTime;
   }
 
-  public void setCreationTime(LocalDate creationTime) {
+  public void setCreationTime(LocalDateTime creationTime) {
     this.creationTime = creationTime;
   }
 
@@ -298,11 +298,11 @@ public class Contract {
     this.value = value;
   }
 
-  public LocalDate getExpirationTime() {
+  public LocalDateTime getExpirationTime() {
     return expirationTime;
   }
 
-  public void setExpirationTime(LocalDate expirationTime) {
+  public void setExpirationTime(LocalDateTime expirationTime) {
     this.expirationTime = expirationTime;
   }
 

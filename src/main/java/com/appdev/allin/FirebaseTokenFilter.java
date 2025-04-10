@@ -56,7 +56,7 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
       User user = userRepo.findById(decodedToken.getUid())
           .orElseGet(() -> {
             // Only create a user on the /users/me endpoint
-            if (request.getRequestURI().equals("/users/me")) {
+            if (request.getRequestURI().equals("/users/me/")) {
               User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
                   decodedToken.getPicture());
               return userRepo.save(newUser);
@@ -91,13 +91,11 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     }
 
     chain.doFilter(request, response);
-
   }
 
   @Override
   public boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-    // TODO: Delete when done
-    // return true;
+    // return true; // Uncomment to bypass middleware when testing locally
     String path = request.getRequestURI();
     return swaggerPath(path);
   }

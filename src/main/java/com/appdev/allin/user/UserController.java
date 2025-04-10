@@ -60,7 +60,7 @@ public class UserController {
 
   // Functionality does not exist yet based on the designs (users can only view
   // their own profile)
-  @GetMapping("/{uid}/")
+  @GetMapping("/{uid}")
   public ResponseEntity<User> getUser(@PathVariable final String uid) {
     User user = userService.getUserByUid(uid);
     return ResponseEntity.ok(user);

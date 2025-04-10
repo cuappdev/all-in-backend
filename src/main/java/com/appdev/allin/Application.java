@@ -7,7 +7,7 @@ import com.appdev.allin.playerData.PlayerDataRepo;
 import com.appdev.allin.user.User;
 import com.appdev.allin.user.UserService;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +40,8 @@ public class Application {
         List<Contract> contracts = contractRepo.findAll();
         for (Contract contract : contracts) {
             if (!contract.getExpired() &&
-                    (contract.getExpirationTime().isBefore(LocalDate.now()) ||
-                            contract.getExpirationTime().isEqual(LocalDate.now()))) {
+                    (contract.getExpirationTime().isBefore(LocalDateTime.now()) ||
+                            contract.getExpirationTime().isEqual(LocalDateTime.now()))) {
                 if (isContractHit(contract)) {
                     processPayout(contract);
                 }
