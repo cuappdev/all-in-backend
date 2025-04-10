@@ -21,6 +21,8 @@ services:
     image: cornellappdev/all-in:${IMAGE_TAG}
     ports:
       - "8080:8080"
+    volumes:
+      - ./firebaseServiceAccount.json:/app/firebaseServiceAccount.json
     env_file:
       - .all-in-env
     depends_on:
