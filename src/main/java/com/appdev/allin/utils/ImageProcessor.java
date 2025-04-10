@@ -11,8 +11,12 @@ import java.io.File;
 import java.io.IOException;
 
 import org.imgscalr.Scalr;
+import org.springframework.beans.factory.annotation.Value;
 
 public class ImageProcessor {
+
+    @Value("${all-in.image-upload-url}")
+    private static String imageUploadUrl;
 
     /**
      * Crops the given image to the specified width and height.
