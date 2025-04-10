@@ -45,4 +45,10 @@ public class ErrorHandler {
   public Map<String, String> handleForbiddenException(ForbiddenException e) {
     return createErrorResponse(e);
   }
+
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ExceptionHandler(UnauthorizedException.class)
+  public Map<String, String> handleUnauthorizedException(UnauthorizedException e) {
+    return createErrorResponse(e);
+  }
 }

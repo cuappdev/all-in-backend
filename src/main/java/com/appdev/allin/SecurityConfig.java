@@ -27,6 +27,7 @@ public class SecurityConfig {
                 "/webjars/**")
             .permitAll()
             .anyRequest().authenticated())
+        // Needed for Spring to place the filter in the correct order
         .addFilterBefore(firebaseTokenFilter,
             UsernamePasswordAuthenticationFilter.class);
 
