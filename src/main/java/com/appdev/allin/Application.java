@@ -6,6 +6,8 @@ import com.appdev.allin.player.PlayerRepo;
 import com.appdev.allin.playerData.PlayerDataRepo;
 import com.appdev.allin.user.User;
 import com.appdev.allin.user.UserService;
+import com.appdev.allin.transaction.Transaction;
+import com.appdev.allin.transaction.TransactionService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +32,9 @@ public class Application {
     @Autowired
     UserService userService;
 
+    @Autowired
+    TransactionService transactionService;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -45,6 +50,8 @@ public class Application {
                 if (isContractHit(contract)) {
                     processPayout(contract);
                 }
+
+                createFinalTransaction(contract);
 
                 contract.setExpired(true);
                 contractRepo.save(contract);
@@ -64,5 +71,17 @@ public class Application {
             Integer payoutAmount = contract.getValue();
             userService.addToUserBalance(owner, payoutAmount);
         }
+    }
+
+    private void createFinalTransaction(Contract contract) {
+        User seller = contract.getOwner();
+        Transaction finalTransaction = new Transaction(
+            seller,
+            null,
+            contract,
+            LocalDateTime.now(),
+            contract.getValue()
+        );
+        transactionService.createTransaction(finalTransaction);
     }
 }
