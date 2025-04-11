@@ -21,6 +21,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.appdev.allin.playerData.PlayerData;
+
 @SpringBootApplication
 @EnableScheduling
 public class Application {
@@ -67,9 +69,33 @@ public class Application {
         }
     }
 
-    // TODO: Finish
     public boolean isContractHit(Contract contract) {
-        return true;
+
+        if (contract == null || contract.getPlayer() == null || contract.getEvent() == null || contract.getOpposingTeam() == null) {
+            return false;
+        }
+        if (contract.getExpired() != null && contract.getExpired()) {
+            return false;
+        }
+        
+        // getting player data
+        List<PlayerData> playerDataList = playerDataRepo.findByPlayer(contract.getPlayer());
+        
+        // no data found, so contract is not hit
+        if (playerDataList == null || playerDataList.isEmpty()) {
+            return false;
+        }
+        // comparing data to contract
+        for (PlayerData playerData : playerDataList) {
+            if (playerData.getOpposingTeam() == contract.getOpposingTeam()) {
+                Integer actualValue = playerData.getEvent(contract.getEvent());
+                if (actualValue >= contract.getEventThreshold()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 
     private void processPayout(Contract contract) {
