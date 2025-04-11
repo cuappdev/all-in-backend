@@ -24,15 +24,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.imgscalr.Scalr;
-import org.springframework.beans.factory.annotation.Value;
 
 public class ImageProcessor {
-
-    @Value("${all-in.image-upload-url}")
-    private static String imageUploadUrl;
-
-    @Value("${allin.bucket}")
-    private String bucket;
 
     /**
      * Crops the given image to the specified width and height.
