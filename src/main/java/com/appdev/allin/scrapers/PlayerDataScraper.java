@@ -1,12 +1,13 @@
 package com.appdev.allin.scrapers;
 
-import com.appdev.allin.player.Player;
-import com.appdev.allin.player.PlayerService;
-import com.appdev.allin.playerData.PlayerData;
-import com.appdev.allin.playerData.PlayerDataService;
-import com.appdev.allin.contract.OpposingTeam;
-import com.appdev.allin.exceptions.NotFoundException;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
+import com.appdev.allin.exceptions.NotFoundException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,13 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import com.appdev.allin.contract.OpposingTeam;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.player.PlayerService;
+import com.appdev.allin.playerData.PlayerData;
+import com.appdev.allin.playerData.PlayerDataService;
 
 @Component
 public class PlayerDataScraper {
@@ -38,7 +37,7 @@ public class PlayerDataScraper {
     private final Set<String> processedGameUrls = new HashSet<>();
 
     // Set to track unmatched teams
-    private final Set<String> unmatchedTeams = new TreeSet<>(); // TreeSet for sorted output
+    private final Set<String> unmatchedTeams = new HashSet<>();
 
     public PlayerDataScraper(PlayerService playerService, PlayerDataService playerDataService) {
         this.playerService = playerService;
@@ -88,9 +87,10 @@ public class PlayerDataScraper {
                             .userAgent(USER_AGENT)
                             .get();
                     processGameStats(gameDoc);
-                } catch (Exception e) {
+                } catch (IOException e) {
                     logger.error("Error scraping individual game {}: {}", gameUrl, e.getMessage());
                 }
+                System.gc();
             }
         } catch (IOException e) {
             logger.error("Error scraping schedule from URL {}: {}", scheduleUrl, e.getMessage());
