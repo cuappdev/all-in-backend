@@ -49,25 +49,11 @@ public class User {
   public User() {
   }
 
-  // Use this constructor when creating a new user
   public User(String uid, String username, String email, String image) {
     this.uid = uid;
     this.username = username;
     this.email = email;
     this.image = image;
-  }
-
-  public User(String uid, String username, String email, String image, Integer balance, LocalDateTime createdAt,
-      List<Contract> contracts, List<Transaction> sellerTransactions, List<Transaction> buyerTransactions) {
-    this.uid = uid;
-    this.username = username;
-    this.email = email;
-    this.image = image;
-    this.balance = balance;
-    this.createdAt = createdAt;
-    this.contracts = contracts;
-    this.sellerTransactions = sellerTransactions;
-    this.buyerTransactions = buyerTransactions;
   }
 
   public String getUid() {

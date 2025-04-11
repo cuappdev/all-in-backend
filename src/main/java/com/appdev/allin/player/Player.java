@@ -2,7 +2,6 @@ package com.appdev.allin.player;
 
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.playerData.PlayerData;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "players")
+@Table(name = "player")
 public class Player {
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
@@ -26,8 +25,8 @@ public class Player {
   @Column(name = "lastName", nullable = false)
   private String lastName;
 
-  @Column(name = "position", nullable = false)
-  private Position[] position;
+  @Column(name = "positions", nullable = false)
+  private Position[] positions;
 
   @Column(name = "number", nullable = false)
   private Integer number;
@@ -44,40 +43,23 @@ public class Player {
   @Column(name = "highSchool", nullable = false)
   private String highSchool;
 
+  // TODO: Remove default value, should be populated when scraping
   @Column(name = "image", nullable = false)
   private String image = "src/main/resources/static/images/players/default.jpg";
 
-  @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
   private List<Contract> contracts = new LinkedList<>();
 
-  @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
   private List<PlayerData> playerData = new LinkedList<>();
 
-  public Player() {}
-
-  public Player(
-      String firstName,
-      String lastName,
-      Position[] position,
-      Integer number,
-      String height,
-      Integer weight,
-      String hometown,
-      String highSchool) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.position = position;
-    this.number = number;
-    this.height = height;
-    this.weight = weight;
-    this.hometown = hometown;
-    this.highSchool = highSchool;
+  public Player() {
   }
 
   public Player(
       String firstName,
       String lastName,
-      Position[] position,
+      Position[] positions,
       Integer number,
       String height,
       Integer weight,
@@ -86,7 +68,7 @@ public class Player {
       String image) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.position = position;
+    this.positions = positions;
     this.number = number;
     this.height = height;
     this.weight = weight;
@@ -119,12 +101,12 @@ public class Player {
     this.lastName = lastName;
   }
 
-  public Position[] getPosition() {
-    return position;
+  public Position[] getPositions() {
+    return positions;
   }
 
-  public void setPosition(Position[] position) {
-    this.position = position;
+  public void setPositions(Position[] positions) {
+    this.positions = positions;
   }
 
   public Integer getNumber() {
@@ -167,18 +149,20 @@ public class Player {
     this.highSchool = highSchool;
   }
 
-  @JsonIgnore
   public String getImage() {
     return image;
   }
 
-  @JsonIgnore
   public void setImage(String image) {
     this.image = image;
   }
 
   public List<Contract> getContracts() {
     return contracts;
+  }
+
+  public void setContracts(List<Contract> contracts) {
+    this.contracts = contracts;
   }
 
   public void addContract(Contract contract) {
@@ -189,12 +173,12 @@ public class Player {
     contracts.remove(contract);
   }
 
-  public void setContracts(List<Contract> contracts) {
-    this.contracts = contracts;
-  }
-
   public List<PlayerData> getPlayerData() {
     return playerData;
+  }
+
+  public void setPlayerData(List<PlayerData> playerData) {
+    this.playerData = playerData;
   }
 
   public void addPlayerData(PlayerData playerData) {
@@ -205,32 +189,53 @@ public class Player {
     this.playerData.remove(playerData);
   }
 
-  public void setPlayerData(List<PlayerData> playerData) {
-    this.playerData = playerData;
+  @Override
+  public String toString() {
+    return "Player{" +
+        "id='" + id + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", positions='" + positions + '\'' +
+        ", number=" + number +
+        ", height='" + height + '\'' +
+        ", weight=" + weight +
+        ", hometown='" + hometown + '\'' +
+        ", highSchool='" + highSchool + '\'' +
+        ", image='" + image + '\'' +
+        ", contracts=" + contracts +
+        ", playerData=" + playerData +
+        '}';
   }
 
   @Override
-  public String toString() {
-    return "Player [id="
-        + id
-        + ", firstName="
-        + firstName
-        + ", lastName="
-        + lastName
-        + ", position="
-        + position
-        + ", number="
-        + number
-        + ", height="
-        + height
-        + ", weight="
-        + weight
-        + ", hometown="
-        + hometown
-        + ", highSchool="
-        + highSchool
-        + ", image="
-        + image
-        + "]";
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Player player))
+      return false;
+
+    if (!getId().equals(player.getId()))
+      return false;
+    if (!getFirstName().equals(player.getFirstName()))
+      return false;
+    if (!getLastName().equals(player.getLastName()))
+      return false;
+    if (!getPositions().equals(player.getPositions()))
+      return false;
+    if (!getNumber().equals(player.getNumber()))
+      return false;
+    if (!getHeight().equals(player.getHeight()))
+      return false;
+    if (!getWeight().equals(player.getWeight()))
+      return false;
+    if (!getHometown().equals(player.getHometown()))
+      return false;
+    if (!getHighSchool().equals(player.getHighSchool()))
+      return false;
+    if (!getImage().equals(player.getImage()))
+      return false;
+    if (!getContracts().equals(player.getContracts()))
+      return false;
+    return !getPlayerData().equals(player.getPlayerData());
   }
 }

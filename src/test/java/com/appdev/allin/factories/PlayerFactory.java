@@ -18,7 +18,8 @@ public class PlayerFactory {
     Integer weight = faker.number().numberBetween(150, 250); // Weight in pounds, adjustable as needed
     String hometown = faker.address().city() + ", " + faker.address().state();
     String highSchool = faker.educator().secondarySchool();
-    return new Player(firstName, lastName, positions, number, height, weight, hometown, highSchool);
+    String image = "";
+    return new Player(firstName, lastName, positions, number, height, weight, hometown, highSchool, image);
   }
 
   private static Position[] generateRandomPositions() {

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-  public final TransactionService transactionService;
+  private final TransactionService transactionService;
 
   public TransactionController(TransactionService transactionService) {
     this.transactionService = transactionService;

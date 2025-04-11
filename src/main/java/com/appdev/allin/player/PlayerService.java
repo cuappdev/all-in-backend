@@ -22,12 +22,10 @@ public class PlayerService {
     return playerRepo.findAll();
   }
 
-  public Player getPlayerById(final Integer player_id) throws NotFoundException {
-    Optional<Player> playerOptional = playerRepo.findById(player_id);
-    if (playerOptional.isEmpty()) {
-      throw new NotFoundException("Player with id " + player_id + " not found.");
-    }
-    return playerOptional.get();
+  public Player getPlayerById(final Integer pid) {
+    Player player = playerRepo.findById(pid)
+        .orElseThrow(() -> new NotFoundException("Player with id " + pid + " not found."));
+    return player;
   }
 
   public Player createPlayer(final Player player) {
@@ -43,7 +41,7 @@ public class PlayerService {
     Player playerToUpdate = playerOptional.get();
     playerToUpdate.setFirstName(player.getFirstName());
     playerToUpdate.setLastName(player.getLastName());
-    playerToUpdate.setPosition(player.getPosition());
+    playerToUpdate.setPositions(player.getPositions());
     playerToUpdate.setNumber(player.getNumber());
     playerToUpdate.setHeight(player.getHeight());
     playerToUpdate.setWeight(player.getWeight());

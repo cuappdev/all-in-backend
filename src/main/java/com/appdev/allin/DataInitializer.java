@@ -31,15 +31,15 @@ public class DataInitializer {
 
         @EventListener(ApplicationReadyEvent.class)
         public void initializeData() {
-                PlayerScraper playerScraper = new PlayerScraper(playerRepo);
-                playerScraper.run();
+                // PlayerScraper playerScraper = new PlayerScraper(playerRepo);
+                // playerScraper.run();
 
-                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
-                                playerDataRepo);
-                playerDataScraper.run();
+                // PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
+                // playerDataRepo);
+                // playerDataScraper.run();
 
-                GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
-                gameDataScraper.run();
+                // GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                // gameDataScraper.run();
                 // Uncomment the above lines to schedule the scrapers to run periodically
 
                 // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

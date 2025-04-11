@@ -20,19 +20,19 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "contracts")
+@Table(name = "contract")
 public class Contract {
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
   private Integer id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "player_id")
+  @JoinColumn(name = "player_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Player player;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "owner_id")
+  @JoinColumn(name = "owner_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private User owner;
 
