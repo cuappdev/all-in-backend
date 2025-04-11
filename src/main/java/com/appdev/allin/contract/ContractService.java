@@ -53,12 +53,10 @@ public class ContractService {
         rarity, pageable);
   }
 
-  public Contract getContractById(final Integer contract_id) throws NotFoundException {
-    Optional<Contract> contractOptional = contractRepo.findById(contract_id);
-    if (contractOptional.isEmpty()) {
-      throw new NotFoundException("Contract with id " + contract_id + " not found.");
-    }
-    return contractOptional.get();
+  public Contract getContractById(final Integer cid) {
+    Contract contract = contractRepo.findById(cid)
+        .orElseThrow(() -> new NotFoundException("Contract with id " + cid + " not found."));
+    return contract;
   }
 
   public List<Contract> getContractsByUser(final User user) {
