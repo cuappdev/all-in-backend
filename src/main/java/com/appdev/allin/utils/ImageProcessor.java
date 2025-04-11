@@ -31,6 +31,9 @@ public class ImageProcessor {
     @Value("${all-in.image-upload-url}")
     private static String imageUploadUrl;
 
+    @Value("${all-in.image-upload-bucket}")
+    private static String imageUploadBucket;
+
     /**
      * Crops the given image to the specified width and height.
      * If the specified dimensions are larger than the original image,
@@ -195,7 +198,7 @@ public class ImageProcessor {
 
             // Build payload
             Map<String, Object> payload = new HashMap<>();
-            payload.put("bucket", "all-in");
+            payload.put("bucket", imageUploadBucket);
             payload.put("image", dataUri);
 
             HttpHeaders headers = new HttpHeaders();

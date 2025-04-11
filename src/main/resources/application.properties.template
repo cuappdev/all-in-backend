@@ -1,5 +1,6 @@
 # Custom properties
-all-in.image-upload-url=Hi
+all-in.image-upload-url=
+all-in.image-upload-bucket=
 
 # Spring properties
 spring.datasource.url=jdbc:mysql://localhost:3306/all_in
