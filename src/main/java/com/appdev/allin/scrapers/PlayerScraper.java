@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.appdev.allin.player.Player;
 import com.appdev.allin.player.PlayerService;
 import com.appdev.allin.player.Position;
+import com.appdev.allin.utils.ImageProcessor;
 
 public class PlayerScraper {
     private static final Logger logger = LoggerFactory.getLogger(PlayerScraper.class);
@@ -62,6 +63,17 @@ public class PlayerScraper {
 
                 Element imageElement = playerElement.selectFirst("div.sidearm-roster-player-image img");
                 String imageUrl = imageElement != null ? "https://cornellbigred.com" + imageElement.attr("data-src") : "";
+                
+                System.out.println("Image URL: " + imageUrl);
+                String bucketUrl = "";
+                if (!imageUrl.isEmpty()) {
+                    String b64Image = "data:image/webp;base64," + ImageProcessor.urlToBase64(imageUrl);
+                    System.out.println("Base64 Image: " + b64Image);
+                    if (b64Image != null && !b64Image.isEmpty()) {
+                        bucketUrl = ImageProcessor.uploadImage(b64Image, 250, 250);
+                        System.out.println("Bucket URL: " + bucketUrl);
+                    }
+                }
 
                 if (number == null || firstName.isEmpty() || lastName.isEmpty()) {
                     logger.warn("Bad data for player {} {}", firstName, lastName);
@@ -75,7 +87,7 @@ public class PlayerScraper {
                 }
 
                 Player player = new Player(firstName, lastName, positions, number, height, weight, hometown, highSchool,
-                        imageUrl);
+                        bucketUrl);
 
                 if (playerService.getPlayerByNumber(player.getNumber()) == null) {
                     playerService.savePlayer(player);
