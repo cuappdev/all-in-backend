@@ -30,15 +30,12 @@ public class UserService {
   }
 
   public User createUser(final User user) {
-    User existingUsernameUser = userRepo.findByUsername(user.getUsername());
-    if (existingUsernameUser != null) {
-      throw new ForbiddenException("Username " + user.getUsername() + " already exists.");
-    }
+    userRepo.findByUsername(user.getUsername())
+        .orElseThrow(() -> new ForbiddenException("Username " + user.getUsername() + " already exists."));
 
-    User existingEmailUser = userRepo.findByEmail(user.getEmail());
-    if (existingEmailUser != null) {
-      throw new ForbiddenException("Email " + user.getEmail() + " already exists.");
-    }
+    userRepo.findByEmail(user.getEmail())
+        .orElseThrow(() -> new ForbiddenException("Email " + user.getEmail() + " already exists."));
+    
     return userRepo.save(user);
   }
 
