@@ -12,14 +12,21 @@ import com.appdev.allin.transaction.TransactionService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
+@EnableScheduling
 @SpringBootApplication
 public class Application {
+
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
     @Autowired
     PlayerRepo playerRepo;
 
@@ -42,6 +49,8 @@ public class Application {
     // Once a day at midnight
     @Scheduled(cron = "0 0 0 * * *")
     public void checkAndProcessContracts() {
+        logger.info("Running scheduled contract check at {}", LocalDateTime.now());
+
         List<Contract> contracts = contractRepo.findAll();
         for (Contract contract : contracts) {
             if (!contract.getExpired() &&
