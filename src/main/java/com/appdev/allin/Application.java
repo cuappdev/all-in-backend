@@ -21,8 +21,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
-@EnableScheduling
 @SpringBootApplication
+@EnableScheduling
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -59,19 +59,17 @@ public class Application {
                 if (isContractHit(contract)) {
                     processPayout(contract);
                 }
-
+                // TODO: Add logic to handle contract hit vs miss for the transaction
                 createFinalTransaction(contract);
-
                 contract.setExpired(true);
                 contractRepo.save(contract);
             }
         }
-        contractRepo.flush();
     }
 
     // TODO: Finish
     public boolean isContractHit(Contract contract) {
-        return false;
+        return true;
     }
 
     private void processPayout(Contract contract) {
@@ -85,12 +83,11 @@ public class Application {
     private void createFinalTransaction(Contract contract) {
         User seller = contract.getOwner();
         Transaction finalTransaction = new Transaction(
-            seller,
-            null,
-            contract,
-            LocalDateTime.now(),
-            contract.getValue()
-        );
+                seller,
+                null,
+                contract,
+                LocalDateTime.now(),
+                contract.getValue());
         transactionService.createTransaction(finalTransaction);
     }
 }

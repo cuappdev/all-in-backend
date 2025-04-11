@@ -5,12 +5,20 @@ import com.appdev.allin.user.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface ContractRepo extends JpaRepository<Contract, Integer> {
-  public List<Contract> findByPlayer(Player player);
+  List<Contract> findByPlayer(Player player);
 
-  public List<Contract> findByOwner(User owner);
+  List<Contract> findByOwner(User owner);
 
-  public List<Contract> findByForSale(Boolean forSale);
+  List<Contract> findByForSale(Boolean forSale);
+
+  Page<Contract> findAllByBuyPriceBetweenAndValueBetween(
+      Integer minPrice, Integer maxPrice, Integer minPayout, Integer maxPayout, Pageable pageable);
+
+  Page<Contract> findAllByBuyPriceBetweenAndValueBetweenAndRarity(
+      Integer minPrice, Integer maxPrice, Integer minPayout, Integer maxPayout, Rarity rarity, Pageable pageable);
 }

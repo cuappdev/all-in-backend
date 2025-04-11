@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ContractService {
@@ -41,8 +43,14 @@ public class ContractService {
     this.playerDataRepo = playerDataRepo;
   }
 
-  public List<Contract> getAllContracts() {
-    return contractRepo.findAll();
+  public Page<Contract> getAllContracts(Pageable pageable, Integer minPrice,
+      Integer maxPrice, Integer minPayout, Integer maxPayout, Rarity rarity) {
+    if (rarity == null) {
+      return contractRepo.findAllByBuyPriceBetweenAndValueBetween(minPrice, maxPrice, minPayout, maxPayout, pageable);
+    }
+
+    return contractRepo.findAllByBuyPriceBetweenAndValueBetweenAndRarity(minPrice, maxPrice, minPayout, maxPayout,
+        rarity, pageable);
   }
 
   public Contract getContractById(final Integer contract_id) throws NotFoundException {
@@ -51,6 +59,10 @@ public class ContractService {
       throw new NotFoundException("Contract with id " + contract_id + " not found.");
     }
     return contractOptional.get();
+  }
+
+  public List<Contract> getContractsByUser(final User user) {
+    return contractRepo.findByOwner(user);
   }
 
   public List<Contract> getContractsByPlayer(final Player player) {
