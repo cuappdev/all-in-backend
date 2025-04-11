@@ -20,16 +20,16 @@ public class PlayerScraper {
 
     private final PlayerRepo playerRepo;
 
-    private static final String ROSTER_URL = "https://cornellbigred.com/sports/mens-basketball/roster?view=2";
+    private static final String BASE_URL = "https://cornellbigred.com/sports/mens-basketball/roster?view=2";
 
     public PlayerScraper(PlayerRepo playerRepo) {
         this.playerRepo = playerRepo;
     }
 
     public void populate() throws IOException {
-        logger.info("Scraping player data from URL: {}", ROSTER_URL);
+        logger.info("Scraping player data from URL: {}", BASE_URL);
         try {
-            Document doc = Jsoup.connect(ROSTER_URL).get();
+            Document doc = Jsoup.connect(BASE_URL).get();
 
             Elements playerElements = doc.select("ul.sidearm-roster-players > li.sidearm-roster-player");
 
@@ -110,7 +110,7 @@ public class PlayerScraper {
 
     private Integer extractIntegerFromString(String text) {
         try {
-            return Integer.parseInt(text.replaceAll("[^\\d]", ""));
+            return Integer.valueOf(text.replaceAll("[^\\d]", ""));
         } catch (NumberFormatException e) {
             logger.warn("Failed retrieving integer: '{}'", text);
             return null;

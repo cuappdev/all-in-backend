@@ -22,12 +22,12 @@ public class GameDataScraper {
         this.gameDataRepo = Objects.requireNonNull(gameDataRepo);
     }
 
-    private static final String SCHEDULE_URL = "https://cornellbigred.com/sports/mens-basketball/schedule/2024-25";
+    private static final String BASE_URL = "https://cornellbigred.com/sports/mens-basketball/schedule/2024-25";
 
-    public void populateUpcomingGames() throws IOException {
-        logger.info("Scraping game schedule data from URL: {}", SCHEDULE_URL);
+    public void populate() throws IOException {
+        logger.info("Scraping game schedule data from URL: {}", BASE_URL);
         try {
-            Document doc = Jsoup.connect(SCHEDULE_URL).get();
+            Document doc = Jsoup.connect(BASE_URL).get();
 
             Elements gameElements = doc.select("div.sidearm-schedule-game-opponent-name");
             Elements dateElements = doc.select("div.sidearm-schedule-game-opponent-date");
@@ -81,7 +81,7 @@ public class GameDataScraper {
 
     public void run() {
         try {
-            populateUpcomingGames();
+            populate();
         } catch (IOException e) {
             logger.error("Failed to populate game schedule data: {}", e.getMessage());
         }

@@ -6,7 +6,6 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,7 +35,7 @@ public class PlayerDataScraper {
     private final Set<String> processedGameUrls = new HashSet<>();
 
     // Set to track unmatched teams
-    private final Set<String> unmatchedTeams = new TreeSet<>(); // TreeSet for sorted output
+    private final Set<String> unmatchedTeams = new HashSet<>();
 
     public PlayerDataScraper(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
         this.playerRepo = playerRepo;
@@ -86,7 +85,7 @@ public class PlayerDataScraper {
                             .userAgent(USER_AGENT)
                             .get();
                     processGameStats(gameDoc);
-                } catch (Exception e) {
+                } catch (IOException e) {
                     logger.error("Error scraping individual game {}: {}", gameUrl, e.getMessage());
                 }
                 System.gc();
