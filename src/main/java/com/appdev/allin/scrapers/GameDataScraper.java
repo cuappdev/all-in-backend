@@ -68,6 +68,7 @@ public class GameDataScraper {
                 } else {
                     logger.info("Game {} with opponent: {} already exists in the database", i + 1, opponentName);
                 }
+                System.gc();
             }
 
             logger.info("Game schedule scraping completed");

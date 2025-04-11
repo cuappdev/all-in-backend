@@ -83,6 +83,7 @@ public class PlayerScraper {
                 } else {
                     logger.warn("Player already exists: {}", player);
                 }
+                System.gc();
             }
 
             logger.info("Player data scraping completed");

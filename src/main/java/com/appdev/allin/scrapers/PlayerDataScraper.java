@@ -1,10 +1,12 @@
 package com.appdev.allin.scrapers;
 
-import com.appdev.allin.player.Player;
-import com.appdev.allin.player.PlayerRepo;
-import com.appdev.allin.playerData.PlayerData;
-import com.appdev.allin.playerData.PlayerDataRepo;
-import com.appdev.allin.contract.OpposingTeam;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,13 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import com.appdev.allin.contract.OpposingTeam;
+import com.appdev.allin.player.Player;
+import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.playerData.PlayerData;
+import com.appdev.allin.playerData.PlayerDataRepo;
 
 @Component
 public class PlayerDataScraper {
@@ -89,6 +89,7 @@ public class PlayerDataScraper {
                 } catch (Exception e) {
                     logger.error("Error scraping individual game {}: {}", gameUrl, e.getMessage());
                 }
+                System.gc();
             }
         } catch (IOException e) {
             logger.error("Error scraping schedule from URL {}: {}", scheduleUrl, e.getMessage());
