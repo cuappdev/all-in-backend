@@ -7,16 +7,32 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.imgscalr.Scalr;
+import javax.imageio.ImageIO;
+
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.imgscalr.Scalr;
 
 public class ImageProcessor {
 
     @Value("${all-in.image-upload-url}")
     private static String imageUploadUrl;
+
+    @Value("${all-in.image-upload-bucket}")
+    private static String imageUploadBucket;
 
     /**
      * Crops the given image to the specified width and height.
@@ -134,4 +150,77 @@ public class ImageProcessor {
     public static BufferedImage scaleImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
         return Scalr.resize(originalImage, Scalr.Method.ULTRA_QUALITY, targetWidth, targetHeight);
     }
+
+    /**
+     * Converts image from base64 string to BufferedImage.
+     * 
+     * @param base64String The original base64 string to be converted.
+     * @return A BufferedImage representing the original image.
+     */
+    public static BufferedImage convertBase64ToImage(String base64String) throws IOException {
+        // Remove the data:image/...;base64, prefix if it exists
+        String base64Image = base64String.split(",")[base64String.split(",").length - 1];
+
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes)) {
+            return ImageIO.read(bis);
+        }
+    }
+
+    /**
+     * Scales and uploads an image in base64 form to digital ocean.
+     * 
+     * @param encodedImage The unmodified base64 image.
+     * @param targetWidth  The desired width of the scaled image.
+     * @param targetHeight The desired height of the scaled image.
+     * @return A url representing the uploaded image.
+     */
+    public static String uploadImage(String encodedImage, int targetWidth, int targetHeight) {
+        try {
+            // Assume base64 starts with data URI prefix — extract format
+            String[] parts = encodedImage.split(",");
+            String format = "png";
+            if (parts[0].contains("jpeg"))
+                format = "jpg";
+
+            // Decode base64 and convert to scaled image
+            BufferedImage image = convertBase64ToImage(encodedImage);
+            image = scaleImage(image, targetWidth, targetHeight);
+
+            // Re-encode using original format
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, format, os);
+            byte[] imageBytes = os.toByteArray();
+
+            // Add proper prefix
+            String mimeType = format.equals("jpg") ? "image/jpeg" : "image/png";
+            String dataUri = "data:" + mimeType + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
+
+            // Build payload
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("bucket", imageUploadBucket);
+            payload.put("image", dataUri);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    imageUploadUrl,
+                    request,
+                    String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                JsonNode json = new ObjectMapper().readTree(response.getBody());
+                return json.has("data") ? json.get("data").asText() : null;
+            } else {
+                throw new RuntimeException("Upload failed: " + response.getStatusCode());
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image: " + e.getMessage(), e);
+        }
+    }
+
 }

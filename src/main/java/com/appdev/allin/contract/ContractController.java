@@ -3,8 +3,13 @@ package com.appdev.allin.contract;
 import com.appdev.allin.exceptions.NotForSaleException;
 import com.appdev.allin.exceptions.NotFoundException;
 import com.appdev.allin.exceptions.OverdrawnException;
+import com.appdev.allin.utils.Pagination;
+
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,11 +34,22 @@ public class ContractController {
     this.contractService = contractService;
   }
 
-  // CRUD operations
-
   @GetMapping("/")
-  public ResponseEntity<List<Contract>> getAllContracts() {
-    List<Contract> contracts = contractService.getAllContracts();
+  public ResponseEntity<Page<Contract>> getAllContracts(
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer size,
+      @RequestParam(defaultValue = "creationTime") String sortBy,
+      @RequestParam(defaultValue = "desc") String direction,
+      @RequestParam(defaultValue = "0") Integer minPrice,
+      @RequestParam(defaultValue = "100000") Integer maxPrice,
+      @RequestParam(defaultValue = "0") Integer minPayout,
+      @RequestParam(defaultValue = "100000") Integer maxPayout,
+      @RequestParam(required = false) Rarity rarity) {
+
+    Pageable pageable = Pagination.generatePageable(page, size, sortBy,
+        direction);
+    Page<Contract> contracts = contractService.getAllContracts(pageable, minPrice, maxPrice,
+        minPayout, maxPayout, rarity);
     return ResponseEntity.ok(contracts);
   }
 
