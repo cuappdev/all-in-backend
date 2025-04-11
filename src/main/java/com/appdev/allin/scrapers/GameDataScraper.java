@@ -11,15 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appdev.allin.gameData.GameData;
-import com.appdev.allin.gameData.GameDataRepo;
+import com.appdev.allin.gameData.GameDataService;
 
 public class GameDataScraper {
     private static final Logger logger = LoggerFactory.getLogger(GameDataScraper.class);
 
-    private final GameDataRepo gameDataRepo;
+    private final GameDataService gameDataService;
 
-    public GameDataScraper(GameDataRepo gameDataRepo) {
-        this.gameDataRepo = Objects.requireNonNull(gameDataRepo);
+    public GameDataScraper(GameDataService gameDataService) {
+        this.gameDataService = Objects.requireNonNull(gameDataService);
     }
 
     private static final String BASE_URL = "https://cornellbigred.com/sports/mens-basketball/schedule/2024-25";
@@ -63,8 +63,8 @@ public class GameDataScraper {
                 logger.info("Upcoming Game {}: {} on {} in {}, Logo URL: {}", i + 1, opponentName, gameDate,
                         fullLocation, logoUrl);
                 GameData gameData = new GameData(opponentName, gameDate, fullLocation, logoUrl);
-                if (gameDataRepo.findByOpposingTeamAndGameDateTime(opponentName, gameDate) == null) {
-                    gameDataRepo.save(gameData);
+                if (gameDataService.findByOpposingTeamAndGameDateTime(opponentName, gameDate) == null) {
+                    gameDataService.saveGameData(gameData);
                 } else {
                     logger.info("Game {} with opponent: {} already exists in the database", i + 1, opponentName);
                 }

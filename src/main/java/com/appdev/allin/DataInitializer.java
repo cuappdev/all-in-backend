@@ -6,9 +6,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.appdev.allin.gameData.GameDataRepo;
-import com.appdev.allin.player.PlayerRepo;
-import com.appdev.allin.playerData.PlayerDataRepo;
+import com.appdev.allin.gameData.GameDataService;
+import com.appdev.allin.player.PlayerService;
+import com.appdev.allin.playerData.PlayerDataService;
 import com.appdev.allin.scrapers.GameDataScraper;
 import com.appdev.allin.scrapers.PlayerDataScraper;
 import com.appdev.allin.scrapers.PlayerScraper;
@@ -16,31 +16,31 @@ import com.appdev.allin.scrapers.PlayerScraper;
 @Component
 public class DataInitializer {
 
-        private final PlayerRepo playerRepo;
-        private final PlayerDataRepo playerDataRepo;
-        private final GameDataRepo gameDataRepo;
+        private final PlayerService playerService;
+        private final PlayerDataService playerDataService;
+        private final GameDataService gameDataService;
 
-        public DataInitializer(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo, GameDataRepo gameDataRepo) {
-                this.playerRepo = playerRepo;
-                this.playerDataRepo = playerDataRepo;
-                this.gameDataRepo = gameDataRepo;
+        public DataInitializer(PlayerService playerService, PlayerDataService playerDataService, GameDataService gameDataService) {
+                this.playerService = playerService;
+                this.playerDataService = playerDataService;
+                this.gameDataService = gameDataService;
         }
 
         @EventListener(ApplicationReadyEvent.class)
         public void initializeData() {
                 logMemoryUsage("Before player scraper");
-                PlayerScraper playerScraper = new PlayerScraper(playerRepo);
+                PlayerScraper playerScraper = new PlayerScraper(playerService);
                 playerScraper.run();
                 
                 logMemoryUsage("After player scraper");
 
-                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
-                playerDataRepo);
+                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
+                playerDataService);
                 playerDataScraper.run();
 
                 logMemoryUsage("After player data scraper");
 
-                GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                GameDataScraper gameDataScraper = new GameDataScraper(gameDataService);
                 gameDataScraper.run();
                 logMemoryUsage("After all scrapers");
 
@@ -50,14 +50,14 @@ public class DataInitializer {
 
                 // scheduler.scheduleAtFixedRate(() -> {
                 // try {
-                //         PlayerScraper playerScraper = new PlayerScraper(playerRepo);
+                //         PlayerScraper playerScraper = new PlayerScraper(playerService);
                 //         playerScraper.run();
 
-                //         PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
-                //         playerDataRepo);
+                //         PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
+                //         playerDataService);
                 //         playerDataScraper.run();
 
-                //         GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                //         GameDataScraper gameDataScraper = new GameDataScraper(gameDataService);
                 //         gameDataScraper.run();
                 // } catch (Exception e) {
                 // e.printStackTrace();

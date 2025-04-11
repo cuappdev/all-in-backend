@@ -1,13 +1,15 @@
 package com.appdev.allin.player;
 
-import com.appdev.allin.exceptions.NotFoundException;
-import com.appdev.allin.utils.Constants;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.appdev.allin.exceptions.NotFoundException;
+import com.appdev.allin.utils.Constants;
 
 @Service
 public class PlayerService {
@@ -27,6 +29,21 @@ public class PlayerService {
         .orElseThrow(() -> new NotFoundException("Player with id " + pid + " not found."));
     return player;
   }
+
+  public Player getPlayerByNumber(final Integer number) {
+    Player player = playerRepo.findByNumber(number);
+    return player;
+  }
+
+  public Player savePlayer(final Player player) {
+    Player existingPlayer = playerRepo.findByFirstNameAndLastName(player.getFirstName(),
+        player.getLastName());
+    if (existingPlayer == null) {
+      return playerRepo.save(player);
+    }
+    return existingPlayer;
+  }
+
 
   public Player createPlayer(final Player player) {
     return playerRepo.save(player);
