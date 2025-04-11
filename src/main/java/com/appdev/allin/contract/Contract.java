@@ -3,7 +3,6 @@ package com.appdev.allin.contract;
 import com.appdev.allin.player.Player;
 import com.appdev.allin.transaction.Transaction;
 import com.appdev.allin.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,6 +44,7 @@ public class Contract {
   @Column(name = "opposingTeam", nullable = false)
   private OpposingTeam opposingTeam;
 
+  // TODO: Delete when image upload added to scraper
   @Column(name = "opposingTeamImage", nullable = false)
   private String opposingTeamImage = "src/main/resources/static/images/teams/default.jpg";
 
@@ -198,7 +198,6 @@ public class Contract {
     this.id = id;
   }
 
-  @JsonIgnore
   public Player getPlayer() {
     return player;
   }
@@ -210,12 +209,10 @@ public class Contract {
     return player.getId();
   }
 
-  @JsonIgnore
   public void setPlayer(Player player) {
     this.player = player;
   }
 
-  @JsonIgnore
   public User getOwner() {
     return owner;
   }
@@ -227,7 +224,6 @@ public class Contract {
     return owner.getUid();
   }
 
-  @JsonIgnore
   public void setOwner(User owner) {
     this.owner = owner;
   }
@@ -256,12 +252,10 @@ public class Contract {
     this.opposingTeam = opposingTeam;
   }
 
-  @JsonIgnore
   public String getOpposingTeamImage() {
     return opposingTeamImage;
   }
 
-  @JsonIgnore
   public void setOpposingTeamImage(String opposingTeamImage) {
     this.opposingTeamImage = opposingTeamImage;
   }
@@ -332,36 +326,59 @@ public class Contract {
 
   @Override
   public String toString() {
-    return "Contract [buyPrice="
-        + buyPrice
-        + ", creationTime="
-        + creationTime
-        + ", event="
-        + event
-        + ", eventThreshold="
-        + eventThreshold
-        + ", expirationTime="
-        + expirationTime
-        + ", expired="
-        + expired
-        + ", forSale="
-        + forSale
-        + ", id="
-        + id
-        + ", opposingTeam="
-        + opposingTeam
-        + ", opposingTeamImage="
-        + opposingTeamImage
-        + ", owner="
-        + owner
-        + ", player="
-        + player
-        + ", rarity="
-        + rarity
-        + ", sellPrice="
-        + sellPrice
-        + ", value="
-        + value
-        + "]";
+    return "Contract{" +
+        "id=" + id +
+        ", player=" + player +
+        ", owner=" + owner +
+        ", buyPrice=" + buyPrice +
+        ", rarity=" + rarity +
+        ", opposingTeam=" + opposingTeam +
+        ", opposingTeamImage='" + opposingTeamImage + '\'' +
+        ", event=" + event +
+        ", eventThreshold=" + eventThreshold +
+        ", creationTime=" + creationTime +
+        ", value=" + value +
+        ", expirationTime=" + expirationTime +
+        ", expired=" + expired +
+        ", forSale=" + forSale +
+        ", sellPrice=" + sellPrice +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Contract contract))
+      return false;
+    if (!id.equals(contract.id))
+      return false;
+    if (!player.equals(contract.player))
+      return false;
+    if (!owner.equals(contract.owner))
+      return false;
+    if (!buyPrice.equals(contract.buyPrice))
+      return false;
+    if (!rarity.equals(contract.rarity))
+      return false;
+    if (!opposingTeam.equals(contract.opposingTeam))
+      return false;
+    if (!opposingTeamImage.equals(contract.opposingTeamImage))
+      return false;
+    if (!event.equals(contract.event))
+      return false;
+    if (!eventThreshold.equals(contract.eventThreshold))
+      return false;
+    if (!creationTime.equals(contract.creationTime))
+      return false;
+    if (!value.equals(contract.value))
+      return false;
+    if (!expirationTime.equals(contract.expirationTime))
+      return false;
+    if (!expired.equals(contract.expired))
+      return false;
+    if (!forSale.equals(contract.forSale))
+      return false;
+    return sellPrice != null ? sellPrice.equals(contract.sellPrice) : contract.sellPrice == null;
   }
 }

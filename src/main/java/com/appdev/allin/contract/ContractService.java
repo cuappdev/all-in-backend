@@ -28,9 +28,6 @@ public class ContractService {
 
   public final String imagePath = "src/main/resources/static/images/teams/";
 
-  // public final String imagePath =
-  // "root/all-in-backend/src/main/resources/static/images/teams/";
-
   public ContractService(
       ContractRepo contractRepo,
       UserRepo userRepo,
@@ -56,12 +53,7 @@ public class ContractService {
     return contractOptional.get();
   }
 
-  public List<Contract> getContractsByPlayerId(final Integer player_id) throws NotFoundException {
-    Optional<Player> playerOptional = playerRepo.findById(player_id);
-    if (playerOptional.isEmpty()) {
-      throw new NotFoundException("Player with id " + player_id + " not found.");
-    }
-    Player player = playerOptional.get();
+  public List<Contract> getContractsByPlayer(final Player player) {
     return contractRepo.findByPlayer(player);
   }
 

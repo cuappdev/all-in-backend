@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/contracts")
 public class ContractController {
 
   private final ContractService contractService;
@@ -28,20 +30,16 @@ public class ContractController {
 
   // CRUD operations
 
-  @GetMapping("/contracts/")
+  @GetMapping("/")
   public ResponseEntity<List<Contract>> getAllContracts() {
     List<Contract> contracts = contractService.getAllContracts();
     return ResponseEntity.ok(contracts);
   }
 
-  @GetMapping("/contracts/{contract_id}/")
-  public ResponseEntity<Contract> getContractById(@PathVariable final Integer contract_id) {
-    try {
-      Contract contract = contractService.getContractById(contract_id);
-      return ResponseEntity.ok(contract);
-    } catch (NotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
+  @GetMapping("/{cid}/")
+  public ResponseEntity<Contract> getContractById(@PathVariable final Integer cid) {
+    Contract contract = contractService.getContractById(cid);
+    return ResponseEntity.ok(contract);
   }
 
   // @GetMapping("/contract/{contract_id}")
@@ -56,7 +54,7 @@ public class ContractController {
   // }
   // }
 
-  @PatchMapping("/contracts/{contract_id}/")
+  @PatchMapping("/{contract_id}/")
   public ResponseEntity<Contract> updateContract(
       @PathVariable final Integer contract_id, @RequestBody final Contract contract) {
     try {
@@ -67,7 +65,7 @@ public class ContractController {
     }
   }
 
-  @DeleteMapping("/contracts/{contract_id}/")
+  @DeleteMapping("/{contract_id}/")
   public ResponseEntity<Contract> deleteContract(@PathVariable final Integer contract_id) {
     try {
       Contract deletedContract = contractService.deleteContract(contract_id);
@@ -77,7 +75,7 @@ public class ContractController {
     }
   }
 
-  @GetMapping("/contracts/{contract_id}/image/")
+  @GetMapping("/{contract_id}/image/")
   public ResponseEntity<byte[]> getContractImageById(@PathVariable final Integer contract_id) {
     try {
       Contract contract = contractService.getContractById(contract_id);
@@ -92,8 +90,6 @@ public class ContractController {
       return ResponseEntity.notFound().build();
     }
   }
-
-  // Market operations
 
   @GetMapping("/market/")
   public ResponseEntity<List<Contract>> getMarketContracts() {

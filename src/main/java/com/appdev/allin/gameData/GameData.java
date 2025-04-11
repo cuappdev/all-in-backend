@@ -1,8 +1,6 @@
 package com.appdev.allin.gameData;
 
-
 import com.appdev.allin.gameData.GameData;
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,37 +17,30 @@ public class GameData {
 
     @Column(name = "opposingTeam", nullable = false)
     private String opposingTeam;
- 
+
     @Column(name = "gameDateTime", nullable = false)
     private String gameDateTime;
 
     @Column(name = "fullLocation", nullable = false)
     private String fullLocation;
 
-    @Column(name= "logoUrl", nullable = false)
+    @Column(name = "logoUrl", nullable = false)
     private String logoUrl;
 
+    public GameData() {
+    }
 
-    public GameData() {}
-  
-    public GameData(
-        String opposingTeam,
-        String gameDateTime,
-        String fullLocation,
-        String logoUrl
-
-        ) {
+    public GameData(String opposingTeam, String gameDateTime, String fullLocation, String logoUrl) {
         this.opposingTeam = opposingTeam;
         this.gameDateTime = gameDateTime;
         this.fullLocation = fullLocation;
         this.logoUrl = logoUrl;
     }
 
-    
     public Integer getId() {
         return id;
     }
-    
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -77,7 +68,7 @@ public class GameData {
     public void setFullLocation(String fullLocation) {
         this.fullLocation = fullLocation;
     }
-    
+
     public String getLogoUrl() {
         return logoUrl;
     }
@@ -86,4 +77,34 @@ public class GameData {
         this.logoUrl = logoUrl;
     }
 
+    @Override
+    public String toString() {
+        return "GameData{" +
+                "id=" + id +
+                ", opposingTeam='" + opposingTeam + '\'' +
+                ", gameDateTime='" + gameDateTime + '\'' +
+                ", fullLocation='" + fullLocation + '\'' +
+                ", logoUrl='" + logoUrl + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof GameData))
+            return false;
+
+        GameData gameData = (GameData) o;
+
+        if (!getId().equals(gameData.getId()))
+            return false;
+        if (!getOpposingTeam().equals(gameData.getOpposingTeam()))
+            return false;
+        if (!getGameDateTime().equals(gameData.getGameDateTime()))
+            return false;
+        if (!getFullLocation().equals(gameData.getFullLocation()))
+            return false;
+        return getLogoUrl().equals(gameData.getLogoUrl());
+    }
 }
