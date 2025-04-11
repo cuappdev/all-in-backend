@@ -64,14 +64,14 @@ public class PlayerScraper {
                 Element imageElement = playerElement.selectFirst("div.sidearm-roster-player-image img");
                 String imageUrl = imageElement != null ? "https://cornellbigred.com" + imageElement.attr("data-src") : "";
                 
-                System.out.println("Image URL: " + imageUrl);
+
                 String bucketUrl = "";
                 if (!imageUrl.isEmpty()) {
                     String b64Image = "data:image/webp;base64," + ImageProcessor.urlToBase64(imageUrl);
-                    System.out.println("Base64 Image: " + b64Image);
+
                     if (b64Image != null && !b64Image.isEmpty()) {
                         bucketUrl = ImageProcessor.uploadImage(b64Image, 250, 250);
-                        System.out.println("Bucket URL: " + bucketUrl);
+
                     }
                 }
 
