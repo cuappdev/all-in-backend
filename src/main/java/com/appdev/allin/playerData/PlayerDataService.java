@@ -28,4 +28,8 @@ public class PlayerDataService {
   public List<PlayerData> getPlayerDataByDate(final LocalDate gameDate) {
     return playerDataRepo.findByGameDate(gameDate);
   }
+
+  public List<PlayerData> getPlayerDataByDateAndPlayer(Player player, LocalDate gameDate) {
+    return playerDataRepo.findByPlayerAndGameDate(player, gameDate);
+}
 }

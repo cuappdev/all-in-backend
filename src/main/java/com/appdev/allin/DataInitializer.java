@@ -1,7 +1,7 @@
 package com.appdev.allin;
 
-import com.appdev.allin.player.PlayerRepo;
-import com.appdev.allin.playerData.PlayerDataRepo;
+import com.appdev.allin.player.PlayerService;
+import com.appdev.allin.playerData.PlayerDataService;
 import com.appdev.allin.gameData.GameDataRepo;
 
 import com.appdev.allin.scrapers.PlayerScraper;
@@ -19,27 +19,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer {
 
-        private final PlayerRepo playerRepo;
-        private final PlayerDataRepo playerDataRepo;
+        private final PlayerService playerService;
+        private final PlayerDataService playerDataService;
         private final GameDataRepo gameDataRepo;
 
-        public DataInitializer(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo, GameDataRepo gameDataRepo) {
-                this.playerRepo = playerRepo;
-                this.playerDataRepo = playerDataRepo;
+        public DataInitializer(PlayerService playerService, PlayerDataService playerDataService, GameDataRepo gameDataRepo) {
+                this.playerService = playerService;
+                this.playerDataService = playerDataService;
                 this.gameDataRepo = gameDataRepo;
         }
 
         @EventListener(ApplicationReadyEvent.class)
         public void initializeData() {
-                // PlayerScraper playerScraper = new PlayerScraper(playerRepo);
-                // playerScraper.run();
+                PlayerScraper playerScraper = new PlayerScraper(playerService);
+                playerScraper.run();
 
-                // PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerRepo,
-                // playerDataRepo);
-                // playerDataScraper.run();
+                PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
+                playerDataService);
+                playerDataScraper.run();
 
-                // GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
-                // gameDataScraper.run();
+                GameDataScraper gameDataScraper = new GameDataScraper(gameDataRepo);
+                gameDataScraper.run();
                 // Uncomment the above lines to schedule the scrapers to run periodically
 
                 // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

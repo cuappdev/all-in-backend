@@ -1,10 +1,12 @@
 package com.appdev.allin.scrapers;
 
 import com.appdev.allin.player.Player;
-import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.player.PlayerService;
 import com.appdev.allin.playerData.PlayerData;
-import com.appdev.allin.playerData.PlayerDataRepo;
+import com.appdev.allin.playerData.PlayerDataService;
 import com.appdev.allin.contract.OpposingTeam;
+import com.appdev.allin.exceptions.NotFoundException;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,8 +28,8 @@ import java.util.TreeSet;
 public class PlayerDataScraper {
     private static final Logger logger = LoggerFactory.getLogger(PlayerDataScraper.class);
 
-    private final PlayerRepo playerRepo;
-    private final PlayerDataRepo playerDataRepo;
+    private final PlayerService playerService;
+    private final PlayerDataService playerDataService;
     private static final String BASE_URL = "https://cornellbigred.com";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
@@ -38,14 +40,14 @@ public class PlayerDataScraper {
     // Set to track unmatched teams
     private final Set<String> unmatchedTeams = new TreeSet<>(); // TreeSet for sorted output
 
-    public PlayerDataScraper(PlayerRepo playerRepo, PlayerDataRepo playerDataRepo) {
-        this.playerRepo = playerRepo;
-        this.playerDataRepo = playerDataRepo;
+    public PlayerDataScraper(PlayerService playerService, PlayerDataService playerDataService) {
+        this.playerService = playerService;
+        this.playerDataService = playerDataService;
     }
 
     public void populate() throws IOException {
-        int startYear = Year.now().getValue() - 4;
         int endYear = Year.now().getValue();
+        int startYear = endYear - 4;
 
         for (int year = startYear; year <= endYear; year++) {
             // Format: 2023-24
@@ -145,7 +147,8 @@ public class PlayerDataScraper {
                 }
 
                 // Check if stats already exist for this player and game
-                if (playerDataRepo.findByPlayerAndGameDate(player, gameDate).isEmpty()) {
+                List<PlayerData> existingStats = playerDataService.getPlayerDataByDateAndPlayer(player, gameDate);
+                if (existingStats.isEmpty()) {
                     PlayerData gameStats = new PlayerData();
                     gameStats.setPlayer(player);
                     gameStats.setGameDate(gameDate);
@@ -164,7 +167,7 @@ public class PlayerDataScraper {
                     gameStats.setTurnovers(parseIntStat(row, "TO"));
                     gameStats.setFouls(parseIntStat(row, "PF"));
 
-                    PlayerData saved = playerDataRepo.saveAndFlush(gameStats);
+                    PlayerData saved = playerDataService.createPlayerData(gameStats);
                     logger.info("Saved stats for player {} with ID {}", playerName, saved.getId());
                     savedCount++;
                 } else {
@@ -227,23 +230,53 @@ public class PlayerDataScraper {
     }
 
     Player findPlayerByName(String fullName) {
-        String[] nameParts = fullName.split(",", 2);
-        if (nameParts.length != 2) {
-            logger.warn("Invalid name format: {}", fullName);
+        try {
+            // Check if format is "Last, First"
+            if (fullName.contains(",")) {
+                String[] nameParts = fullName.split(",", 2);
+                String lastName = nameParts[0].trim();
+                String firstName = nameParts[1].trim();
+                
+                logger.debug("Looking up player: firstName='{}', lastName='{}'", firstName, lastName);
+                try {
+                    return playerService.getPlayerByFirstNameAndLastName(firstName, lastName);
+                } catch (NotFoundException e) {
+                    logger.warn("Player not found: {}", fullName);
+                }
+            } 
+            // Format is "First Last"
+            else {
+                String[] nameParts = fullName.split(" ");
+                if (nameParts.length >= 2) {
+                    String firstName = nameParts[0].trim();
+                    // Last name might be multiple words (e.g., "Ragland Jr.")
+                    StringBuilder lastName = new StringBuilder();
+                    for (int i = 1; i < nameParts.length; i++) {
+                        if (i > 1) lastName.append(" ");
+                        lastName.append(nameParts[i]);
+                    }
+                    
+                    logger.debug("Looking up player by First Last format: firstName='{}', lastName='{}'", 
+                                firstName, lastName.toString());
+                    try {
+                        return playerService.getPlayerByFirstNameAndLastName(firstName, lastName.toString());
+                    } catch (NotFoundException e) {
+                        logger.warn("Player not found: {}", fullName);
+                    }
+                }
+            }
+            
+            return null;
+        } catch (Exception e) {
+            logger.warn("Error parsing player name: {}", fullName);
             return null;
         }
-
-        String lastName = nameParts[0].trim();
-        String firstName = nameParts[1].trim();
-
-        logger.debug("Looking up player: firstName='{}', lastName='{}'", firstName, lastName);
-        return playerRepo.findByFirstNameAndLastName(firstName, lastName);
     }
 
     public void run() {
         try {
             populate();
-            long count = playerDataRepo.count();
+            long count = playerDataService.getAllPlayerData().size();
             logger.info("Total player data records after scraping: {}", count);
         } catch (IOException e) {
             logger.error("Failed to populate player stats: {}", e.getMessage());

@@ -12,24 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appdev.allin.player.Player;
-import com.appdev.allin.player.PlayerRepo;
+import com.appdev.allin.player.PlayerService;
 import com.appdev.allin.player.Position;
 
 public class PlayerScraper {
     private static final Logger logger = LoggerFactory.getLogger(PlayerScraper.class);
 
-    private final PlayerRepo playerRepo;
+    private final PlayerService playerService;
 
-    private static final String ROSTER_URL = "https://cornellbigred.com/sports/mens-basketball/roster?view=2";
+    private static final String BASE_URL = "https://cornellbigred.com/sports/mens-basketball/roster?view=2";
 
-    public PlayerScraper(PlayerRepo playerRepo) {
-        this.playerRepo = playerRepo;
+    public PlayerScraper(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
     public void populate() throws IOException {
-        logger.info("Scraping player data from URL: {}", ROSTER_URL);
+        logger.info("Scraping player data from URL: {}", BASE_URL);
         try {
-            Document doc = Jsoup.connect(ROSTER_URL).get();
+            Document doc = Jsoup.connect(BASE_URL).get();
 
             Elements playerElements = doc.select("ul.sidearm-roster-players > li.sidearm-roster-player");
 
@@ -68,7 +68,7 @@ public class PlayerScraper {
                     continue;
                 }
 
-                Player existingPlayer = playerRepo.findByNumber(number);
+                Player existingPlayer = playerService.getPlayerByNumber(number);
                 if (existingPlayer != null) {
                     logger.warn("Player already exists.");
                     continue;
@@ -77,12 +77,13 @@ public class PlayerScraper {
                 Player player = new Player(firstName, lastName, positions, number, height, weight, hometown, highSchool,
                         imageUrl);
 
-                if (playerRepo.findByNumber(player.getNumber()) == null) {
-                    playerRepo.save(player);
+                if (playerService.getPlayerByNumber(player.getNumber()) == null) {
+                    playerService.savePlayer(player);
                     logger.info("Saved player: {} {}", firstName, lastName);
                 } else {
                     logger.warn("Player already exists: {}", player);
                 }
+                System.gc();
             }
 
             logger.info("Player data scraping completed");
@@ -109,7 +110,7 @@ public class PlayerScraper {
 
     private Integer extractIntegerFromString(String text) {
         try {
-            return Integer.parseInt(text.replaceAll("[^\\d]", ""));
+            return Integer.valueOf(text.replaceAll("[^\\d]", ""));
         } catch (NumberFormatException e) {
             logger.warn("Failed retrieving integer: '{}'", text);
             return null;
