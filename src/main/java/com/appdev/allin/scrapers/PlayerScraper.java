@@ -61,7 +61,7 @@ public class PlayerScraper {
                 String highSchool = extractText(playerElement, "span.sidearm-roster-player-highschool");
 
                 Element imageElement = playerElement.selectFirst("div.sidearm-roster-player-image img");
-                String imageUrl = imageElement != null ? imageElement.attr("data-src") : "";
+                String imageUrl = imageElement != null ? "https://cornellbigred.com" + imageElement.attr("data-src") : "";
 
                 if (number == null || firstName.isEmpty() || lastName.isEmpty()) {
                     logger.warn("Bad data for player {} {}", firstName, lastName);
