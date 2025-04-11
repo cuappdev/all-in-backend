@@ -2,10 +2,16 @@ package com.appdev.allin.user;
 
 import com.appdev.allin.contract.Contract;
 import com.appdev.allin.contract.ContractService;
+import com.appdev.allin.contract.Rarity;
+import com.appdev.allin.exceptions.NotFoundException;
+import com.appdev.allin.exceptions.OverdrawnException;
+import com.appdev.allin.player.PlayerService;
 import com.appdev.allin.utils.Pagination;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,11 +32,13 @@ public class UserController {
 
   private final UserService userService;
   private final ContractService contractService;
+  private final PlayerService playerService;
 
   public UserController(
-      UserService userService, ContractService contractService) {
+      UserService userService, ContractService contractService, PlayerService playerService) {
     this.userService = userService;
     this.contractService = contractService;
+    this.playerService = playerService;
   }
 
   @GetMapping("/")
@@ -90,45 +98,45 @@ public class UserController {
   }
 
   // TODO: Move to contract controller
-  // @PostMapping("/users/{uid}/players/{player_id}/contracts/")
-  // public ResponseEntity<Contract> createContractByPlayerId(
-  // @PathVariable final String uid,
-  // @PathVariable final Integer player_id,
-  // @RequestBody final Map<String, Double> body) {
-  // try {
-  // Double buyPrice = body.get("buy_price");
-  // Rarity rarity = Rarity.getRandomRarity();
-  // Contract createdContract = contractService.createContract(uid, player_id,
-  // buyPrice, rarity);
-  // return ResponseEntity.status(201).body(createdContract);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // } catch (OverdrawnException e) {
-  // return ResponseEntity.status(403).build();
-  // } catch (ClassCastException e) {
-  // return ResponseEntity.badRequest().build();
-  // }
-  // }
+  @PostMapping("/me/contracts/players/{player_id}/contracts/")
+  public ResponseEntity<Contract> createContractByPlayerId(
+      @PathVariable final String uid,
+      @PathVariable final Integer player_id,
+      @RequestBody final Map<String, Integer> body) {
+    try {
+      Integer buyPrice = body.get("buy_price");
+      Rarity rarity = Rarity.getRandomRarity();
+      Contract createdContract = contractService.createContract(uid, player_id,
+          buyPrice, rarity);
+      return ResponseEntity.status(201).body(createdContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    } catch (OverdrawnException e) {
+      return ResponseEntity.status(403).build();
+    } catch (ClassCastException e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
 
-  // @PostMapping("/me/contracts")
-  // public ResponseEntity<Contract> createContractByRarity(
-  // @AuthenticationPrincipal User user,
-  // @RequestBody final Map<String, Object> body) {
-  // try {
-  // Double buyPrice = (Double) body.get("buy_price");
-  // Rarity rarity = Rarity.valueOf((String) body.get("rarity"));
-  // Integer max_player_id = playerService.getAllPlayers().size();
-  // Integer player_id = (int) (ThreadLocalRandom.current().nextDouble() *
-  // max_player_id) + 1;
-  // Contract createdContract = contractService.createContract(uid, player_id,
-  // buyPrice, rarity);
-  // return ResponseEntity.status(201).body(createdContract);
-  // } catch (NotFoundException e) {
-  // return ResponseEntity.notFound().build();
-  // } catch (OverdrawnException e) {
-  // return ResponseEntity.status(403).build();
-  // } catch (ClassCastException e) {
-  // return ResponseEntity.badRequest().build();
-  // }
-  // }
+  @PostMapping("/me/contracts")
+  public ResponseEntity<Contract> createContractByRarity(
+      @AuthenticationPrincipal User user,
+      @RequestBody final Map<String, Object> body) {
+    try {
+      Integer buyPrice = (Integer) body.get("buy_price");
+      Rarity rarity = Rarity.valueOf((String) body.get("rarity"));
+      Integer max_player_id = playerService.getAllPlayers().size();
+      Integer player_id = (int) (ThreadLocalRandom.current().nextDouble() *
+          max_player_id) + 1;
+      Contract createdContract = contractService.createContract(user.getUid(), player_id,
+          buyPrice, rarity);
+      return ResponseEntity.status(201).body(createdContract);
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    } catch (OverdrawnException e) {
+      return ResponseEntity.status(403).build();
+    } catch (ClassCastException e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
 }
