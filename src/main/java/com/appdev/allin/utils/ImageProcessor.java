@@ -18,6 +18,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,6 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.imgscalr.Scalr;
 
 public class ImageProcessor {
+
+    @Value("${all-in.image-upload-url}")
+    private static String imageUploadUrl;
 
     /**
      * Crops the given image to the specified width and height.
@@ -200,7 +204,7 @@ public class ImageProcessor {
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.postForEntity(
-                    "https://upload.cornellappdev.com/upload/",
+                    imageUploadUrl,
                     request,
                     String.class);
 
