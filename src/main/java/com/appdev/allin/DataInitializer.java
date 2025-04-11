@@ -20,7 +20,8 @@ public class DataInitializer {
         private final PlayerDataService playerDataService;
         private final GameDataService gameDataService;
 
-        public DataInitializer(PlayerService playerService, PlayerDataService playerDataService, GameDataService gameDataService) {
+        public DataInitializer(PlayerService playerService, PlayerDataService playerDataService,
+                        GameDataService gameDataService) {
                 this.playerService = playerService;
                 this.playerDataService = playerDataService;
                 this.gameDataService = gameDataService;
@@ -31,11 +32,11 @@ public class DataInitializer {
                 logMemoryUsage("Before player scraper");
                 PlayerScraper playerScraper = new PlayerScraper(playerService);
                 playerScraper.run();
-                
+
                 logMemoryUsage("After player scraper");
 
                 PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
-                playerDataService);
+                                playerDataService);
                 playerDataScraper.run();
 
                 logMemoryUsage("After player data scraper");
@@ -44,37 +45,36 @@ public class DataInitializer {
                 gameDataScraper.run();
                 logMemoryUsage("After all scrapers");
 
-                // Uncoment the above lines to schedule the scrapers to run periodically
-
+                // Commented lines below were an attempt at running the scrapers on a schedule -
+                // should just use the @Scheduled command like in Application.java
                 // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
                 // scheduler.scheduleAtFixedRate(() -> {
                 // try {
-                //         PlayerScraper playerScraper = new PlayerScraper(playerService);
-                //         playerScraper.run();
+                // PlayerScraper playerScraper = new PlayerScraper(playerService);
+                // playerScraper.run();
 
-                //         PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
-                //         playerDataService);
-                //         playerDataScraper.run();
+                // PlayerDataScraper playerDataScraper = new PlayerDataScraper(playerService,
+                // playerDataService);
+                // playerDataScraper.run();
 
-                //         GameDataScraper gameDataScraper = new GameDataScraper(gameDataService);
-                //         gameDataScraper.run();
+                // GameDataScraper gameDataScraper = new GameDataScraper(gameDataService);
+                // gameDataScraper.run();
                 // } catch (Exception e) {
                 // e.printStackTrace();
                 // }
                 // }, 0, 1, TimeUnit.DAYS); // Initial delay: 0, Repeat every 1 day
         }
 
-
         private void logMemoryUsage(String point) {
                 Runtime runtime = Runtime.getRuntime();
                 NumberFormat format = NumberFormat.getInstance();
-                
+
                 long maxMemory = runtime.maxMemory();
                 long allocatedMemory = runtime.totalMemory();
                 long freeMemory = runtime.freeMemory();
                 long usedMemory = allocatedMemory - freeMemory;
-                
+
                 System.out.println("Memory Usage at " + point);
                 System.out.println("Max Memory: " + format.format(maxMemory / 1024 / 1024) + " MB");
                 System.out.println("Allocated Memory: " + format.format(allocatedMemory / 1024 / 1024) + " MB");

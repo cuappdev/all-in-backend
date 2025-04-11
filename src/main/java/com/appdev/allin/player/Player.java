@@ -50,7 +50,7 @@ public class Player {
   @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
   private List<Contract> contracts = new LinkedList<>();
 
-  @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
   private List<PlayerData> playerData = new LinkedList<>();
 
   public Player() {

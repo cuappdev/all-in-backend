@@ -22,7 +22,7 @@ public class FirebaseInitialization {
 
         return FirebaseApp.initializeApp(options);
       } else {
-        return FirebaseApp.getInstance(); // Return the existing instance
+        return FirebaseApp.getInstance();
       }
     } catch (Exception error) {
       error.printStackTrace();

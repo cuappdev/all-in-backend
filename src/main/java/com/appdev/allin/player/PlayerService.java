@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.appdev.allin.exceptions.NotFoundException;
-import com.appdev.allin.utils.Constants;
 
 @Service
 public class PlayerService {
@@ -43,7 +42,6 @@ public class PlayerService {
     }
     return existingPlayer;
   }
-
 
   public Player createPlayer(final Player player) {
     return playerRepo.save(player);
@@ -123,10 +121,6 @@ public class PlayerService {
       throw new NotFoundException("Player with id " + player_id + " not found.");
     }
     Player playerToUpdate = playerOptional.get();
-    String image = playerToUpdate.getImage();
-    if (image.equals(Constants.DEFAULT_PLAYER_IMAGE)) {
-      return false;
-    }
     Path pathToFile = Path.of(playerToUpdate.getImage());
     try {
       Files.delete(pathToFile);

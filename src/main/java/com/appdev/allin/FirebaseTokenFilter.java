@@ -55,7 +55,7 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     try {
       User user = userRepo.findById(decodedToken.getUid())
           .orElseGet(() -> {
-            // Only create a user on the /users/me endpoint
+            // Only create a user on the /users/me/ endpoint
             if (request.getRequestURI().equals("/users/me/")) {
               User newUser = new User(decodedToken.getUid(), decodedToken.getName(), decodedToken.getEmail(),
                   decodedToken.getPicture());

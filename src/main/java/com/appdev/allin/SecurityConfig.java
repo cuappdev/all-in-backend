@@ -25,8 +25,7 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-resources/**",
-                "/webjars/**"
-                )
+                "/webjars/**")
             .permitAll()
             .anyRequest().authenticated())
         // Needed for Spring to place the filter in the correct order
